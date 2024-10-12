@@ -1,0 +1,162 @@
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+/*LOG IN BOX*/
+
+.random{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.LogInBox{
+    background-color: var(--bgandtext-color-light);
+    width: 350px;
+    padding: 20px;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: var(--primary-color-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.LogInBox h1{
+    font-size: 36px;
+    text-align: center;
+    font-family: var(--special-font);
+    color: var(--primary-color);
+}
+.LogInBox p{
+    font-family: var(--regular-font);
+    color: var(--bgandtext-color-dark);
+}
+.LogInBox input[type=text],input[type=password]{
+    border-radius: 25px;
+    border-style: solid;
+    background-color: var(--bgandtext-color-light);
+    margin-bottom: 10px;
+    width: 80%;
+    height: 100%;
+    border: 2px solid var(--primary-color);
+    border-radius: 40px;
+    padding: 15px 30px 15px 30px;
+    text-align: center;
+}
+#username::placeholder {
+    color: var(--bgandtext-color-grey);
+    font-family: var(--light-font);
+    text-align: center;
+  }
+
+#password::placeholder {
+    color: var(--bgandtext-color-grey);
+    font-family: var(--light-font);
+  }
+.LogInBox input[type=text]:focus, input[type=password]{
+    outline: 1px var(--primary-color-dark);
+}
+.LogInBox img{
+    width: 50%;
+}
+.LogInBox button{
+    width: 100%;
+    height: 45px;
+    background: var(--primary-color);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color:var(--bgandtext-color-light);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.LogInBox button:active{
+    color: rgb(255,255,255);
+    background-color: var(--primary-color-dark);
+}
+  /* -- Font Family -- */
+  @font-face {
+    font-family: Rubik-Bold;
+    src: url("../fonts/rubik_bold.ttf");
+}
+@font-face {
+    font-family: Rubik-Regular;
+    src: url("../fonts/rubik_regular.ttf");
+}
+@font-face {
+    font-family: Rubik-Light;
+    src: url("../fonts/rubik_light.ttf");
+}
+@font-face {
+    font-family: Lobster-Regular;
+    src: url("../fonts/lobster_regular.ttf");
+}
+
+/* -- Color Family -- */
+:root {
+    --primary-color: #F5393B;
+    --primary-color-dark: #BE2C2E;
+    --primary-color-light: #FFC1C2;
+    --accent-color: #25567D;
+    --bgandtext-color-light: #F8F7F2;
+    --bgandtext-color-dark: #1A1A1A;
+    --bgandtext-color-grey: #808080;
+}
+
+/* -- Font Root -- */
+:root {
+    --bold-font: 'Rubik-Bold';
+    --regular-font: 'Rubik-Regular';
+    --light-font: 'Rubik-Light';
+    --special-font: 'Lobster-Regular';
+}
+
+    /* -- Overall Body -- */
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--primary-color);
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        animation: transitionIn 0.75s;
+    }
+
+    /* -- Header -- */
+    header {
+        width: 100%;
+        background-color:var(--bgandtext-color-light);
+        height: 75px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;;
+        box-sizing: border-box;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .logo{
+        display: flex;
+        width: 120%;
+        justify-content: center;
+        align-items: center;
+    }
+    .logo > p{
+        text-align: center;
+        margin-left: 10px;
+        font-family: var(--special-font);
+        color: var(--primary-color);
+        font-size: 30px;
+    }
