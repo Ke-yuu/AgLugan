@@ -1,0 +1,100 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+content {
+  background-color: #d32f2f;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  align-items: center;
+}
+
+.logo img {
+  width: 100px;
+}
+
+.login-btn button {
+  background-color: #fdd835;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+main {
+  text-align: center;
+}
+
+/* Hero Section */
+.content {
+  position: relative;
+}
+
+.hero img {
+  width: 100%;
+  height: auto;
+}
+
+.hero-content {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.hero-content h2 {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+#get-started-btn {
+  margin-top: 20px;
+  background-color: #fdd835;
+  color: black;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px 0;
+}
+
+.feature {
+  background-color: #f44336;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 250px;
+  text-align: left;
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Button Hover Effects */
+button:hover {
+  opacity: 0.9;
+}
