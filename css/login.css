@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  background-color: #333;
+}
+
+.login-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;  /* Puts the image behind the login form */
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Ensures the image covers the entire background */
+}
+
+.login-section {
+  background-color: rgba(229, 57, 53, 0.95);  /* Slight transparency to show background */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+  width: 300px;
+  text-align: center;
+}
+
+.login-section h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.login-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-section label {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.login-section input {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.login-btn, .register-btn {
+  background-color: #fdd835;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.register-btn {
+  background-color: white;
+  color: black;
+  margin-top: 10px;
+}

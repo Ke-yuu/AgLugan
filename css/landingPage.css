@@ -1,48 +1,53 @@
-/* General Styles */
-body {
-  font-family: Arial, sans-serif;
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-content {
-  background-color: #d32f2f;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-  align-items: center;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
 }
 
-.logo img {
-  width: 100px;
-}
-
-.login-btn button {
-  background-color: #fdd835;
-  color: black;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-main {
-  text-align: center;
-}
-
-/* Hero Section */
-.content {
+.container {
+  width: 100%;
+  height: 100vh;
   position: relative;
 }
 
-.hero img {
-  width: 100%;
-  height: auto;
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #e53935;
 }
 
-.hero-content {
+.logo {
+  height: 50px;
+}
+
+.login-btn {
+  background-color: #fdd835;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.content {
+  position: relative;
+  text-align: center;
+}
+
+.img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.content1 {
   position: absolute;
   top: 30%;
   left: 50%;
@@ -50,18 +55,19 @@ main {
   color: white;
 }
 
-.hero-content h1 {
+.content1 h1 {
   font-size: 4rem;
-  margin: 0;
   font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.hero-content h2 {
+.content1 h2 {
   font-size: 2rem;
   margin-top: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-#get-started-btn {
+button#getStartedBtn {
   margin-top: 20px;
   background-color: #fdd835;
   color: black;
@@ -73,28 +79,31 @@ main {
   cursor: pointer;
 }
 
-/* Features Section */
 .features {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  justify-content: space-around;
-  margin: 30px 0;
+  justify-content: space-between;
+  width: 80%;
 }
 
 .feature {
-  background-color: #f44336;
+  background-color: #e53935;
   color: white;
-  padding: 20px;
   border-radius: 10px;
-  max-width: 250px;
-  text-align: left;
+  padding: 20px;
+  width: 30%;
+  text-align: center;
 }
 
-.icon {
-  font-size: 2rem;
+.feature img {
+  width: 50px;
   margin-bottom: 10px;
 }
 
-/* Button Hover Effects */
-button:hover {
-  opacity: 0.9;
+.feature p {
+  font-size: 1rem;
+  line-height: 1.4;
 }

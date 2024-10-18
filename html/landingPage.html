@@ -1,76 +1,43 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aglugan Landing Page</title>
-  <link rel="stylesheet" href="../css/landingPage.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgLugan</title>
+    <link rel="stylesheet" href="..//css/landingPage.css">
 </head>
 <body>
-
-  <!-- Header Section -->
-  <header>
-    <div class="logo">
-      <img src="../media/logo1.png" alt="Aglugan Logo"> 
+    <div class="container">
+        <header>
+            <img src="..//media/logo1.png" alt="AgLugan Logo" class="logo">
+            <button class="login-btn" id="loginBtn">Log-in</button>
+        </header>
+        <main class="content">
+            <img src="..//media/main-bg.jpg" alt="Jeepney" class="img">
+            <div class="content1">
+                <h1>AgLugan</h1>
+                <h2>Ang Iyong Jeepney, Naghihintay na!</h2>
+                <button id="getStartedBtn">Get Started</button>
+            </div>
+            <div class="features">
+                <div class="feature">
+                    <img src="booking-icon.png" alt="Booking Icon">
+                    <p>Booking: "Madaling mag-book ng iyong jeepney ride <br>
+                      sa AgLugan—ilang click lang at handa ka nang umalis!"</p>
+                </div>
+                <div class="feature">
+                    <img src="payment-icon.png" alt="Payment Icon">
+                    <p>Online Payment: "Sa AgLugan, maaari kang magbayad online 
+                      nang mabilis at ligtas, kaya't hindi mo na kailangang 
+                      mag-alala tungkol sa cash!"</p>
+                </div>
+                <div class="feature">
+                    <img src="convenience-icon.png" alt="Convenience Icon">
+                    <p>Convenience: "Naghahandang ang AgLugan ng maginhawang solusyon para sa iyong mga biyahe, kahit saan at kailan!"</p>
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="login-btn">
-      <button id="login-btn">Log-in</button>
-    </div>
-  </header>
-
-  <!-- Main Section -->
-  <main>
-    <div class="content">
-      <div class="content1">
-        <h1>AgLugan</h1>
-        <h2>Ang Iyong Jeepney, Naghihintay na!</h2>
-        <button id="get-started-btn">Get Started</button>
-      </div>
-      <img src="../media/marc.jpg" alt="Campus Background">
-    </div>
-
-    <!-- Features Section -->
-    <section class="features">
-      <div class="feature">
-        <div class="icon">&#128198;</div>
-        <p><strong>Booking</strong>: "Madaling mag-book ng iyong jeepney ride sa Aglugan—ilang click lang at handa ka nang umalis!"</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#128176;</div>
-        <p><strong>Online Payment</strong>: "Sa Aglugan, maaari kang magbayad online nang mabilis at ligtas, kaya't hindi mo na kailangan mag-alala tungkol sa cash!"</p>
-      </div>
-      <div class="feature">
-        <div class="icon">&#128522;</div>
-        <p><strong>Convenience</strong>: "Nagbibigay ang Aglugan ng maginhawang solusyon para sa iyong mga biyahe, kahit saan at kailan!"</p>
-      </div>
-    </section>
-  </main>
-
-  <script src="../script/script.js"></script>
-
-  <!-- Footer Section -->
-<footer>
-  <div class="footer-container">
-    <div class="footer-left">
-      <h3>AgLugan</h3>
-      <p>Your reliable Jeepney booking service, providing easy and convenient travel solutions for students, faculty, and staff.</p>
-    </div>
-    <div class="footer-right">
-      <ul class="footer-links">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-      </ul>
-      <div class="social-icons">
-        <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
-        <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
-        <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2024 AgLugan. All Rights Reserved.</p>
-  </div>
-</footer>
-
+    <script src="..//script/script.js"></script>
 </body>
 </html>
