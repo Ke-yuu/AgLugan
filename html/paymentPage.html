@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - AgLugan</title>
+  <link rel="stylesheet" href="..//css/paymentStyle.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header>
+    <nav>
+      <div class="logo-container">
+        <img src="..//media/logo1.png" alt="AgLugan Logo" class="logo">
+        <span class="brand-name">AgLugan</span>
+      </div>
+      <ul>
+        <li><a href="..//html/landingPage.html">Home</a></li>
+        <li><a href="payment.html" class="active">Payment</a></li>
+        <li><a href="..//html/aboutUsPage.html">About Us</a></li>
+        <li><a href="..//html/schedule.html">Schedules</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Payment Options</h1>
+    
+    <!-- Payment Selection -->
+    <div class="payment-selection">
+      <label for="payment-method">Choose Payment Method:</label>
+      <select id="payment-method" onchange="showPaymentForm()">
+        <option value="cash">Cash</option>
+        <option value="gcash">GCash</option>
+      </select>
+    </div>
+
+    <!-- Cash Payment Section -->
+    <div id="cash-section" class="payment-section">
+      <h2>Pay with Cash</h2>
+      <p>You have selected to pay via cash. Please hand over the payment directly to the jeepney driver.</p>
+    </div>
+
+    <!-- GCash Payment Section (hidden initially) -->
+    <div id="gcash-section" class="payment-section" style="display: none;">
+      <h2>Pay with GCash</h2>
+      <form id="gcash-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date" value="" readonly><br><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+
+        <button type="submit">Submit Payment</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="..//script/script.js"></script>
+</body>
+</html>

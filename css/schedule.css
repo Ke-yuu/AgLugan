@@ -57,13 +57,18 @@ nav ul li a {
   font-size: 18px;
   font-weight: bold;
   text-transform: uppercase;
+  padding: 0;
   background: none;
   border: none;
-  padding: 0; /* No background padding */
 }
 
 nav ul li a:hover {
-  color: #ffcc00; /* Change color on hover */
+  color: #ffcc00;
+}
+
+nav ul li a.active {
+  color: #ffcc00;
+  text-decoration: underline;
 }
 
 nav ul li::before {
@@ -79,7 +84,7 @@ nav ul li:first-child::before {
   content: none;
 }
 
-/* Container and Content */
+/* Payment Page Styles */
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -89,22 +94,31 @@ nav ul li:first-child::before {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  text-align: center;
+h1, h2 {
   color: #333;
 }
 
-/* Ride Form */
-.ride-form {
+.payment-selection {
   margin-bottom: 20px;
 }
 
-.ride-form label {
-  margin-right: 10px;
+.payment-section {
+  display: none;
+}
+
+label {
+  font-weight: bold;
+}
+
+input, select, button {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 button {
-  padding: 10px 20px;
   background-color: #28a745;
   color: white;
   border: none;
@@ -114,40 +128,4 @@ button {
 
 button:hover {
   background-color: #218838;
-}
-
-/* Ride Info Section */
-.ride-info h2 {
-  color: #333;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul li {
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-ul li span {
-  font-weight: bold;
-}
-
-.ride-info ul li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ride-info ul li div {
-  margin-right: 10px;
-}
-
-/* Color Coding for Seat Availability */
-ul li[style] {
-  display: flex;
-  justify-content: space-between;
 }
