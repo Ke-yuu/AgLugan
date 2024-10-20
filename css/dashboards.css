@@ -1,0 +1,77 @@
+/* Header Navigation Bar */
+header {
+  background-color: #d32f2f;
+  padding: 10px 0;
+  border-bottom: 2px solid #333;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.brand-name {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px #000;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-left: 30px;
+  position: relative;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+nav ul li a:hover {
+  color: #ffcc00;
+}
+
+nav ul li a.active {
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+nav ul li::before {
+  content: '|';
+  color: white;
+  position: absolute;
+  left: -15px;
+  top: 0;
+  font-size: 18px;
+}
+
+nav ul li:first-child::before {
+  content: none;
+}
