@@ -14,17 +14,61 @@
                 <span class="brand-name">AgLugan</span>
             </div>
             <ul>
-                <li><a href="../html/landingPage.html">Home</a></li>
-                <li><a href="payment.html">Payment</a></li>
+                <li><a href="../html/paymentPage.html">Payment</a></li>
                 <li><a href="../html/aboutUsPage.html">About Us</a></li>
                 <li><a href="../html/schedule.html">Schedules</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="main-content">
         <h1>Welcome to the Passenger Dashboard!</h1>
         <p>Join the jeepney queue and check your position in real-time.</p>
+        
+        <!-- Dashboard Sections -->
+        <div class="dashboard-sections">
+            <!-- Section 1: Profile and Welcome Message -->
+            <div class="section" id="profile-section">
+                <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
+                <p>Email: <span id="passenger-email">passenger@example.com</span></p>
+                <button id="logoutBtn">Log out</button>
+            </div>
+
+            <!-- Section 2: Upcoming and Available Rides -->
+            <div class="section" id="available-rides-section">
+                <h2>Available Rides</h2>
+                <ul class="ride-list" id="ride-list">
+                    <!-- Rides will be dynamically populated here -->
+                </ul>
+            </div>
+
+            <!-- Section 3: Queue Information -->
+            <div class="section" id="queue-info-section">
+                <h2>Queue Information</h2>
+                <div class="queue-info" id="queue-info">
+                    <p>Queue Position: <span id="queue-position">Not in queue</span></p>
+                    <p>Estimated Wait Time: <span id="wait-time">N/A</span></p>
+                    <button id="join-queue-btn">Join Queue</button>
+                </div>
+            </div>
+
+            <!-- Section 4: Ride History -->
+            <div class="section" id="ride-history-section">
+                <h2>Ride Booking History</h2>
+                <ul id="ride-history">
+                    <li>Bakakeng to City - 7:00 AM - Jeepney #JPN-001</li>
+                    <li>City to Bakakeng - 9:00 AM - Jeepney #JPN-006</li>
+                </ul>
+            </div>
+
+            <!-- Section 8: Help and Support -->
+            <div class="section help-section">
+                <h2>Help and Support</h2>
+                <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+            </div>
+        </div>
     </main>
-</body>
+
+    <script src="..//script/passenger-dashboard.js"></script>
+</body>    
 </html>
