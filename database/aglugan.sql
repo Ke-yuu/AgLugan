@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 22, 2024 at 03:55 PM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
+-- Generation Time: Oct 22, 2024 at 06:57 PM
+-- Server version: 8.2.0
+-- PHP Version: 8.2.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -113,11 +113,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_type` enum('passenger','driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` enum('admin','passenger','driver') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -129,7 +129,9 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`
 (3, 'Daniga', 'black@email.com', '123', '09321532561', 'passenger'),
 (4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver'),
 (5, 'Driver2', 'driver@email.com', '123', '0912345627481', 'driver'),
-(6, 'Driver3', 'driver3@email.com', '123', '0926481726412', 'driver');
+(6, 'Driver3', 'driver3@email.com', '123', '0926481726412', 'driver'),
+(16, 'marc', 'marc@gmail.com', '$2y$10$gXIDwHzzNUjtdPprBLyNYOCGxr.POgquyfCIbYRLE4I/psaj1k8JW', '09159730243', 'passenger'),
+(17, 'kumar', 'kumar@gmail.com', '$2y$10$WpbtGl6cBcImjfYFy6csl.S7d39wLVYy91PaAfFSfyJw9Dp/fqPJK', '091696966969', 'admin');
 
 -- --------------------------------------------------------
 
@@ -142,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `vehicle_id` int NOT NULL AUTO_INCREMENT,
   `driver_id` int DEFAULT NULL,
   `capacity` int NOT NULL,
-  `plate_number` varchar(1234) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
