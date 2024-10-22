@@ -1,19 +1,16 @@
-// Placeholder passenger data
-const passenger = {
-  name: 'Juan Dela Cruz',
-  email: 'juan.delacruz@example.com'
-};
+document.addEventListener('DOMContentLoaded', function () {
+  // Fetch user and available rides data from the server
+  fetch('../php/passenger-dashboard.php')
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === 'error') {
+              alert(data.message);
+              return;
+          }
 
-// Placeholder ride data
-const availableRides = [
-  { time: "7:00 AM", route: "Bakakeng to City", seats: 5, jeepneyNumber: "JPN-001" },
-  { time: "9:00 AM", route: "City to Bakakeng", seats: 3, jeepneyNumber: "JPN-002" },
-  { time: "11:00 AM", route: "Bakakeng to City", seats: 0, jeepneyNumber: "JPN-003" },
-];
-
-// Display Passenger Info
-document.getElementById('passenger-name').innerText = passenger.name;
-document.getElementById('passenger-email').innerText = passenger.email;
+          // Display Passenger Info
+          document.getElementById('passenger-name').innerText = data.user.name;
+          document.getElementById('passenger-email').innerText = data.user.email;
 
 // Display Available Rides
 const rideList = document.getElementById('ride-list');
@@ -47,6 +44,7 @@ availableRides.forEach(ride => {
   listItem.appendChild(banner); // Add the banner to the list item
   rideList.appendChild(listItem);
 });
+
 
 
 // Queue System

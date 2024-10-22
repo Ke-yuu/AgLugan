@@ -1,8 +1,8 @@
 function showPaymentForm() {
-  const paymentMethod = document.getElementById("payment-method").value;
-  const cashSection = document.getElementById("cash-section");
-  const gcashSection = document.getElementById("gcash-section");
-  const mayaSection = document.getElementById("maya-section");
+    const paymentMethod = document.getElementById("payment-method").value;
+    const cashSection = document.getElementById("cash-section");
+    const gcashSection = document.getElementById("gcash-section");
+    const mayaSection = document.getElementById("maya-section");
 
   // Hide all sections first
   cashSection.classList.remove('active');
@@ -22,10 +22,10 @@ function showPaymentForm() {
 }
 
 function populateDate(fieldId) {
-  const today = new Date();
-  const dateField = document.getElementById(fieldId);
-  const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  dateField.value = formattedDate;
+    const today = new Date();
+    const dateField = document.getElementById(fieldId);
+    const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    dateField.value = formattedDate;
 }
 
 const modal = document.getElementById("terms-modal");
