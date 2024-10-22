@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 22, 2024 at 12:57 PM
+-- Generation Time: Oct 22, 2024 at 03:55 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -88,16 +88,17 @@ CREATE TABLE IF NOT EXISTS `rides` (
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`user_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rides`
 --
 
 INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`) VALUES
-(1001, 1, NULL, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000'),
-(1002, 2, NULL, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000'),
-(10002, NULL, NULL, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000');
+(1001, 1, 4, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000'),
+(1002, 2, 5, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000'),
+(1003, 5, 6, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000'),
+(10003, NULL, NULL, 'Town', 'Bakakeng', 'on-route', 13.00, '00:05:00.000000');
 
 -- --------------------------------------------------------
 
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -126,7 +127,9 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`
 (1, 'Marc Pogi', 'pogi@email.com', '123', '09090909091', 'passenger'),
 (2, 'Marron', 'angas@email.com', '1234', '09696969696', 'passenger'),
 (3, 'Daniga', 'black@email.com', '123', '09321532561', 'passenger'),
-(4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver');
+(4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver'),
+(5, 'Driver2', 'driver@email.com', '123', '0912345627481', 'driver'),
+(6, 'Driver3', 'driver3@email.com', '123', '0926481726412', 'driver');
 
 -- --------------------------------------------------------
 
