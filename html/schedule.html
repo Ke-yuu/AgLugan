@@ -3,44 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeepney Ride Schedule</title>
+  <title>Jeepney Ride Schedule - AgLugan</title>
   <link rel="stylesheet" href="../css/schedule.css">
 </head>
 <body>
   <header>
     <nav>
-        <div class="logo-container">
-        <img src="..//media/logo1.png" alt="Aglugan Logo" class="logo">
-        <span class="brand-name">AGLUGAN</span>
-        </div>
-        <ul>
-          <li><a href="..//html/landingPage.html">Home</a></li>
-          <li><a href="..//html/paymentPage.html">Payment</a></li>
-          <li><a href="..//html/aboutUsPage.html">About Us</a></li>
-          <li><a href="schedule.html" class="active">Schedules</a></li>
-        </ul>
+      <div class="logo-container">
+        <img src="../media/logo.png" alt="Aglugan Logo" class="logo">
+      </div>
+      <ul class="nav-links">
+        <li><a href="../html/landingPage.html">Home</a></li>
+        <li><a href="../html/paymentPage.html">Payment</a></li>
+        <li><a href="../html/aboutUsPage.html">About Us</a></li>
+        <li><a href="schedule.html" class="active">Schedules</a></li>
+      </ul>
     </nav>
   </header>
 
-  <div class="container">
-    <h1>Jeepney Rides from/to Bakakeng</h1>
+  <main class="main-content">
+    <div class="container">
+      <h1>Jeepney Rides from/to Bakakeng</h1>
 
-    <div class="ride-form">
-      <label for="route">Select Route:</label>
-      <select id="route">
-        <option value="bakakeng-to-city">Bakakeng to City</option>
-        <option value="city-to-bakakeng">City to Bakakeng</option>
-      </select>
+      <div class="ride-form">
+        <label for="route">Select Route:</label>
+        <select id="route">
+          <option value="bakakeng-to-city">Bakakeng to City</option>
+          <option value="city-to-bakakeng">City to Bakakeng</option>
+        </select>
 
-      <button onclick="showRides()">Show Available Rides</button>
+        <button onclick="showRides()" class="view-button">Show Available Rides</button>
+      </div>
+
+      <div class="ride-info">
+        <h2>Available Rides</h2>
+        <ul id="rides-list" class="ride-list"></ul>
+      </div>
     </div>
+  </main>
 
-    <div class="ride-info">
-      <h2>Available Rides</h2>
-      <ul id="rides-list"></ul>
-    </div>
-  </div>
-
-  <script src="..//script/schedule.js"></script>
+  <script src="../script/schedule.js"></script>
 </body>
 </html>
