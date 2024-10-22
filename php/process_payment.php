@@ -1,5 +1,7 @@
 <?php
-// process_payment.php
+// Start the session to access user information
+session_start();
+
 header('Content-Type: application/json');
 
 // Database connection configuration
@@ -17,16 +19,24 @@ if ($conn->connect_error) {
     exit();
 }
 
+// Check if the user is logged in and retrieve the user_id from the session
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["status" => "error", "message" => "User not logged in."]);
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];  // Fetch user_id from session
+
 // Get payment details from form submission
 $payment_method = $_POST['payment_method'];
 $amount = $_POST['amount'];
 $name = $_POST['name'];
-$phone_number = $_POST['gcash-number'] ?? $_POST['maya-number']; 
+$phone_number = $_POST['gcash-number'] ?? $_POST['maya-number'];
 
-// Insert payment into 'payments' table
-$sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, status) VALUES (NULL, ?, ?, ?, 'pending')";
+// Insert payment into 'payments' table (include user_id)
+$sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) VALUES (NULL, ?, ?, ?, ?, 'pending')";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("dss", $amount, $payment_method, $phone_number); 
+$stmt->bind_param("dssi", $amount, $payment_method, $phone_number, $user_id); 
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "Payment submitted successfully!"]);
