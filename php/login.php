@@ -21,36 +21,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $password = $_POST['password'];
 
-    // Sanitize inputs to prevent SQL Injection
-    $name = mysqli_real_escape_string($conn, $name);
-    $password = mysqli_real_escape_string($conn, $password);
+    // Prepare the SQL statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM users WHERE name = ?");
+    $stmt->bind_param("s", $name);  // "s" specifies that the parameter is a string
 
-    // Query to check if the user exists and password matches
-    $sql = "SELECT * FROM users WHERE name = '$name' AND password_hash = '$password'";
-    $result = $conn->query($sql);
+    // Execute the statement
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         // Fetch the user details
         $user = $result->fetch_assoc();
 
-        // Store relevant user information in the session
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['name'] = $user['name'];
-        $_SESSION['user_type'] = $user['user_type'];
+        // Verify the hashed password
+        if (password_verify($password, $user['password_hash'])) {
+            // Password matches, store relevant user information in the session
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['user_type'] = $user['user_type'];
 
-        // Redirect based on user type
-        if ($user['user_type'] == 'admin') {
-            header("Location: ../html/admin-dashboard.html");
-        } else if ($user['user_type'] == 'passenger') {
-            header("Location: ../html/passenger-dashboard.html");
-        } else if ($user['user_type'] == 'driver') {
-            header("Location: ../html/driver-dashboard.html");
+            // Redirect based on user type
+            if ($user['user_type'] == 'admin') {
+                header("Location: ../html/admin-dashboard.html");
+            } else if ($user['user_type'] == 'passenger') {
+                header("Location: ../html/passenger-dashboard.html");
+            } else if ($user['user_type'] == 'driver') {
+                header("Location: ../html/driver-dashboard.html");
+            }
+            exit();
+        } else {
+            // Invalid password
+            echo "<script>alert('Invalid Name or Password'); window.location.href='../html/login.php';</script>";
         }
-        exit();
     } else {
-        // Invalid credentials, display an error message
+        // Invalid username
         echo "<script>alert('Invalid Name or Password'); window.location.href='../html/login.php';</script>";
     }
+
+    // Close the prepared statement
+    $stmt->close();
 }
 
 // Close the connection
