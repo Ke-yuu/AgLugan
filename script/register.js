@@ -1,30 +1,51 @@
-// Handle form submission
-document.getElementById('registrationForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting the traditional way
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
 
-    // Get form values
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
+        // Get form values
+        const name = document.getElementById('name').value; // Make sure this matches the HTML
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const phone_number = document.getElementById('phone_number').value; // Added phone number
+        const user_type = document.getElementById('user_type').value; // This captures the selected value
 
-    // Create a user object to store
-    const user = {
-        username: username,
-        email: email,
-        password: password,
-        role: role
-    };
 
-    // Store the user data in localStorage
-    localStorage.setItem('currentUser', JSON.stringify(user));
+        // Debugging: Log values to console
+        console.log('Name:', name);
+        console.log('Email:', email);
+        console.log('Password:', password);
+        console.log('Phone Number:', phone_number); // Log phone number
+        console.log('User Type:', user_type);
 
-    // Simulate role-based redirection
-    if (role === 'admin') {
-        window.location.href = '../html/admin-dashboard.html';
-    } else if (role === 'passenger') {
-        window.location.href = '../html/passenger-dashboard.html';
-    } else if (role === 'driver') {
-        window.location.href = '../html/driver-dashboard.html';
-    }
+        // Prepare form data for submission
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('phone_number', phone_number); // Append phone number
+        formData.append('user_type', user_type);
+
+        // Send form data to PHP script using fetch API
+        fetch('../php/register.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "success") {
+                alert('Registration successful!');
+                // Redirect based on role...
+            } else {
+                alert("Registration failed: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    });
 });
