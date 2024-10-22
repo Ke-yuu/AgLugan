@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passenger Dashboard</title>
-    <link rel="stylesheet" href="..//css/dashboards.css">
+    <title>Passenger Dashboard - AgLugan</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
 </head>
 <body>
     <header>
         <nav>
             <div class="logo-container">
-                <img src="../media/logo1.png" alt="AgLugan Logo" class="logo">
+                <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
                 <span class="brand-name">AgLugan</span>
             </div>
             <ul>
@@ -25,16 +25,17 @@
         <h1>Welcome to the Passenger Dashboard!</h1>
         <p>Join the jeepney queue and check your position in real-time.</p>
         
-        <!-- Dashboard Sections -->
         <div class="dashboard-sections">
             <!-- Section 1: Profile and Welcome Message -->
-            <div class="section" id="profile-section">
-                <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
-                <p>Email: <span id="passenger-email">passenger@example.com</span></p>
-                <button id="logoutBtn">Log out</button>
+            <div class="section profile-section" id="profile-section">
+                <div class="profile-content">
+                    <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
+                    <p>Email: <span id="passenger-email">passenger@example.com</span></p>
+                    <button id="logoutBtn">Log out</button>
+                </div>
             </div>
 
-            <!-- Section 2: Upcoming and Available Rides -->
+            <!-- Section 2: Available Rides -->
             <div class="section" id="available-rides-section">
                 <h2>Available Rides</h2>
                 <ul class="ride-list" id="ride-list">
@@ -52,16 +53,16 @@
                 </div>
             </div>
 
-            <!-- Section 4: Ride History -->
-            <div class="section" id="ride-history-section">
-                <h2>Ride Booking History</h2>
-                <ul id="ride-history">
-                    <li>Bakakeng to City - 7:00 AM - Jeepney #JPN-001</li>
-                    <li>City to Bakakeng - 9:00 AM - Jeepney #JPN-006</li>
-                </ul>
-            </div>
+           <!-- Section 4: Ride History -->
+           <div class="section" id="ride-history-section">
+               <h2>Ride Booking History</h2>
+               <ul id="ride-history">
+                 <li class="ride-history-item">Bakakeng to City - 7:00 AM - Jeepney #JPN-001</li>
+                 <li class="ride-history-item">City to Bakakeng - 9:00 AM - Jeepney #JPN-006</li>
+               </ul>
+           </div>
 
-            <!-- Section 8: Help and Support -->
+            <!-- Section 5: Help and Support -->
             <div class="section help-section">
                 <h2>Help and Support</h2>
                 <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
@@ -70,5 +71,4 @@
     </main>
 
     <script src="..//script/passenger-dashboard.js"></script>
-</body>    
-</html>
+</body>

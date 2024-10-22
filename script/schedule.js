@@ -12,23 +12,28 @@ function showRides() {
         return;
       }
 
-      data.forEach((ride) => {
-        const rideItem = document.createElement("li");
-
-        const rideDetails = `
-          <div>
-            <span>Jeepney Number:</span> ${ride.jeepneyNumber}
-          </div>
-          <div>
-            <span>Time:</span> ${ride.time}
-          </div>
-          <div>
-            <span>Seats Available:</span> ${ride.seats}
-          </div>
-          <div>
-            <span>Wait Time:</span> ${ride.waiting_time}
-          </div>
-        `;
+  availableRides.forEach((ride) => {
+    const rideItem = document.createElement("li");
+    
+    const rideDetails = `
+  <div class="ride-details">
+    <div class="ride-info">
+      <span class="label">Jeepney Number:</span> ${ride.jeepneyNumber}
+    </div>
+    <div class="ride-info">
+      <span class="label">Time:</span> ${ride.time}
+    </div>
+    <div class="ride-info">
+      <span class="label">Seats Available:</span> ${ride.seats}
+    </div>
+    <div class="ride-info">
+      <span class="label">Wait Time:</span> ${ride.waitTime}
+    </div>
+    <button class="book-button" ${ride.seats === 0 ? 'disabled' : ''}>
+      ${ride.seats > 0 ? 'Book Now' : 'Full'}
+    </button>
+  </div>
+`;
 
         rideItem.innerHTML = rideDetails;
 
