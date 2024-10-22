@@ -1,5 +1,5 @@
 function showRides() {
-  console.log("string")
+  console.log("Fetching rides");
 
   var route = document.getElementById("route").value;
 
@@ -15,9 +15,36 @@ function showRides() {
         return;
       }
 
-      // Display each ride in the list
+      // Display each ride in the list with a button for payment
       data.forEach(ride => {
-        ridesList.innerHTML += `<li>Ride ID: ${ride.ride_id}, Driver ID: ${ride.driver_id}, Status: ${ride.status}, Waiting Time: ${ride.waiting_time}</li>`;
+        let rideElement = document.createElement('li');
+        rideElement.classList.add('ride-item'); // Add a class for styling
+
+        // Create a div for ride details
+        let rideDetails = document.createElement('div');
+        rideDetails.classList.add('ride-details');
+
+        rideDetails.innerHTML = `
+          <span class="ride-id">Ride ID: ${ride.ride_id}</span>
+          <span class="driver-id">Driver ID: ${ride.driver_id || 'N/A'}</span>
+          <span class="status">Status: ${ride.status}</span>
+          <span class="waiting-time">Waiting Time: ${ride.waiting_time}</span>
+        `;
+
+        // Create the payment button
+        let paymentButton = document.createElement('button');
+        paymentButton.innerText = 'Go to Payment';
+        paymentButton.classList.add('payment-button');
+        paymentButton.onclick = function() {
+          window.location.href = '../html/paymentPage.html'; // Redirect to payment page
+        };
+
+        // Append the ride details and payment button to the ride item
+        rideElement.appendChild(rideDetails);
+        rideElement.appendChild(paymentButton);
+
+        // Append the ride element to the rides list
+        ridesList.appendChild(rideElement);
       });
     })
     .catch(error => {
