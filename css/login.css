@@ -2,84 +2,106 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  height: 100vh;
-  background-color: #333;
+html, body {
+  height: 100%;
+  background-color: #444444;
 }
 
-.login-container {
-  position: relative;
-  width: 100%;
+.container {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+}
+
+/* Header Section */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: rgb(27, 27, 27);
+}
+
+.logo {
+  width: 60px;
+}
+
+.login-btn {
+  background-color: #ff0000;
+  color: #f8f8f8;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 15px;
+  max-width: 120px; 
+}
+
+.login-btn:hover {
+  background-color: #ffffff;
+  color: #f30303;
+}
+
+header .login-btn {
+  margin-left: auto;
+}
+/* Login Form Section */
+.login-section {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1;
+  background-color: #444444;
 }
 
-.image-section {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;  /* Puts the image behind the login form */
-}
-
-.image-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;  /* Ensures the image covers the entire background */
-}
-
-.login-section {
-  background-color: rgba(229, 57, 53, 0.95);  /* Slight transparency to show background */
+.form-container {
+  background-color: rgb(27, 27, 27);
   padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
-  width: 300px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-.login-section h1 {
-  font-size: 2.5rem;
-  color: #fff;
-  margin-bottom: 30px;
+.form-logo {
+  width: 80px;
+  margin-bottom: 20px;
 }
 
-.login-section form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+h1 {
+  color: white;
+  margin-bottom: 20px;
 }
 
-.login-section label {
-  color: #fff;
-  font-size: 1.1rem;
+form label {
+  color: white;
+  display: block;
+  margin: 10px 0 5px;
 }
 
-.login-section input {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  font-size: 1rem;
-}
-
-.login-btn, .register-btn {
-  background-color: #fdd835;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
+form input {
   width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.register-btn {
-  background-color: white;
-  color: black;
-  margin-top: 10px;
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-btn:hover {
+  background-color: #910b0b;
 }
