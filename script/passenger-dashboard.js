@@ -19,12 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
       // Loop through the available rides and display them
       data.rides.forEach(ride => {
         const listItem = document.createElement('li');
-
-        // Create a div for the banner
         const banner = document.createElement('div');
         banner.classList.add('ride-banner');
 
-        // Determine the banner and styling based on ride status (adjust as necessary)
         if (ride.status === 'full') {
           listItem.classList.add('full-seats');
           banner.classList.add('banner-full');
@@ -39,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
           banner.innerText = 'Available';
         }
 
-        // Add ride information to the list item
         listItem.innerHTML = `
           <div class="ride-info">
             Route: ${ride.start_location} to ${ride.end_location}
@@ -48,8 +44,22 @@ document.addEventListener('DOMContentLoaded', function () {
           <div>Waiting Time: ${ride.waiting_time} mins</div>
         `;
 
-        listItem.appendChild(banner); // Add the banner to the list item
+        listItem.appendChild(banner);
         rideList.appendChild(listItem);
+      });
+
+      // Display Payment History
+      const paymentHistory = document.getElementById('ride-history');
+      paymentHistory.innerHTML = ''; // Clear existing content
+
+      // Loop through the payment history and display it
+      data.payments.forEach(payment => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('ride-history-item');
+        listItem.innerHTML = `
+          Amount: ₱${payment.amount} - Payment Method: ${payment.payment_method} - Status: ${payment.status}
+        `;
+        paymentHistory.appendChild(listItem);
       });
     })
     .catch(error => {

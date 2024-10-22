@@ -42,10 +42,22 @@ while ($row = $rides_result->fetch_assoc()) {
     $rides[] = $row;
 }
 
-// Combine user and ride data into a single response
+// Fetch payment history for the logged-in user
+$payment_sql = "SELECT amount, payment_method, status FROM payments WHERE user_id = ?";
+$payment_stmt = $conn->prepare($payment_sql);
+$payment_stmt->bind_param("i", $user_id);
+$payment_stmt->execute();
+$payment_result = $payment_stmt->get_result();
+$payments = [];
+while ($row = $payment_result->fetch_assoc()) {
+    $payments[] = $row;
+}
+
+// Combine user, ride, and payment history data into a single response
 $response = [
     "user" => $user_data,
-    "rides" => $rides
+    "rides" => $rides,
+    "payments" => $payments // Payment history
 ];
 
 // Return the data as JSON
