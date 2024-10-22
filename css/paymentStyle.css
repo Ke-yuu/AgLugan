@@ -1,25 +1,21 @@
-/* General Body Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Header Navigation Bar */
+html, body {
+  height: 100%;
+  background-color: #444444;
+}
+
 header {
-  background-color: #d32f2f;
-  padding: 10px 0;
-  border-bottom: 2px solid #333;
-}
-
-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
+  background-color: rgb(27, 27, 27);
 }
 
 .logo-container {
@@ -28,167 +24,145 @@ nav {
 }
 
 .logo {
-  height: 50px;
+  width: 50px;
   margin-right: 10px;
 }
 
 .brand-name {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 1.5rem;
   color: white;
-  text-shadow: 2px 2px 4px #000;
 }
 
 nav ul {
-  display: flex;
   list-style: none;
-  margin: 0;
-  padding: 0;
+  display: flex;
+  margin-left: 81rem;
+  margin-top: -2rem; 
+  margin-bottom: 1rem;
 }
 
 nav ul li {
-  margin-left: 30px;
-  position: relative;
+  margin: 0 15px;
 }
 
 nav ul li a {
-  text-decoration: none;
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 0;
-  background: none;
-  border: none;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 nav ul li a:hover {
-  color: #ffcc00;
+  background-color: #910b0b;
 }
 
 nav ul li a.active {
-  color: #ffcc00;
-  text-decoration: underline;
+  background-color: #460505;
 }
 
-nav ul li::before {
-  content: '|';
-  color: white;
-  position: absolute;
-  left: -15px;
-  top: 0;
-  font-size: 18px;
-}
-
-nav ul li:first-child::before {
-  content: none;
-}
-
-/* Payment Page Styles */
-.container {
+/* Payment Container Styling */
+.payment-container {
+  width: 60%;
   max-width: 800px;
-  margin: 20px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  padding: 30px;
+  background-color: rgb(27, 27, 27);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-h1, h2 {
-  color: #333;
-}
-
-.payment-selection {
+.payment-container h1 {
+  text-align: center;
   margin-bottom: 20px;
+}
+
+.payment-selection label,
+.payment-section label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.payment-selection select,
+.payment-section input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #222;
+  color: white;
 }
 
 .payment-section {
   display: none;
 }
 
-label {
-  font-weight: bold;
-}
-
-input, select, button {
-  padding: 10px;
-  margin: 5px 0;
-  width: 100%;
-  max-width: 300px;
-  box-sizing: border-box;
-}
-
-
-#gcash-form {
+.payment-section.active {
   display: block;
-  width: 100%;
-  max-width: 300px;
-  margin-top: 20px;
-}
-#maya-form{
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  margin-top: 20px;
-  
 }
 
-input[type="checkbox"] {
-  transform: translateY(3px); /* Fine-tune vertical alignment */
-}
-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+.payment-section h2 {
+  color: #ff0000;
+  margin-bottom: 15px;
 }
 
-button:hover {
-  background-color: #218838;
-}
-
-/*Terms and Conditions*/
 .checkbox-container {
   display: flex;
   align-items: center;
-  margin-bottom: 20px; 
+  gap: 10px; /* Adds some space between the checkbox and label */
+  margin-top: 10px;
 }
 
-.checkbox-container label {
-  margin-left: 8px; 
+.checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
 }
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #910b0b;
+}
+
+/* Modal Styling */
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1;
-  left: 0;
+  display: none;
+  position: fixed;
   top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; 
+  margin: 10% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%; 
+  width: 60%;
+  max-width: 600px;
+  border-radius: 5px;
+  position: relative;
 }
 
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #ff0000;
   cursor: pointer;
+  font-size: 24px;
 }

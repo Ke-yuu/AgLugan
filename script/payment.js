@@ -1,4 +1,3 @@
-// Function to show the appropriate payment form
 function showPaymentForm() {
   const paymentMethod = document.getElementById("payment-method").value;
   const cashSection = document.getElementById("cash-section");
@@ -6,29 +5,29 @@ function showPaymentForm() {
   const mayaSection = document.getElementById("maya-section");
 
   // Hide all sections first
-  cashSection.style.display = "none";
-  gcashSection.style.display = "none";
-  mayaSection.style.display = "none";
+  cashSection.classList.remove('active');
+  gcashSection.classList.remove('active');
+  mayaSection.classList.remove('active');
 
   // Show the selected section
   if (paymentMethod === "gcash") {
-    gcashSection.style.display = "block";
+    gcashSection.classList.add('active');
     populateDate("gcash-date"); // Populate date for GCash
-  } else if(paymentMethod === "maya") {
-    mayaSection.style.display = "block";
+  } else if (paymentMethod === "maya") {
+    mayaSection.classList.add('active');
     populateDate("maya-date"); // Populate date for Maya
   } else {
-    cashSection.style.display = "block";
+    cashSection.classList.add('active');
   }
 }
 
-// Function to populate today's date in the specified date field
 function populateDate(fieldId) {
   const today = new Date();
   const dateField = document.getElementById(fieldId);
   const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
   dateField.value = formattedDate;
 }
+
 const modal = document.getElementById("terms-modal");
 const btnOpen = document.getElementById("open-modal");
 const btnOpenMaya = document.getElementById("open-maya-modal");
@@ -38,29 +37,29 @@ const gcashSubmit = document.getElementById("gcash-submit");
 const mayaTerms = document.getElementById("maya-terms");
 const mayaSubmit = document.getElementById("maya-submit");
 
-btnOpen.onclick = function() {
+btnOpen.onclick = function () {
   modal.style.display = "block";
 }
 
-btnOpenMaya.onclick = function() {
+btnOpenMaya.onclick = function () {
   modal.style.display = "block";
 }
 
-spanClose.onclick = function() {
+spanClose.onclick = function () {
   modal.style.display = "none";
   gcashTerms.disabled = false;
   mayaTerms.disabled = false;
 }
 
-gcashTerms.addEventListener('change', function() {
+gcashTerms.addEventListener('change', function () {
   gcashSubmit.disabled = !this.checked;
 });
 
-mayaTerms.addEventListener('change', function() {
+mayaTerms.addEventListener('change', function () {
   mayaSubmit.disabled = !this.checked;
 });
 
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
     gcashTerms.disabled = false;

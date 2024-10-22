@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment - AgLugan</title>
   <link rel="stylesheet" href="..//css/paymentStyle.css">
+  <link rel="icon" href="..//media/logo.png" type="image/png"> <!-- Favicon -->
 </head>
 <body>
-  <!-- Navigation Bar -->
+  <!-- Header Section -->
   <header>
     <nav>
       <div class="logo-container">
-        <img src="..//media/logo1.png" alt="AgLugan Logo" class="logo">
-        <span class="brand-name">AgLugan</span>
+        <img src="..//media/logo.png" alt="AgLugan Logo" class="logo">
       </div>
       <ul>
         <li><a href="..//html/landingPage.html">Home</a></li>
@@ -23,10 +23,11 @@
     </nav>
   </header>
 
-  <div class="container">
+  <!-- Payment Container Section -->
+  <div class="payment-container">
     <h1>Payment Options</h1>
-    
-    <!-- Payment Selection -->
+
+    <!-- Payment Selection Form -->
     <div class="payment-selection">
       <label for="payment-method">Choose Payment Method:</label>
       <select id="payment-method" onchange="showPaymentForm()">
@@ -37,64 +38,61 @@
     </div>
 
     <!-- Cash Payment Section -->
-    <div id="cash-section" class="payment-section">
+    <div id="cash-section" class="payment-section active">
       <h2>Pay with Cash</h2>
       <p>You have selected to pay via cash. Please hand over the payment directly to the jeepney driver.</p>
     </div>
 
-      <!-- GCash Payment Section (hidden initially) -->
-      <div id="gcash-section" class="payment-section" style="display: none;">
-        <h2>Pay with GCash</h2>
-        <form id="gcash-form">
-          <label for="gcash-name">Name:</label>
-          <input type="text" id="gcash-name" name="name" required><br><br>
-          <label for="gcash-number">Gcash Number:</label>
-          <input type= "number" id="gcash-number" name="gcash-number" required><br><br>
-          <label for="gcash-date">Date:</label>
-          <input type="text" id="gcash-date" name="date" value="" readonly><br><br>
-  
-          <label for="gcash-amount">Amount:</label>
-          <input type="number" id="gcash-amount" name="amount" required><br><br>
-  
-          <div class="checkbox-container">
-            <input type="checkbox" id="gcash-terms" disabled>
-            <label for="gcash-terms">I have read and agree to the <a href="#" id="open-modal">Terms and Conditions</a></label>
-          </div><br>
-  
-          <button type="submit" id="gcash-submit" disabled>Submit Payment</button>
-        </form>
-      </div>
-    
-      <!-- Maya Payment Section (hidden initially) -->
-      <div id="maya-section" class="payment-section" style="display: none;">
-        <h2>Pay with Maya</h2>
-        <form id="maya-form">
-          <label for="maya-name">Name:</label>
-          <input type="text" id="maya-name" name="name" required><br><br>
-          <label for="maya-number">Maya Number:</label>
-          <input type="number" id="maya-number" name="maya-number" required><br><br>
-          <label for="maya-date">Date:</label>
-          <input type="text" id="maya-date" name="date" value="" readonly><br><br>
-  
-          <label for="maya-amount">Amount:</label>
-          <input type="number" id="maya-amount" name="amount" required><br><br>
-          <div class="checkbox-container">
-            <input type="checkbox" id="maya-terms" disabled>
-            <label for="maya-terms">I have read and agree to the <a href="#" id="open-maya-modal">Terms and Conditions</a></label>
-          </div><br>
-          <button type="submit" id="gcash-submit" disabled>Submit Payment</button>
-        </form>
-      </div>
+    <!-- GCash Payment Section -->
+    <div id="gcash-section" class="payment-section">
+      <h2>Pay with GCash</h2>
+      <form id="gcash-form">
+        <label for="gcash-name">Name:</label>
+        <input type="text" id="gcash-name" name="name" required>
+        <label for="gcash-number">GCash Number:</label>
+        <input type="number" id="gcash-number" name="gcash-number" required>
+        <label for="gcash-date">Date:</label>
+        <input type="text" id="gcash-date" name="date" readonly>
+        <label for="gcash-amount">Amount:</label>
+        <input type="number" id="gcash-amount" name="amount" required>
+        <div class="checkbox-container">
+          <input type="checkbox" id="gcash-terms">
+          <label for="gcash-terms">I have read and agree to the <a href="#" id="open-modal">Terms and Conditions</a></label>
+        </div>
+        <button type="submit" id="gcash-submit" class="submit-btn" disabled>Submit Payment</button>
+      </form>
     </div>
-    <!-- Terms and Conditions Modal -->
+
+    <!-- Maya Payment Section -->
+    <div id="maya-section" class="payment-section">
+      <h2>Pay with Maya</h2>
+      <form id="maya-form">
+        <label for="maya-name">Name:</label>
+        <input type="text" id="maya-name" name="name" required>
+        <label for="maya-number">Maya Number:</label>
+        <input type="number" id="maya-number" name="maya-number" required>
+        <label for="maya-date">Date:</label>
+        <input type="text" id="maya-date" name="date" readonly>
+        <label for="maya-amount">Amount:</label>
+        <input type="number" id="maya-amount" name="amount" required>
+        <div class="checkbox-container">
+          <input type="checkbox" id="maya-terms">
+          <label for="maya-terms">I have read and agree to the <a href="#" id="open-maya-modal">Terms and Conditions</a></label>
+        </div>
+        <button type="submit" id="maya-submit" class="submit-btn" disabled>Submit Payment</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Terms and Conditions Modal -->
   <div id="terms-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Terms and Conditions</h2>
       <p>Your terms and conditions content goes here.</p>
-      <p>... (additional terms) ...</p>
     </div>
   </div>
+
   <script src="..//script/payment.js"></script>
 </body>
 </html>

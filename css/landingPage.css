@@ -7,7 +7,7 @@
 
 html, body {
   height: 100%;
-  overflow: hidden; /* Disable scrolling */
+  overflow: hidden; 
 }
 
 body {
@@ -17,7 +17,7 @@ body {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full height of the viewport */
+  height: 100vh; 
 }
 
 header {
@@ -48,17 +48,16 @@ header {
   color: #f30303;
 }
 
-/* Adjusted hero section to fit and keep content centered */
 .hero-section {
   position: relative;
   width: 100%;
-  flex: 1; /* Adjusted flex to allow space for features */
+  flex: 1; 
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: #fff;
-  min-height: 60vh; /* Ensures the hero section takes at least 60% of the screen */
+  min-height: 60vh;
 }
 
 .bg-image {
@@ -141,7 +140,6 @@ h2 {
   line-height: 1.5;
 }
 
-/* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .features {
     flex-direction: column;
