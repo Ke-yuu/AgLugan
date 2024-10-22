@@ -1,9 +1,9 @@
 <?php
 // Database connection
-$servername = "localhost";  // Replace with your database server
-$username = "root";         // Replace with your database username
-$password = "";             // Replace with your database password
-$dbname = "aglugan";        // Replace with your database name
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aglugan";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Get the route from the request
-$route = $_GET['route'];
+$route = isset($_GET['route']) ? $_GET['route'] : '';
 
 // Define the SQL query based on the selected route
 if ($route === "bakakeng-to-city") {
@@ -36,10 +36,10 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $rides[] = $row;
     }
+    echo json_encode($rides);
+} else {
+    echo json_encode(array("error" => "No rides available"));
 }
-
-// Return the results as JSON
-echo json_encode($rides);
 
 // Close the connection
 $conn->close();
