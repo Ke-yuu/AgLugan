@@ -42,51 +42,65 @@
       <p>You have selected to pay via cash. Please hand over the payment directly to the jeepney driver.</p>
     </div>
 
-      <!-- GCash Payment Section (hidden initially) -->
-      <div id="gcash-section" class="payment-section" style="display: none;">
-        <h2>Pay with GCash</h2>
-        <form id="gcash-form">
-          <label for="gcash-name">Name:</label>
-          <input type="text" id="gcash-name" name="name" required><br><br>
-          <label for="gcash-number">Gcash Number:</label>
-          <input type= "number" id="gcash-number" name="gcash-number" required><br><br>
-          <label for="gcash-date">Date:</label>
-          <input type="text" id="gcash-date" name="date" value="" readonly><br><br>
-  
-          <label for="gcash-amount">Amount:</label>
-          <input type="number" id="gcash-amount" name="amount" required><br><br>
-  
-          <div class="checkbox-container">
-            <input type="checkbox" id="gcash-terms" disabled>
-            <label for="gcash-terms">I have read and agree to the <a href="#" id="open-modal">Terms and Conditions</a></label>
-          </div><br>
-  
-          <button type="submit" id="gcash-submit" disabled>Submit Payment</button>
-        </form>
-      </div>
-    
-      <!-- Maya Payment Section (hidden initially) -->
-      <div id="maya-section" class="payment-section" style="display: none;">
-        <h2>Pay with Maya</h2>
-        <form id="maya-form">
-          <label for="maya-name">Name:</label>
-          <input type="text" id="maya-name" name="name" required><br><br>
-          <label for="maya-number">Maya Number:</label>
-          <input type="number" id="maya-number" name="maya-number" required><br><br>
-          <label for="maya-date">Date:</label>
-          <input type="text" id="maya-date" name="date" value="" readonly><br><br>
-  
-          <label for="maya-amount">Amount:</label>
-          <input type="number" id="maya-amount" name="amount" required><br><br>
-          <div class="checkbox-container">
-            <input type="checkbox" id="maya-terms" disabled>
-            <label for="maya-terms">I have read and agree to the <a href="#" id="open-maya-modal">Terms and Conditions</a></label>
-          </div><br>
-          <button type="submit" id="gcash-submit" disabled>Submit Payment</button>
-        </form>
-      </div>
+    <!-- GCash Payment Section (hidden initially) -->
+    <div id="gcash-section" class="payment-section" style="display: none;">
+      <h2>Pay with GCash</h2>
+      <form id="gcash-form" action="../php/process_payment.php" method="POST">
+        <input type="hidden" name="payment_method" value="gcash">
+        <label for="gcash-name">Name:</label>
+        <input type="text" id="gcash-name" name="name" required><br><br>
+        <label for="gcash-number">Gcash Number:</label>
+        <input type="number" id="gcash-number" name="gcash-number" required><br><br>
+        <label for="gcash-date">Date:</label>
+        <input type="text" id="gcash-date" name="date" value="" readonly><br><br>
+
+        <label for="gcash-amount">Amount:</label>
+        <input type="number" id="gcash-amount" name="amount" required><br><br>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="gcash-terms" disabled>
+          <label for="gcash-terms">I have read and agree to the <a href="#" id="open-modal">Terms and Conditions</a></label>
+        </div><br>
+
+        <button type="submit" id="gcash-submit" disabled>Submit Payment</button>
+      </form>
     </div>
-    <!-- Terms and Conditions Modal -->
+
+    <!-- Maya Payment Section (hidden initially) -->
+    <div id="maya-section" class="payment-section" style="display: none;">
+      <h2>Pay with Maya</h2>
+      <form id="maya-form" action="../php/process_payment.php" method="POST">
+        <input type="hidden" name="payment_method" value="maya">
+        <label for="maya-name">Name:</label>
+        <input type="text" id="maya-name" name="name" required><br><br>
+        <label for="maya-number">Maya Number:</label>
+        <input type="number" id="maya-number" name="maya-number" required><br><br>
+        <label for="maya-date">Date:</label>
+        <input type="text" id="maya-date" name="date" value="" readonly><br><br>
+
+        <label for="maya-amount">Amount:</label>
+        <input type="number" id="maya-amount" name="amount" required><br><br>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="maya-terms" disabled>
+          <label for="maya-terms">I have read and agree to the <a href="#" id="open-maya-modal">Terms and Conditions</a></label>
+        </div><br>
+
+        <button type="submit" id="maya-submit" disabled>Submit Payment</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="success-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>Payment submitted successfully!</h2>
+      <p>Your payment has been processed successfully. Thank you!</p>
+      <button id="close-modal-btn">OK</button>
+    </div>
+  </div>
+
+  <!-- Terms and Conditions Modal -->
   <div id="terms-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -95,6 +109,7 @@
       <p>... (additional terms) ...</p>
     </div>
   </div>
+
   <script src="..//script/payment.js"></script>
 </body>
 </html>
