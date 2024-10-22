@@ -31,12 +31,26 @@ $user_id = $_SESSION['user_id'];  // Fetch user_id from session
 $payment_method = $_POST['payment_method'];
 $amount = $_POST['amount'];
 $name = $_POST['name'];
-$phone_number = $_POST['gcash-number'] ?? $_POST['maya-number'];
+
+// Handle payment method to get the phone number based on GCash or Maya
+$phone_number = null;
+if ($payment_method === "gcash") {
+    $phone_number = $_POST['gcash-number'];
+} elseif ($payment_method === "maya") {
+    $phone_number = $_POST['maya-number'];
+}
+
+// Validate required fields
+if (empty($amount) || empty($phone_number) || empty($payment_method) || empty($user_id)) {
+    echo json_encode(["status" => "error", "message" => "Missing required fields."]);
+    exit();
+}
 
 // Insert payment into 'payments' table (include user_id)
-$sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) VALUES (NULL, ?, ?, ?, ?, 'pending')";
+$sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) 
+        VALUES (NULL, ?, ?, ?, ?, 'pending')";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("dssi", $amount, $payment_method, $phone_number, $user_id); 
+$stmt->bind_param("dssi", $amount, $payment_method, $phone_number, $user_id);
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "Payment submitted successfully!"]);
@@ -45,5 +59,6 @@ if ($stmt->execute()) {
 }
 
 // Close connection
+$stmt->close();
 $conn->close();
 ?>

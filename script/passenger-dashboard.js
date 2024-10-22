@@ -16,19 +16,20 @@ document.addEventListener('DOMContentLoaded', function () {
       const rideList = document.getElementById('ride-list');
       rideList.innerHTML = ''; // Clear any existing ride information before adding new ones
 
-      data.availableRides.forEach(ride => {
+      // Loop through the available rides and display them
+      data.rides.forEach(ride => {
         const listItem = document.createElement('li');
 
         // Create a div for the banner
         const banner = document.createElement('div');
         banner.classList.add('ride-banner');
 
-        // Determine the banner and styling based on seat availability
-        if (ride.seats === 0) {
+        // Determine the banner and styling based on ride status (adjust as necessary)
+        if (ride.status === 'full') {
           listItem.classList.add('full-seats');
           banner.classList.add('banner-full');
           banner.innerText = 'Full';
-        } else if (ride.seats <= 3) {
+        } else if (ride.status === 'waiting') {
           listItem.classList.add('few-seats');
           banner.classList.add('banner-few');
           banner.innerText = 'Few Seats Left';
@@ -40,9 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add ride information to the list item
         listItem.innerHTML = `
-          <div class="ride-info">${ride.route} - ${ride.time}</div>
-          <div>Seats Available: ${ride.seats}</div>
-          <div>Jeepney Number: ${ride.jeepneyNumber}</div>
+          <div class="ride-info">
+            Route: ${ride.start_location} to ${ride.end_location}
+          </div>
+          <div>Fare: ₱${ride.fare}</div>
+          <div>Waiting Time: ${ride.waiting_time} mins</div>
         `;
 
         listItem.appendChild(banner); // Add the banner to the list item

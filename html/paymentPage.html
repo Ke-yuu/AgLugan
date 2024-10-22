@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment - AgLugan</title>
-  <link rel="stylesheet" href="..//css/paymentStyle.css">
-  <link rel="icon" href="..//media/logo.png" type="image/png"> 
+  <link rel="stylesheet" href="../css/paymentStyle.css">
+  <link rel="icon" href="../media/logo.png" type="image/png">
 </head>
 <body>
   <!-- Header Section -->
   <header>
     <nav>
       <div class="logo-container">
-        <img src="..//media/logo.png" alt="AgLugan Logo" class="logo">
+        <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
       </div>
       <ul>
-        <li><a href="..//html/passenger-dashboard.html">Home</a></li>
+        <li><a href="../html/passenger-dashboard.html">Home</a></li>
         <li><a href="" class="active">Payment</a></li>
-        <li><a href="..//html/aboutUsPage.html">About Us</a></li>
-        <li><a href="..//html/schedule.html">Schedules</a></li>
+        <li><a href="../html/aboutUsPage.html">About Us</a></li>
+        <li><a href="../html/schedule.html">Schedules</a></li>
       </ul>
     </nav>
   </header>
@@ -30,7 +30,7 @@
     <!-- Payment Selection Form -->
     <div class="payment-selection">
       <label for="payment-method">Choose Payment Method:</label>
-      <select id="payment-method" onchange="showPaymentForm()">
+      <select id="payment-method" name="payment_method" onchange="showPaymentForm()">
         <option value="cash">Cash</option>
         <option value="gcash">GCash</option>
         <option value="maya">Maya</option>
@@ -47,6 +47,7 @@
     <div id="gcash-section" class="payment-section">
       <h2>Pay with GCash</h2>
       <form id="gcash-form">
+        <input type="hidden" name="payment_method" value="gcash">
         <label for="gcash-name">Name:</label>
         <input type="text" id="gcash-name" name="name" required>
         <label for="gcash-number">GCash Number:</label>
@@ -67,6 +68,7 @@
     <div id="maya-section" class="payment-section">
       <h2>Pay with Maya</h2>
       <form id="maya-form">
+        <input type="hidden" name="payment_method" value="maya">
         <label for="maya-name">Name:</label>
         <input type="text" id="maya-name" name="name" required>
         <label for="maya-number">Maya Number:</label>
@@ -93,7 +95,15 @@
     </div>
   </div>
 
+  <!-- Success Modal -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content">
+      <h2>Payment Successful</h2>
+      <p>Your payment has been processed successfully. Thank you!</p>
+      <button id="close-success-modal">OK</button>
+    </div>
+  </div>
 
-  <script src="..//script/payment.js"></script>
+  <script src="../script/payment.js"></script>
 </body>
 </html>
