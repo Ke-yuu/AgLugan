@@ -2,108 +2,158 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* Disable scrolling */
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #fff;
+  background-color: #333333;
 }
 
 .container {
-  width: 100%;
-  height: 100vh;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
 }
 
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px;
-  background-color: #e53935;
+  background-color: rgb(27, 27, 27);
 }
 
 .logo {
-  height: 50px;
+  width: 60px;
 }
 
 .login-btn {
-  background-color: #fdd835;
+  background-color: #ff0000;
+  color: #f8f8f8;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 25px;
   border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 15px;
 }
 
-.content {
+.login-btn:hover {
+  background-color: #ffffff;
+  color: #f30303;
+}
+
+/* Adjusted hero section to fit and keep content centered */
+.hero-section {
   position: relative;
+  width: 100%;
+  flex: 1; /* Adjusted flex to allow space for features */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  color: #fff;
+  min-height: 60vh; /* Ensures the hero section takes at least 60% of the screen */
 }
 
-.img {
+.bg-image {
+  position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   object-fit: cover;
+  filter: brightness(0.7);
 }
 
 .content1 {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
+  position: relative;
+  z-index: 1;
 }
 
-.content1 h1 {
-  font-size: 4rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+.content1 h1 strong{
+  color: rgb(197, 2, 2);
+}
+.content1 h2 strong{
+  color: rgb(202, 2, 2);
 }
 
-.content1 h2 {
-  font-size: 2rem;
-  margin-top: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+h1 {
+  font-size: 5rem;
+  margin-bottom: 10px;
 }
 
-button#getStartedBtn {
-  margin-top: 20px;
-  background-color: #fdd835;
-  color: black;
-  padding: 15px 30px;
+h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+#getStartedBtn {
+  padding: 10px 30px;
+  background-color: #ff0000;
+  color: #fcf5f5;
   border: none;
   border-radius: 5px;
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#getStartedBtn:hover {
+  background-color: #910b0b;
 }
 
 .features {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
-  justify-content: space-between;
-  width: 80%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #333333;
+  flex: 1;
+  min-height: 30vh;
 }
 
 .feature {
-  background-color: #e53935;
-  color: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 30%;
   text-align: center;
+  width: 30%;
+  padding: 10px;
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-.feature img {
-  width: 50px;
+.feature i {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.feature i.fa-3x {
+  font-size: 5rem;
   margin-bottom: 10px;
 }
 
 .feature p {
   font-size: 1rem;
-  line-height: 1.4;
+  line-height: 1.5;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
 }
