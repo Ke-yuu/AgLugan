@@ -112,7 +112,7 @@ nav ul li a.active {
 .checkbox-container {
   display: flex;
   align-items: center;
-  gap: 10px; /* Adds some space between the checkbox and label */
+  gap: 10px; 
   margin-top: 10px;
 }
 

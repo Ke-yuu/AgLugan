@@ -19,14 +19,35 @@ document.getElementById('passenger-email').innerText = passenger.email;
 const rideList = document.getElementById('ride-list');
 availableRides.forEach(ride => {
   const listItem = document.createElement('li');
-  listItem.innerHTML = `${ride.route} - ${ride.time} - Seats: ${ride.seats} - Jeepney #${ride.jeepneyNumber}`;
+
+  // Create a div for the banner
+  const banner = document.createElement('div');
+  banner.classList.add('ride-banner');
+
   if (ride.seats === 0) {
-      listItem.style.backgroundColor = "#f8d7da";  // Red for no seats
+    listItem.classList.add('full-seats');
+    banner.classList.add('banner-full');
+    banner.innerText = 'Full';
   } else if (ride.seats <= 3) {
-      listItem.style.backgroundColor = "#fff3cd";  // Yellow for few seats
+    listItem.classList.add('few-seats');
+    banner.classList.add('banner-few');
+    banner.innerText = 'Few Seats Left';
+  } else {
+    listItem.classList.add('available-seats');
+    banner.classList.add('banner-available');
+    banner.innerText = 'Available';
   }
+
+  listItem.innerHTML = `
+    <div class="ride-info">${ride.route} - ${ride.time}</div>
+    <div>Seats Available: ${ride.seats}</div>
+    <div>Jeepney Number: ${ride.jeepneyNumber}</div>
+  `;
+  
+  listItem.appendChild(banner); // Add the banner to the list item
   rideList.appendChild(listItem);
 });
+
 
 // Queue System
 let queuePosition = null;
@@ -36,12 +57,14 @@ const waitTimeDisplay = document.getElementById('wait-time');
 
 joinQueueBtn.addEventListener('click', function() {
   if (!queuePosition) {
-      queuePosition = Math.floor(Math.random() * 10) + 1; // Random queue position
-      const estimatedWaitTime = `${queuePosition * 5} mins`; // Estimate wait time
-      queuePositionDisplay.innerText = queuePosition;
-      waitTimeDisplay.innerText = estimatedWaitTime;
-      joinQueueBtn.disabled = true;
-      joinQueueBtn.innerText = "Joined Queue";
+    queuePosition = Math.floor(Math.random() * 10) + 1; // Random queue position between 1 and 10
+    const estimatedWaitTime = `${queuePosition * 5} mins`; // Estimate wait time (5 mins per position)
+    queuePositionDisplay.innerText = queuePosition;
+    waitTimeDisplay.innerText = estimatedWaitTime;
+
+    joinQueueBtn.disabled = true;
+    joinQueueBtn.classList.add('disabled-btn');
+    joinQueueBtn.innerText = "Joined Queue";
   }
 });
 
