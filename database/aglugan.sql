@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 19, 2024 at 02:16 AM
--- Server version: 5.7.36
--- PHP Version: 7.4.26
+-- Generation Time: Oct 22, 2024 at 12:57 PM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,14 +29,27 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `payments`;
 CREATE TABLE IF NOT EXISTS `payments` (
-  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ride_id` int(11) DEFAULT NULL,
+  `payment_id` int NOT NULL AUTO_INCREMENT,
+  `ride_id` int DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_method` enum('cash','credit_card','mobile_wallet') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('pending','completed','failed') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_method` enum('cash','Gcash','Maya') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('pending','completed','failed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` int NOT NULL,
+  `user_id` int NOT NULL,
   PRIMARY KEY (`payment_id`),
-  KEY `ride_id` (`ride_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `ride_id` (`ride_id`),
+  KEY `fk_user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `status`, `phone_number`, `user_id`) VALUES
+(1, NULL, 13.00, 'Gcash', 'pending', 0, 0),
+(2, NULL, 13.00, 'cash', 'pending', 0, 0),
+(3, NULL, 13.00, 'cash', 'completed', 0, 0),
+(4, NULL, 13.00, 'Maya', 'failed', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -46,10 +59,10 @@ CREATE TABLE IF NOT EXISTS `payments` (
 
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
-  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ride_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
+  `rating_id` int NOT NULL AUTO_INCREMENT,
+  `ride_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `score` int DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`rating_id`),
   KEY `ride_id` (`ride_id`),
@@ -64,19 +77,27 @@ CREATE TABLE IF NOT EXISTS `ratings` (
 
 DROP TABLE IF EXISTS `rides`;
 CREATE TABLE IF NOT EXISTS `rides` (
-  `ride_id` int(11) NOT NULL AUTO_INCREMENT,
-  `passenger_id` int(11) DEFAULT NULL,
-  `driver_id` int(11) DEFAULT NULL,
-  `start_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `end_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_time` timestamp NOT NULL,
-  `end_time` timestamp NULL DEFAULT NULL,
-  `status` enum('requested','ongoing','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ride_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `driver_id` int DEFAULT NULL,
+  `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('on-route','waiting','unavailable') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
+  `waiting_time` time(6) NOT NULL,
   PRIMARY KEY (`ride_id`),
-  KEY `passenger_id` (`passenger_id`),
+  KEY `passenger_id` (`user_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rides`
+--
+
+INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`) VALUES
+(1001, 1, NULL, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000'),
+(1002, 2, NULL, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000'),
+(10002, NULL, NULL, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -86,15 +107,26 @@ CREATE TABLE IF NOT EXISTS `rides` (
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_type` enum('passenger','driver') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_type` enum('passenger','driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `email` (`email`),
+  KEY `name` (`name`(250))
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`, `user_type`) VALUES
+(1, 'Marc Pogi', 'pogi@email.com', '123', '09090909091', 'passenger'),
+(2, 'Marron', 'angas@email.com', '1234', '09696969696', 'passenger'),
+(3, 'Daniga', 'black@email.com', '123', '09321532561', 'passenger'),
+(4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver');
 
 -- --------------------------------------------------------
 
@@ -104,12 +136,21 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 DROP TABLE IF EXISTS `vehicles`;
 CREATE TABLE IF NOT EXISTS `vehicles` (
-  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
-  `driver_id` int(11) DEFAULT NULL,
-  `capacity` int(11) NOT NULL,
+  `vehicle_id` int NOT NULL AUTO_INCREMENT,
+  `driver_id` int DEFAULT NULL,
+  `capacity` int NOT NULL,
+  `plate_number` varchar(1234) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vehicles`
+--
+
+INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
+(1, 101, 23, 'WEB 445'),
+(2, 102, 23, 'SAF 214');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
