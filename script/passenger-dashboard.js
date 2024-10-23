@@ -98,6 +98,24 @@ const profileBtn = document.getElementById('profileBtn');
 const profileModal = document.getElementById('profileModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Fetch user and available rides data from the server
+  fetch('../php/passenger-dashboard.php')
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === 'error') {
+              alert(data.message);
+              return;
+          }
+
+          // Display Passenger Info
+          document.getElementById('passenger-name').innerText = data.user.name; // This sets the passenger name
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+          alert('Failed to load data. Please try again later.');
+      });
+});
 profileBtn.addEventListener('click', () => {
     profileModal.style.display = 'block';
 });
