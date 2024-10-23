@@ -38,7 +38,6 @@ $user_id = $_SESSION['user_id'];  // Fetch user_id from session
 // Get payment details from form submission
 $payment_method = isset($_POST['payment_method']) ? $_POST['payment_method'] : '';
 $amount = isset($_POST['amount']) ? $_POST['amount'] : 0;
-$name = isset($_POST['name']) ? $_POST['name'] : '';
 $ride_id = isset($_POST['ride_id']) ? $_POST['ride_id'] : '';
 
 // Handle payment method to get the phone number based on GCash or Maya
@@ -49,17 +48,30 @@ if ($payment_method === "gcash") {
     $phone_number = isset($_POST['maya-number']) ? $_POST['maya-number'] : '';
 }
 
-// Validate required fields
-if (empty($amount) || empty($phone_number) || empty($payment_method) || empty($user_id) || empty($ride_id)) {
+// Cash payment doesn't require phone number validation
+if ($payment_method === "cash" && empty($amount)) {
+    echo json_encode(["status" => "error", "message" => "Missing amount for cash payment."]);
+    exit();
+}
+
+// Validate required fields for non-cash methods
+if (($payment_method === "gcash" || $payment_method === "maya") && (empty($amount) || empty($phone_number) || empty($payment_method) || empty($user_id) || empty($ride_id))) {
     echo json_encode(["status" => "error", "message" => "Missing required fields."]);
     exit();
 }
 
 // Insert payment into 'payments' table with ride_id
-$sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) 
-        VALUES (?, ?, ?, ?, ?, 'pending')";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("idssi", $ride_id, $amount, $payment_method, $phone_number, $user_id);
+if ($payment_method === "cash") {
+    // Cash payments don't require a phone number
+    $sql = "INSERT INTO payments (ride_id, amount, payment_method, user_id, status) VALUES (?, ?, ?, ?, 'pending')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("idss", $ride_id, $amount, $payment_method, $user_id);
+} else {
+    // Non-cash payments (GCash or Maya) require phone number
+    $sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) VALUES (?, ?, ?, ?, ?, 'pending')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("idssi", $ride_id, $amount, $payment_method, $phone_number, $user_id);
+}
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "Payment submitted successfully!"]);

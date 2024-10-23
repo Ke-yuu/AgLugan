@@ -2,6 +2,9 @@
 // Start session
 session_start();
 
+// Set the response header to JSON
+header('Content-Type: application/json');
+
 // Database connection configuration
 $servername = "localhost";
 $username = "root";
@@ -13,7 +16,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]);
+    exit();
 }
 
 // Check if the form is submitted
@@ -40,22 +44,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['name'] = $user['name'];
             $_SESSION['user_type'] = $user['user_type'];
 
-            // Redirect based on user type
+            // Redirect based on user type and send it back in the JSON response
+            $redirectUrl = '';
             if ($user['user_type'] == 'admin') {
-                header("Location: ../html/admin-dashboard.html");
+                $redirectUrl = '../html/admin-dashboard.html';
             } else if ($user['user_type'] == 'passenger') {
-                header("Location: ../html/passenger-dashboard.html");
+                $redirectUrl = '../html/passenger-dashboard.html';
             } else if ($user['user_type'] == 'driver') {
-                header("Location: ../html/driver-dashboard.html");
+                $redirectUrl = '../html/driver-dashboard.html';
             }
-            exit();
+
+            echo json_encode([
+                "status" => "success",
+                "redirectUrl" => $redirectUrl
+            ]);
         } else {
             // Invalid password
-            echo "<script>alert('Invalid Name or Password'); window.location.href='../html/login.php';</script>";
+            echo json_encode(["status" => "error", "message" => "Invalid name or password."]);
         }
     } else {
         // Invalid username
-        echo "<script>alert('Invalid Name or Password'); window.location.href='../html/login.php';</script>";
+        echo json_encode(["status" => "error", "message" => "Invalid name or password."]);
     }
 
     // Close the prepared statement

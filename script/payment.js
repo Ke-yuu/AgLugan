@@ -36,22 +36,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const rideId = urlParams.get('ride_id');
   
   if (rideId) {
-    // Set the ride_id in GCash and Maya forms separately
+    // Set the ride_id in GCash, Maya, and Cash forms
     document.getElementById('gcash-ride_id').value = rideId;
     document.getElementById('maya-ride_id').value = rideId;
+    document.getElementById('cash-ride_id').value = rideId;
   }
 
   // Initialize the correct payment form on page load
   showPaymentForm(); 
 });
 
-// Handle form submission for GCash and Maya
+// Handle form submission for GCash, Maya, and Cash
 document.getElementById('gcash-form').addEventListener('submit', function (e) {
   e.preventDefault();
   submitPaymentForm(new FormData(this));
 });
 
 document.getElementById('maya-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  submitPaymentForm(new FormData(this));
+});
+
+document.getElementById('cash-form').addEventListener('submit', function (e) {
   e.preventDefault();
   submitPaymentForm(new FormData(this));
 });
@@ -88,7 +94,6 @@ function submitPaymentForm(formData) {
     alert('There was an error submitting the form. Please try again.');
   });
 }
-
 
 // Success modal handling
 const successModal = document.getElementById('success-modal');

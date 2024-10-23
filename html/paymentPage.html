@@ -39,6 +39,15 @@
     <div id="cash-section" class="payment-section active">
       <h2>Pay with Cash</h2>
       <p>You have selected to pay via cash. Please hand over the payment directly to the jeepney driver.</p>
+      <p><strong>Note:</strong> The regular fare is 15 pesos, and the student fare is 13 pesos. Please inform the driver if you are eligible for the student discount.</p>
+
+      <form id="cash-form">
+        <input type="hidden" name="payment_method" value="cash">
+        <label for="cash-amount">Amount (15 for regular, 13 for student):</label>
+        <input type="number" id="cash-amount" name="amount" required>
+        <input type="hidden" name="ride_id" id="cash-ride_id">
+        <button type="submit" id="cash-submit" class="submit-btn">Submit Payment</button>
+      </form>
     </div>
 
     <!-- GCash Payment Section -->
