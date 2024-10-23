@@ -43,7 +43,7 @@ while ($row = $rides_result->fetch_assoc()) {
 }
 
 // Fetch payment history for the logged-in user
-$payment_sql = "SELECT amount, payment_method, status FROM payments WHERE user_id = ?";
+$payment_sql = "SELECT ride_id, amount, payment_method, status FROM payments WHERE user_id = ?";
 $payment_stmt = $conn->prepare($payment_sql);
 $payment_stmt->bind_param("i", $user_id);
 $payment_stmt->execute();

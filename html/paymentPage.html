@@ -16,7 +16,6 @@
       </div>
       <ul class="nav-links">
         <li><a href="../html/passenger-dashboard.html"><strong>Home</strong></a></li>
-        <li><a href="" class="active"><strong>Payment</strong></a></li>
         <li><a href="../html/schedule.html"><strong>Schedules</strong></a></li>
       </ul>
     </nav>
@@ -55,6 +54,7 @@
         <input type="text" id="gcash-date" name="date" readonly>
         <label for="gcash-amount">Amount:</label>
         <input type="number" id="gcash-amount" name="amount" required>
+        <input type="hidden" name="ride_id" id="gcash-ride_id">
         <div class="checkbox-container">
           <input type="checkbox" id="gcash-terms">
           <label for="gcash-terms">I have read and agree to the <a href="#" id="open-modal">Terms and Conditions</a></label>
@@ -76,6 +76,7 @@
         <input type="text" id="maya-date" name="date" readonly>
         <label for="maya-amount">Amount:</label>
         <input type="number" id="maya-amount" name="amount" required>
+        <input type="hidden" name="ride_id" id="maya-ride_id">
         <div class="checkbox-container">
           <input type="checkbox" id="maya-terms">
           <label for="maya-terms">I have read and agree to the <a href="#" id="open-maya-modal">Terms and Conditions</a></label>

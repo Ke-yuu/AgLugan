@@ -232,6 +232,7 @@ select, .view-button {
   border: 1px solid #272727;
   border-radius: 8px;
   color: #fffefe;
+  width: 100%;
 }
 
 /* Responsive Design */

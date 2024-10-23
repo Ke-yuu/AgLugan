@@ -36,7 +36,7 @@ function showRides() {
         paymentButton.innerText = 'Go to Payment';
         paymentButton.classList.add('payment-button');
         paymentButton.onclick = function() {
-          window.location.href = '../html/paymentPage.html'; // Redirect to payment page
+          window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`; // Redirect to payment page with ride_id
         };
 
         // Append the ride details and payment button to the ride item

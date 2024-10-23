@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const paymentHistory = document.getElementById('ride-history');
       paymentHistory.innerHTML = ''; // Clear existing content
 
-      // Loop through the payment history and display it
+      // Loop through the payment history and display it, including the ride_id
       data.payments.forEach(payment => {
         const listItem = document.createElement('li');
         listItem.classList.add('ride-history-item');
         listItem.innerHTML = `
-          Amount: ₱${payment.amount} - Payment Method: ${payment.payment_method} - Status: ${payment.status}
+          Ride ID: ${payment.ride_id} - Amount: ₱${payment.amount} - Payment Method: ${payment.payment_method} - Status: ${payment.status}
         `;
         paymentHistory.appendChild(listItem);
       });
