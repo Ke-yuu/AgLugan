@@ -27,6 +27,11 @@ header {
   padding: 20px;
   background-color: rgb(27, 27, 27);
 }
+.header-buttons {
+  display: flex;
+  gap: 30px; /* Space between buttons */
+}
+
 
 .logo {
   width: 60px;
