@@ -29,15 +29,19 @@ header {
 }
 .header-buttons {
   display: flex;
-  gap: 30px; /* Space between buttons */
+  gap: 30px;
+  
 }
-
-
 .logo {
   width: 60px;
 }
+.brand-name {
+  font-size: 1.5rem;
+  color: #f8f8f8;
+  font-weight: bold;
+}
 
-.login-btn {
+.btn {
   background-color: #ff0000;
   color: #f8f8f8;
   border: none;
@@ -46,12 +50,17 @@ header {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 15px;
+  text-decoration: none;
+  display: inline-block; 
+  text-align: center; 
 }
 
-.login-btn:hover {
+.btn:hover {
   background-color: #ffffff;
   color: #f30303;
 }
+
+
 
 .hero-section {
   position: relative;
