@@ -93,3 +93,21 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = '../index.html'; // Redirect to login page
   });
 });
+// JavaScript to handle modal behavior
+const profileBtn = document.getElementById('profileBtn');
+const profileModal = document.getElementById('profileModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+
+profileBtn.addEventListener('click', () => {
+    profileModal.style.display = 'block';
+});
+
+closeModalBtn.addEventListener('click', () => {
+    profileModal.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target == profileModal) {
+        profileModal.style.display = 'none';
+    }
+});
