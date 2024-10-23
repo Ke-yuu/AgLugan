@@ -17,7 +17,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 1900px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -42,10 +42,11 @@ nav {
 .nav-links {
   display: flex;
   list-style: none;
+  margin-right: 2rem;
 }
 
 .nav-links li {
-  margin-left: 30px;
+  margin-left: 20px;
 }
 
 .nav-links li a {
