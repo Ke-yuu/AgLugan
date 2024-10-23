@@ -24,7 +24,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px 25px;
   background-color: rgb(27, 27, 27);
   padding-right: 55px;
 }
@@ -34,7 +34,7 @@ header {
   
 }
 .logo {
-  width: 60px;
+  width: 50px;
 }
 .brand-name {
   font-size: 1.5rem;

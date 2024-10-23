@@ -12,9 +12,8 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px 25px;
   background-color: #1b1b1b;
-  padding: 20px;
 }
 
 .logo-container {
@@ -25,6 +24,10 @@ header nav {
 .logo {
   width: 50px;
   margin-right: 10px;
+}
+.logo:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .brand-name {
