@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare the SQL statement to prevent SQL injection
     $stmt = $conn->prepare("SELECT * FROM users WHERE name = ?");
-    $stmt->bind_param("s", $name);  // "s" specifies that the parameter is a string
+    $stmt->bind_param("s", $name);
 
     // Execute the statement
     $stmt->execute();
