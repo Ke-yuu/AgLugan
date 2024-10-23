@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('registrationForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         // Get form values
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const phone_number = document.getElementById('phone_number').value;
-        const user_type = document.getElementById('user_type').value;  // 'passenger'
+        const user_type = document.getElementById('user_type').value;
 
         // Prepare form data for submission
         const formData = new FormData();
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('email', email);
         formData.append('password', password);
         formData.append('phone_number', phone_number);
-        formData.append('user_type', user_type);  // This will always be "passenger"
+        formData.append('user_type', user_type);
 
         // Send form data to PHP script using fetch API
         fetch('../php/register.php', {

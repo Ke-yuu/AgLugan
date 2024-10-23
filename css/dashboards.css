@@ -14,9 +14,14 @@ header nav {
   align-items: center;
   padding: 15px 30px;
   background-color: #1b1b1b;
-  padding: 20px;
 }
 
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Logo container and size */
 .logo-container {
   display: flex;
   align-items: center;
@@ -27,12 +32,26 @@ header nav {
   margin-right: 10px;
 }
 
-.brand-name {
-  font-size: 1.5rem;
-  color: #f8f8f8;
+/* Profile content beside the logo */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align the profile content to the top next to the logo */
+  color: white;
+}
+
+.profile-content h2 {
+  margin: 0;
+  font-size: 18px;
   font-weight: bold;
 }
 
+.profile-content p {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+/* Aligning buttons and making them the same size */
 ul {
   list-style-type: none;
   display: flex;
@@ -40,17 +59,25 @@ ul {
   margin: 0;
 }
 
-ul li a {
+ul li a,
+#logoutBtn {
   text-decoration: none;
   color: #f8f8f8;
   padding: 10px 20px;
   background-color: #ff0000;
   border-radius: 8px;
   transition: background-color 0.3s;
+  font-weight: bold;
+  display: inline-block;
 }
 
-ul li a:hover {
+ul li a:hover,
+#logoutBtn:hover {
   background-color: #910b0b;
+}
+
+#logoutBtn {
+  margin-left: 10px;
 }
 
 /* Welcome Banner */
@@ -139,18 +166,6 @@ button:hover {
 
 .banner-full {
   background-color: #dc3545; 
-}
-
-
-/* Profile Section Styling */
-.profile-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.profile-content {
-  text-align: center;
 }
 
 /* Help Section */
