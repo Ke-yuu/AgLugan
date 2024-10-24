@@ -33,8 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.status === "success") {
                 alert('Registration successful!');
-                // Redirect to passenger dashboard
-                window.location.href = '../html/passenger-dashboard.html';
+                // Redirect to appropriate dashboard based on user type
+                if (user_type === 'passenger') {
+                    window.location.href = '../html/passenger-dashboard.html';
+                } else if (user_type === 'driver') {
+                    window.location.href = '../html/driver-dashboard.html';
+                }
             } else {
                 alert("Registration failed: " + data.message);
             }

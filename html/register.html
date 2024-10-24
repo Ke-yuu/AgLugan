@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeepney Queue System - Registration</title>
-    <link rel="stylesheet" href="..//css/register.css">
+    <link rel="stylesheet" href="../css/register.css">
 </head>
 <body>
     <div class="container">
@@ -33,8 +33,11 @@
                     <label for="phone_number">Phone Number:</label>
                     <input type="tel" id="phone_number" name="phone_number" required>
 
-                    <input type="hidden" id="user_type" name="user_type" value="passenger">
-
+                    <label for="user_type">User Type:</label>
+                    <select id="user_type" name="user_type" required>
+                        <option value="passenger">Passenger</option>
+                        <option value="driver">Driver</option>
+                    </select>
 
                     <button type="submit" class="register-btn">Register</button>
                 </form>
@@ -42,6 +45,6 @@
         </div>
     </div>
 
-    <script src="..//script/register.js"></script>
+    <script src="../script/register.js"></script>
 </body>
 </html>

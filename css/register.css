@@ -101,3 +101,16 @@ form select {
 .register-btn:hover {
   background-color: #910b0b;
 }
+
+/* Additional styles for the user type dropdown */
+form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 15px;
+  color: #333;
+}
+
