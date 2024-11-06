@@ -9,18 +9,64 @@ document.addEventListener('DOMContentLoaded', function() {
         const phone_number = document.getElementById('phone_number').value;
         const user_type = document.getElementById('user_type').value;
 
-        // Prepare form data for submission
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('phone_number', phone_number);
-        formData.append('user_type', user_type);
+        // Validate email format
+        const validEmailDomains = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@slu.edu.ph'];
+        if (!validEmailDomains.some(domain => email.endsWith(domain))) {
+            alert('Invalid email address. Only gmail.com, yahoo.com, hotmail.com, and slu.edu.ph domains are allowed.');
+            return;
+        }
 
-        // Send form data to PHP script using fetch API
-        fetch('../php/register.php', {
+        // Validate phone number format (starts with 9 and followed by 9 digits)
+        const phoneRegex = /^9\d{9}$/;
+        if (!phoneRegex.test(phone_number)) {
+            alert('Phone number must start with 9 and be followed by 9 digits.');
+            return;
+        }
+
+        // Validate password strength
+        const passwordRegex = /^(?=.*[0-9]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            alert('Password must be at least 8 characters long and contain at least one number.');
+            return;
+        }
+
+        // Check uniqueness of email and phone number
+        fetch('../php/check_unique.php', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, phone_number: phone_number })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to check uniqueness');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.email_exists) {
+                alert('The email address is already registered.');
+                return;
+            }
+            if (data.phone_exists) {
+                alert('The phone number is already registered.');
+                return;
+            }
+
+            // Prepare form data for submission
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('phone_number', phone_number);
+            formData.append('user_type', user_type);
+
+            // Send form data to PHP script using fetch API
+            return fetch('../php/register.php', {
+                method: 'POST',
+                body: formData
+            });
         })
         .then(response => {
             if (!response.ok) {

@@ -13,11 +13,12 @@ html, body {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  align-items: center;
+  height: 100%;
 }
 
-/* Header Section */
 header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,13 +50,13 @@ header {
   color: #f30303;
 }
 
-/* Register Form Section */
+
 .register-section {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   flex: 1;
-  background-color: #444444;
 }
 
 .form-container {
@@ -64,6 +65,7 @@ header {
   border-radius: 10px;
   width: 400px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 130px; 
 }
 
 h1 {
@@ -87,6 +89,43 @@ form select {
   border-radius: 5px;
 }
 
+.phone-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.phone-prefix {
+  background-color: #f9f9f9;
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 15px;
+  color: #333;
+  flex-basis: 50px; 
+  text-align: center; 
+  margin-top: -16px; 
+}
+
+form input[type="tel"] {
+  flex-grow: 1; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 0;
+  background-color: #f9f9f9;
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
 .register-btn {
   width: 100%;
   padding: 10px;
@@ -102,7 +141,6 @@ form select {
   background-color: #910b0b;
 }
 
-/* Additional styles for the user type dropdown */
 form select {
   width: 100%;
   padding: 10px;
@@ -114,3 +152,8 @@ form select {
   color: #333;
 }
 
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
