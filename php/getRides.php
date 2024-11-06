@@ -13,17 +13,32 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the route from the request
+// Get the route, status, and time from the request
 $route = isset($_GET['route']) ? $_GET['route'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+$time = isset($_GET['time']) ? $_GET['time'] : '';
 
-// Define the SQL query based on the selected route
-if ($route === "bakakeng-to-city") {
-    $sql = "SELECT * FROM rides WHERE start_location = 'Bakakeng' AND end_location = 'Town' AND status = 'on-route'";
-} else if ($route === "city-to-bakakeng") {
-    $sql = "SELECT * FROM rides WHERE start_location = 'Town' AND end_location = 'Bakakeng' AND status = 'on-route'";
-} else {
-    echo json_encode(array("error" => "Invalid route"));
-    exit();
+// Build the SQL query based on selected route, status, and time
+$sql = "SELECT * FROM rides WHERE 1=1";
+
+if (!empty($route)) {
+    if ($route === "SLU-to-Church") {
+        $sql .= " AND start_location = 'SLU' AND end_location = 'Church'";
+    } else if ($route === "SLU-to-Town") {
+        $sql .= " AND start_location = 'SLU' AND end_location = 'Town'";
+    } else if ($route === "Town-to-SLU") {
+        $sql .= " AND start_location = 'Town' AND end_location = 'SLU'";
+    } else if ($route === "Town-to-Church") {
+        $sql .= " AND start_location = 'Town' AND end_location = 'Church'";
+    }
+}
+
+if (!empty($status)) {
+    $sql .= " AND status = '$status'";
+}
+
+if (!empty($time)) {
+    $sql .= " AND HOUR(departure_time) = HOUR('$time:00:00')";
 }
 
 // Execute the query

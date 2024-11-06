@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validate email format
         const validEmailDomains = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@slu.edu.ph'];
         if (!validEmailDomains.some(domain => email.endsWith(domain))) {
-            alert('Invalid email address. Only gmail.com, yahoo.com, hotmail.com, and slu.edu.ph domains are allowed.');
+            alert('Invalid email address or domain address. ');
             return;
         }
 
         // Validate phone number format (starts with 9 and followed by 9 digits)
         const phoneRegex = /^9\d{9}$/;
         if (!phoneRegex.test(phone_number)) {
-            alert('Phone number must start with 9 and be followed by 9 digits.');
+            alert('Please enter a valid phone number! (e.g. 9984276714).');
             return;
         }
 

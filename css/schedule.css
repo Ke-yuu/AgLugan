@@ -113,6 +113,7 @@ select, .view-button {
 
 .view-button:hover {
   background-color: #911717;
+  transform: scale(1.1);
 }
 
 /* Ride List Styles */
@@ -120,6 +121,8 @@ select, .view-button {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  max-height: 400px;
 }
 
 .ride-item {
@@ -130,6 +133,11 @@ select, .view-button {
   background-color: #1b1b1b;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .ride-item:hover {
@@ -154,6 +162,7 @@ select, .view-button {
   background-color: #ffcc00;
   color: #333;
 }
+
 .book-button {
   background-color: #252121;
   color: #fff;
@@ -166,37 +175,16 @@ select, .view-button {
   margin-top: 7px;
   transition: background-color 0.3s ease; 
 }
+
 .banner-available {
   background-color: #28a745;
 }
+
 .ride-item {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
-
-.payment-button {
-  margin-left: 15px;
-  padding: 5px 10px;
-  background-color: #ff0000;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.payment-button:hover {
-  background-color: #cc0000;
-}
-.ride-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   background-color: #444;
   color: #fff;
   padding: 15px;
@@ -204,24 +192,31 @@ select, .view-button {
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 16px;
+  width: 100%;
+  max-width: 280px;
+  word-break: break-word;
 }
 
 .ride-details {
   flex-grow: 1;
+  width: 100%;
 }
 
 .ride-id, .driver-id, .status, .waiting-time {
-  margin: 0 10px;
+  margin: 0 10px 10px 0;
+  word-wrap: break-word;
+  font-size: 14px;
 }
 
 .payment-button {
-  margin-left: 15px;
   padding: 7px 15px;
   background-color: #ff0000;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  align-self: flex-start;
+  margin-top: 10px;
 }
 
 .payment-button:hover {
@@ -238,6 +233,72 @@ select, .view-button {
   width: 100%;
 }
 
+.status {
+  color: gold;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); 
+}
+
+.modal-content {
+  background-color: #1b1b1b;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35%; 
+  color: #f8f8f8;
+  border-radius: 10px;
+}
+
+.close-button {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #ff0000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Ride Column Styles */
+.ride-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  text-align: center;
+}
+
+.ride-column {
+  flex: 1;
+  background-color: #1b1b1b;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.ride-column ul {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
   label, select, .view-button {
@@ -246,30 +307,21 @@ select, .view-button {
 
   .ride-info {
     font-size: 14px;
+    flex-direction: column;
   }
+
+  .ride-column {
+    margin-bottom: 20px;
+  }
+
   .ride-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
+    padding: 10px;
+    max-width: 100%;
+  }
 
-.payment-button {
-  margin-left: 15px;
-  padding: 5px 10px;
-  background-color: #ff0000;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.payment-button:hover {
-  background-color: #cc0000;
-}
-
+  .payment-button {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 5px 10px;
+  }
 }

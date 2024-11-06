@@ -22,19 +22,68 @@
     <div class="container">
       <h1>Jeepney Rides from/to Bakakeng</h1>
 
-      <div class="ride-form">
-        <label for="route">Select Route:</label>
-        <select id="route">
-          <option value="bakakeng-to-city">Bakakeng to City</option>
-          <option value="city-to-bakakeng">City to Bakakeng</option>
-        </select>
+      <!-- Button to Open the Filter Modal -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <button id="filter-button" class="view-button">Filter Rides</button>
+      </div>
 
-        <button onclick="showRides()" class="view-button">Show Available Rides</button>
+      <!-- Filter Modal -->
+      <div id="filter-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-button">&times;</span>
+          <h2>Filter Rides</h2>
+          <div class="ride-form">
+            <label for="route-filter">Select Route:</label>
+            <select id="route-filter">
+              <option value="">All Routes</option>
+              <option value="SLU-to-Church">SLU to Church</option>
+              <option value="SLU-to-Town">SLU to Town</option>
+              <option value="Town-to-SLU">Town to SLU</option>
+              <option value="Town-to-Church">Town to Church</option>
+            </select>
+
+            <label for="status-filter">Select Status:</label>
+            <select id="status-filter">
+              <option value="">All Statuses</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="available">Available</option>
+            </select>
+
+            <label for="time-filter">Select Time (Hourly):</label>
+            <select id="time-filter" style="margin-bottom: 20px;">
+              <option value="">All Times</option>
+              <option value="06:00">06:00 - 07:00</option>
+              <option value="07:00">07:00 - 08:00</option>
+              <option value="08:00">08:00 - 09:00</option>
+              <option value="09:00">09:00 - 10:00</option>
+              <option value="10:00">10:00 - 11:00</option>
+              <option value="10:00">11:00 - 12:00</option>
+              <option value="10:00">12:00 - 13:00</option>
+              <option value="10:00">13:00 - 14:00</option>
+              <option value="10:00">14:00 - 15:00</option>
+              <option value="10:00">15:00 - 16:00</option>
+              <option value="10:00">16:00 - 17:00</option>
+              <option value="10:00">17:00 - 18:00</option>
+              <!-- Add more time slots as needed -->
+            </select>
+
+            <div style="text-align: center; margin-top: 20px;">
+              <button onclick="filterRides(); closeModal()" class="view-button">Apply</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="ride-info">
-        <h2>Available Rides</h2>
-        <ul id="rides-list" class="ride-list"></ul>
+        <div class="ride-column">
+          <h2>Available Rides</h2>
+          <ul id="available-rides-list" class="ride-list"></ul>
+        </div>
+        
+        <div class="ride-column">
+          <h2>Upcoming Rides</h2>
+          <ul id="upcoming-rides-list" class="ride-list"></ul>
+        </div>
       </div>
     </div>
   </main>

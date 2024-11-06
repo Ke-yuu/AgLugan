@@ -1,3 +1,23 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Set the correct payment amount based on user type
+  const userType = "<?php echo $_SESSION['user_type']; ?>"; // Assuming user_type is stored in the session
+  const cashAmountField = document.getElementById("cash-amount");
+  const gcashAmountField = document.getElementById("gcash-amount");
+  const mayaAmountField = document.getElementById("maya-amount");
+
+  let amount;
+  if (userType === "Faculty/Staff") {
+    amount = 15;
+  } else if (userType === "Student") {
+    amount = 13;
+  } else {
+    amount = 15; 
+  }
+
+  cashAmountField.value = amount;
+  gcashAmountField.value = amount;
+  mayaAmountField.value = amount;
+});
 // Function to show the correct payment form based on the selection
 function showPaymentForm() {
   const paymentMethod = document.getElementById("payment-method").value;
