@@ -172,50 +172,69 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
    // Handle change password form submission
-   const changePasswordForm = document.getElementById('changePasswordForm');
+    const changePasswordForm = document.getElementById('changePasswordForm');
     if (changePasswordForm) {
-        changePasswordForm.addEventListener('submit', function (e) {
-            e.preventDefault(); 
+      changePasswordForm.addEventListener('submit', function (e) {
+          e.preventDefault(); 
 
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+          const currentPassword = document.getElementById('current-password').value.trim();
+          const newPassword = document.getElementById('new-password').value.trim();
+          const confirmPassword = document.getElementById('confirm-password').value.trim();
 
-            // Validate password strength
-            const passwordRegex = /^(?=.*[0-9]).{8,}$/;
-            if (!passwordRegex.test(newPassword)) {
-                alert('Password must be at least 8 characters long and contain at least one number.');
-                return;
-            }
+          // Check if any fields are empty and alert the user
+          if (!currentPassword) {
+              alert("Please enter your current password.");
+              return;
+          }
+          if (!newPassword) {
+              alert("Please enter a new password.");
+              return;
+          }
+          if (!confirmPassword) {
+              alert("Please confirm your new password.");
+              return;
+          }
 
-            // Check if new password matches confirm password
-            if (newPassword !== confirmPassword) {
-                alert("New passwords do not match.");
-                return;
-            }
+          // Validate password strength
+          const passwordRegex = /^(?=.*[0-9]).{8,}$/;
+          if (!passwordRegex.test(newPassword)) {
+              alert('Password must be at least 8 characters long and contain at least one number.');
+              return;
+          }
 
-            
-            fetch('../php/change_password.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Password changed successfully!");
-                    changePasswordForm.reset();
-                } else {
-                    alert("Failed to change password. " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("An error occurred while changing the password.");
-            });
-        });
+          // Check if new password matches confirm password
+          if (newPassword !== confirmPassword) {
+              alert("New passwords do not match.");
+              return;
+          }
+
+          fetch('../php/change_password.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  alert("Password changed successfully!");
+                  changePasswordForm.reset();
+
+                  // Close the modal upon successful password change
+                  const profileModal = document.getElementById('profileModal');
+                  if (profileModal) {
+                      profileModal.style.display = 'none';
+                  }
+              } else {
+                  alert("Failed to change password. " + data.message);
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert("An error occurred while changing the password.");
+          });
+      });
     }
 });
 
