@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 23, 2024 at 02:35 PM
+-- Generation Time: Oct 22, 2024 at 06:57 PM
 -- Server version: 8.2.0
--- PHP Version: 8.3.0
+-- PHP Version: 8.2.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -13,9 +13,9 @@ SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+ /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+ /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `aglugan`
@@ -39,32 +39,17 @@ CREATE TABLE IF NOT EXISTS `payments` (
   PRIMARY KEY (`payment_id`),
   KEY `ride_id` (`ride_id`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `payments`
 --
 
 INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `status`, `phone_number`, `user_id`) VALUES
-(5, 1001, 123.00, 'Gcash', 'pending', 123, 16);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ratings`
---
-
-DROP TABLE IF EXISTS `ratings`;
-CREATE TABLE IF NOT EXISTS `ratings` (
-  `rating_id` int NOT NULL AUTO_INCREMENT,
-  `ride_id` int DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
-  `score` int DEFAULT NULL,
-  `comment` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`rating_id`),
-  KEY `ride_id` (`ride_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(1, NULL, 13.00, 'Gcash', 'pending', 0, 0),
+(2, NULL, 13.00, 'cash', 'pending', 0, 0),
+(3, NULL, 13.00, 'cash', 'completed', 0, 0),
+(4, NULL, 13.00, 'Maya', 'failed', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -82,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `status` enum('on-route','waiting','unavailable') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
+  `time_range` varchar(20) NOT NULL,  -- Updated field to store scheduled time range
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`user_id`),
   KEY `driver_id` (`driver_id`)
@@ -91,11 +77,11 @@ CREATE TABLE IF NOT EXISTS `rides` (
 -- Dumping data for table `rides`
 --
 
-INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`) VALUES
-(1001, 1, 1, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000'),
-(1002, 2, 2, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000'),
-(1003, 3, 3, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000'),
-(10003, 4, 4, 'Town', 'Bakakeng', 'on-route', 13.00, '00:05:00.000000');
+INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
+(1001, 1, 4, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000', '6:00-7:00'),
+(1002, 2, 5, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000', '7:00-8:00'),
+(1003, 5, 6, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000', '8:00-9:00'),
+(10003, NULL, NULL, 'Town', 'Bakakeng', 'on-route', 13.00, '00:05:00.000000', '9:00-10:00');
 
 -- --------------------------------------------------------
 
@@ -110,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_type` enum('admin','passenger','driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_type` enum('student','faculty/staff','driver') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
@@ -121,8 +107,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`, `user_type`) VALUES
-(1, 'marc', 'marc@gmail.com', '$2y$10$gXIDwHzzNUjtdPprBLyNYOCGxr.POgquyfCIbYRLE4I/psaj1k8JW', '09159730243', 'passenger'),
-(2, 'kumar', 'kumar@gmail.com', '$2y$10$WpbtGl6cBcImjfYFy6csl.S7d39wLVYy91PaAfFSfyJw9Dp/fqPJK', '091696966969', 'passenger');
+(1, 'Marc Pogi', 'pogi@email.com', '123', '09090909091', 'student'),
+(2, 'Marron', 'angas@email.com', '1234', '09696969696', 'student'),
+(3, 'Daniga', 'black@email.com', '123', '09321532561', 'student'),
+(4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver'),
+(5, 'Driver2', 'driver@email.com', '123', '0912345627481', 'driver'),
+(6, 'Driver3', 'driver3@email.com', '123', '0926481726412', 'driver'),
+(16, 'marc', 'marc@gmail.com', '$2y$10$gXIDwHzzNUjtdPprBLyNYOCGxr.POgquyfCIbYRLE4I/psaj1k8JW', '09159730243', 'faculty/staff'),
+(17, 'kumar', 'kumar@gmail.com', '$2y$10$WpbtGl6cBcImjfYFy6csl.S7d39wLVYy91PaAfFSfyJw9Dp/fqPJK', '091696966969', 'faculty/staff');
 
 -- --------------------------------------------------------
 
@@ -150,5 +142,5 @@ INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) V
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+ /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
