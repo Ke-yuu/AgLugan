@@ -34,9 +34,13 @@ $stmt->execute();
 $user_result = $stmt->get_result();
 $user_data = $user_result->fetch_assoc();
 
+
 // Fetch available rides from the `rides` table
-$rides_sql = "SELECT start_location, end_location, status, fare, waiting_time FROM rides WHERE status = 'waiting'";
-$rides_result = $conn->query($rides_sql);
+$rides_sql = "SELECT ride_id, driver_id, start_location, end_location, waiting_time, time_range FROM rides WHERE user_id = ?";
+$rides_stmt = $conn->prepare($rides_sql);
+$rides_stmt->bind_param("i", $user_id);
+$rides_stmt->execute();
+$rides_result = $rides_stmt->get_result();
 $rides = [];
 while ($row = $rides_result->fetch_assoc()) {
     $rides[] = $row;

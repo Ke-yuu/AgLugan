@@ -19,44 +19,22 @@ document.addEventListener('DOMContentLoaded', function () {
         passengerNameElement.innerText = data.user.name;
       }
 
-      // Display Available Rides
-      const rideList = document.getElementById('ride-list');
-      if (rideList) {
-        rideList.innerHTML = ''; // Clear any existing ride information before adding new ones
-
-        // Loop through the available rides and display them
+      // Display Booked Rides with Schedule
+      const bookedRidesList = document.getElementById('ride-booked');
+      console.log("test1");
+      if (bookedRidesList) {
+        bookedRidesList.innerHTML = ''; // Clear any existing content
+        console.log("test2");
         data.rides.forEach(ride => {
+          console.log("test3");
+          console.log(ride);
           const listItem = document.createElement('li');
-          const banner = document.createElement('div');
-          banner.classList.add('ride-banner');
-
-          if (ride.status === 'full') {
-            listItem.classList.add('full-seats');
-            banner.classList.add('banner-full');
-            banner.innerText = 'Full';
-          } else if (ride.status === 'waiting') {
-            listItem.classList.add('few-seats');
-            banner.classList.add('banner-few');
-            banner.innerText = 'Few Seats Left';
-          } else {
-            listItem.classList.add('available-seats');
-            banner.classList.add('banner-available');
-            banner.innerText = 'Available';
-          }
-
-          listItem.innerHTML = `
-            <div class="ride-info">
-              Route: ${ride.start_location} to ${ride.end_location}
-            </div>
-            <div>Fare: ₱${ride.fare}</div>
-            <div>Waiting Time: ${ride.waiting_time} mins</div>
-          `;
-
-          listItem.appendChild(banner);
-          rideList.appendChild(listItem);
+          listItem.classList.add('booked-ride-item');
+          listItem.innerHTML = `Ride ID: ${ride.ride_id}`; // Display only Ride ID for testing;
+          bookedRidesList.appendChild(listItem);
         });
       }
-
+      
       // Display Payment History
       const paymentHistory = document.getElementById('ride-history');
       if (paymentHistory) {
@@ -78,30 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Failed to load data. Please try again later.');
     });
 
-  // Queue System
-  let queuePosition = null;
-  const joinQueueBtn = document.getElementById('join-queue-btn');
-  const queuePositionDisplay = document.getElementById('queue-position');
-  const waitTimeDisplay = document.getElementById('wait-time');
-
-  if (joinQueueBtn) {
-    joinQueueBtn.addEventListener('click', function () {
-      if (!queuePosition) {
-        queuePosition = Math.floor(Math.random() * 10) + 1; // Random queue position between 1 and 10
-        const estimatedWaitTime = `${queuePosition * 5} mins`; // Estimate wait time (5 mins per position)
-        if (queuePositionDisplay) {
-          queuePositionDisplay.innerText = queuePosition;
-        }
-        if (waitTimeDisplay) {
-          waitTimeDisplay.innerText = estimatedWaitTime;
-        }
-
-        joinQueueBtn.disabled = true;
-        joinQueueBtn.classList.add('disabled-btn');
-        joinQueueBtn.innerText = "Joined Queue";
-      }
-    });
-  }
 
   // Logout Functionality
   const logoutBtn = document.getElementById('logoutBtn');
