@@ -41,17 +41,14 @@ function filterRides() {
   fetch(`../php/getRides.php?route=${route}&status=${status}&time=${time}`)
       .then(response => response.json())
       .then(data => {
-          const upcomingRidesList = document.getElementById("upcoming-rides-list");
-          const availableRidesList = document.getElementById("available-rides-list");
+          const ridesList = document.getElementById("rides-list");
 
           // Clear previous results
-          upcomingRidesList.innerHTML = "";
-          availableRidesList.innerHTML = "";
+          ridesList.innerHTML = "";
 
           if (data.error) {
               const errorElement = `<li>${data.error}</li>`;
-              upcomingRidesList.innerHTML = errorElement;
-              availableRidesList.innerHTML = errorElement;
+              ridesList.innerHTML = errorElement;
               return;
           }
 
@@ -70,7 +67,7 @@ function filterRides() {
 
               // Create the payment button
               let paymentButton = document.createElement('button');
-              paymentButton.innerText = 'Go to Payment';
+              paymentButton.innerText = 'Book Ride';
               paymentButton.classList.add('payment-button');
               paymentButton.onclick = function () {
                   window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`; 
@@ -80,12 +77,8 @@ function filterRides() {
               rideElement.appendChild(rideDetails);
               rideElement.appendChild(paymentButton);
 
-              // Append the ride element to the appropriate list based on ride status
-              if (ride.status === 'upcoming') {
-                  upcomingRidesList.appendChild(rideElement);
-              } else if (ride.status === 'available') {
-                  availableRidesList.appendChild(rideElement);
-              }
+              // Append the ride element to the rides list
+              ridesList.appendChild(rideElement);
           });
 
           // Close the modal after applying filters
