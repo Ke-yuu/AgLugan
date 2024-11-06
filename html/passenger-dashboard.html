@@ -56,19 +56,33 @@
     </main>
 
     <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeModalBtn">&times;</span>
-            <h2>Update Profile</h2>
-            <form id="profileForm">
-                <label for="passenger-name-input">Name:</label>
-                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
-                <label for="passenger-email-input">Email:</label>
-                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
-                <button type="submit" class="save-btn">Save Changes</button>
-            </form>
-        </div>
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2>Update Profile</h2>
+        <form id="profileForm">
+            <label for="passenger-name-input">Name:</label>
+            <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+            <label for="passenger-email-input">Email:</label>
+            <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+        
+        <h2>Change Password</h2>
+        <form id="changePasswordForm">
+            <label for="current-password">Current Password:</label>
+            <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+            <br>
+            <label for="new-password">New Password:</label>
+            <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+            <br>
+            <label for="confirm-password">Confirm New Password:</label>
+            <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+            <button type="submit" class="save-btn">Change Password</button>
+        </form>
     </div>
+</div>
+
 
     <script src="../script/passenger-dashboard.js"></script>
 </body>

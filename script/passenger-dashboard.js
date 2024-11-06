@@ -171,4 +171,52 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+   // Handle change password form submission
+   const changePasswordForm = document.getElementById('changePasswordForm');
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', function (e) {
+            e.preventDefault(); 
+
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validate password strength
+            const passwordRegex = /^(?=.*[0-9]).{8,}$/;
+            if (!passwordRegex.test(newPassword)) {
+                alert('Password must be at least 8 characters long and contain at least one number.');
+                return;
+            }
+
+            // Check if new password matches confirm password
+            if (newPassword !== confirmPassword) {
+                alert("New passwords do not match.");
+                return;
+            }
+
+            
+            fetch('../php/change_password.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Password changed successfully!");
+                    changePasswordForm.reset();
+                } else {
+                    alert("Failed to change password. " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while changing the password.");
+            });
+        });
+    }
 });
+
+
