@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 22, 2024 at 06:57 PM
--- Server version: 8.2.0
--- PHP Version: 8.2.13
+-- Generation Time: Nov 06, 2024 at 01:37 PM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -13,9 +13,9 @@ SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
- /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
- /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- /*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `aglugan`
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   PRIMARY KEY (`payment_id`),
   KEY `ride_id` (`ride_id`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `payments`
@@ -49,7 +49,8 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 (1, NULL, 13.00, 'Gcash', 'pending', 0, 0),
 (2, NULL, 13.00, 'cash', 'pending', 0, 0),
 (3, NULL, 13.00, 'cash', 'completed', 0, 0),
-(4, NULL, 13.00, 'Maya', 'failed', 0, 0);
+(4, NULL, 13.00, 'Maya', 'failed', 0, 0),
+(5, 1001, 15.00, 'cash', 'pending', 0, 21);
 
 -- --------------------------------------------------------
 
@@ -64,24 +65,68 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `driver_id` int DEFAULT NULL,
   `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('on-route','waiting','unavailable') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('Available','Upcoming','On-Route') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
-  `time_range` varchar(20) NOT NULL,  -- Updated field to store scheduled time range
+  `time_range` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`user_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10054 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rides`
 --
 
 INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
-(1001, 1, 4, 'Bakakeng', 'Town', 'on-route', 13.00, '00:10:00.000000', '6:00-7:00'),
-(1002, 2, 5, 'Bakakeng', 'Town', 'waiting', 13.00, '00:05:00.000000', '7:00-8:00'),
-(1003, 5, 6, 'Town', 'Bakakeng', 'unavailable', 13.00, '00:00:00.000000', '8:00-9:00'),
-(10003, NULL, NULL, 'Town', 'Bakakeng', 'on-route', 13.00, '00:05:00.000000', '9:00-10:00');
+(1001, 1, 4, 'SLU', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '6:00-7:00'),
+(10007, 2, 5, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '7:00-8:00'),
+(10008, 3, 6, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '8:00-9:00'),
+(10009, 4, 7, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '9:00-10:00'),
+(10010, 5, 8, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '10:00-11:00'),
+(10011, 6, 9, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '11:00-12:00'),
+(10012, 7, 10, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '12:00-13:00'),
+(10013, 8, 11, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '13:00-14:00'),
+(10014, 9, 12, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '14:00-15:00'),
+(10015, 10, 13, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '15:00-16:00'),
+(10016, 11, 14, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '16:00-17:00'),
+(10017, 12, 15, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '17:00-18:00'),
+(10018, 1, 4, 'SLU', 'TOWN', 'Available', 13.00, '00:10:00.000000', '6:00-7:00'),
+(10019, 2, 5, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '7:00-8:00'),
+(10020, 3, 6, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '8:00-9:00'),
+(10021, 4, 7, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '9:00-10:00'),
+(10022, 5, 8, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '10:00-11:00'),
+(10023, 6, 9, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '11:00-12:00'),
+(10024, 7, 10, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '12:00-13:00'),
+(10025, 8, 11, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '13:00-14:00'),
+(10026, 9, 12, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '14:00-15:00'),
+(10027, 10, 13, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '15:00-16:00'),
+(10028, 11, 14, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '16:00-17:00'),
+(10029, 12, 15, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '17:00-18:00'),
+(10030, 1, 4, 'TOWN', 'SLU', 'Available', 13.00, '00:10:00.000000', '6:00-7:00'),
+(10031, 2, 5, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '7:00-8:00'),
+(10032, 3, 6, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '8:00-9:00'),
+(10033, 4, 7, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '9:00-10:00'),
+(10034, 5, 8, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '10:00-11:00'),
+(10035, 6, 9, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '11:00-12:00'),
+(10036, 7, 10, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '12:00-13:00'),
+(10037, 8, 11, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '13:00-14:00'),
+(10038, 9, 12, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '14:00-15:00'),
+(10039, 10, 13, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '15:00-16:00'),
+(10040, 11, 14, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '16:00-17:00'),
+(10041, 12, 15, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '17:00-18:00'),
+(10042, 1, 4, 'TOWN', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '6:00-7:00'),
+(10043, 2, 5, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '7:00-8:00'),
+(10044, 3, 6, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '8:00-9:00'),
+(10045, 4, 7, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '9:00-10:00'),
+(10046, 5, 8, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '10:00-11:00'),
+(10047, 6, 9, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '11:00-12:00'),
+(10048, 7, 10, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '12:00-13:00'),
+(10049, 8, 11, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '13:00-14:00'),
+(10050, 9, 12, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '14:00-15:00'),
+(10051, 10, 13, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '15:00-16:00'),
+(10052, 11, 14, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '16:00-17:00'),
+(10053, 12, 15, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '17:00-18:00');
 
 -- --------------------------------------------------------
 
@@ -96,25 +141,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_type` enum('student','faculty/staff','driver') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`, `user_type`) VALUES
-(1, 'Marc Pogi', 'pogi@email.com', '123', '09090909091', 'student'),
-(2, 'Marron', 'angas@email.com', '1234', '09696969696', 'student'),
-(3, 'Daniga', 'black@email.com', '123', '09321532561', 'student'),
-(4, 'JM', 'ffegzsdg@email.com', '123', '09937485021', 'driver'),
-(5, 'Driver2', 'driver@email.com', '123', '0912345627481', 'driver'),
-(6, 'Driver3', 'driver3@email.com', '123', '0926481726412', 'driver'),
-(16, 'marc', 'marc@gmail.com', '$2y$10$gXIDwHzzNUjtdPprBLyNYOCGxr.POgquyfCIbYRLE4I/psaj1k8JW', '09159730243', 'faculty/staff'),
-(17, 'kumar', 'kumar@gmail.com', '$2y$10$WpbtGl6cBcImjfYFy6csl.S7d39wLVYy91PaAfFSfyJw9Dp/fqPJK', '091696966969', 'faculty/staff');
+(21, 'Kennely Ray', 'krbucang@gmail.com', '$2y$10$UnbJyb0qC35J8UphZv8LXO3B5D42ij5gzxYjejnnZIMTmJI.yXj/2', '9984276714', 'Student');
 
 -- --------------------------------------------------------
 
@@ -142,5 +180,5 @@ INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) V
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
- /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
- /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
