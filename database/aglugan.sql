@@ -50,7 +50,7 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 (2, NULL, 13.00, 'cash', 'pending', 0, 0),
 (3, NULL, 13.00, 'cash', 'completed', 0, 0),
 (4, NULL, 13.00, 'Maya', 'failed', 0, 0),
-(5, 1001, 15.00, 'cash', 'pending', 0, 21);
+(5, 1001, 15.00, 'cash', 'pending', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone_number`, `user_type`) VALUES
-(21, 'Kennely Ray', 'krbucang@gmail.com', '$2y$10$UnbJyb0qC35J8UphZv8LXO3B5D42ij5gzxYjejnnZIMTmJI.yXj/2', '9984276714', 'Student');
+(1, 'Kennely Ray', 'krbucang@gmail.com', '$2y$10$UnbJyb0qC35J8UphZv8LXO3B5D42ij5gzxYjejnnZIMTmJI.yXj/2', '9984276714', 'Student');
 
 -- --------------------------------------------------------
 

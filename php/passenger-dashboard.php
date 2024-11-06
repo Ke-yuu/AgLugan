@@ -1,5 +1,4 @@
 <?php
-// Start session to access logged-in user information
 session_start();
 
 // Database connection configuration
@@ -25,6 +24,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get the user ID from the session
 $user_id = $_SESSION['user_id'];
+error_log("User ID from session: " . $user_id); // Log the user_id for debugging
 
 // Fetch the user's name and email from the `users` table
 $user_sql = "SELECT name, email FROM users WHERE user_id = ?";
@@ -34,8 +34,13 @@ $stmt->execute();
 $user_result = $stmt->get_result();
 $user_data = $user_result->fetch_assoc();
 
+// If no user data is found, log an error
+if (!$user_data) {
+    echo json_encode(["status" => "error", "message" => "User data not found."]);
+    exit();
+}
 
-// Fetch available rides from the `rides` table
+// Fetch booked rides for this user
 $rides_sql = "SELECT ride_id, driver_id, start_location, end_location, waiting_time, time_range FROM rides WHERE user_id = ?";
 $rides_stmt = $conn->prepare($rides_sql);
 $rides_stmt->bind_param("i", $user_id);
@@ -44,6 +49,11 @@ $rides_result = $rides_stmt->get_result();
 $rides = [];
 while ($row = $rides_result->fetch_assoc()) {
     $rides[] = $row;
+}
+
+// Log if no rides are found for debugging
+if (empty($rides)) {
+    error_log("No rides found for user ID: " . $user_id);
 }
 
 // Fetch payment history for the logged-in user
@@ -59,12 +69,14 @@ while ($row = $payment_result->fetch_assoc()) {
 
 // Combine user, ride, and payment history data into a single response
 $response = [
+    "status" => "success",
     "user" => $user_data,
     "rides" => $rides,
-    "payments" => $payments // Payment history
+    "payments" => $payments
 ];
 
 // Return the data as JSON
+header('Content-Type: application/json');
 echo json_encode($response);
 
 // Close the connection

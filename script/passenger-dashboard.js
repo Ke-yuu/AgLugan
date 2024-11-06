@@ -21,18 +21,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Display Booked Rides with Schedule
       const bookedRidesList = document.getElementById('ride-booked');
-      console.log("test1");
       if (bookedRidesList) {
         bookedRidesList.innerHTML = ''; // Clear any existing content
-        console.log("test2");
-        data.rides.forEach(ride => {
-          console.log("test3");
-          console.log(ride);
-          const listItem = document.createElement('li');
-          listItem.classList.add('booked-ride-item');
-          listItem.innerHTML = `Ride ID: ${ride.ride_id}`; // Display only Ride ID for testing;
-          bookedRidesList.appendChild(listItem);
-        });
+        if (data.rides && data.rides.length > 0) {
+          data.rides.forEach(ride => {
+            console.log("Ride Data:", ride);
+            const listItem = document.createElement('li');
+            listItem.classList.add('booked-ride-item');
+            listItem.innerHTML = `Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location}`;
+            bookedRidesList.appendChild(listItem);
+          });
+        } else {
+          console.log("No rides found for the user.");
+          bookedRidesList.innerHTML = '<li>No booked rides found.</li>';
+        }
       }
       
       // Display Payment History
