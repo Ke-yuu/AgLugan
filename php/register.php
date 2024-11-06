@@ -1,58 +1,67 @@
 <?php
-// Start session
-session_start();
-
-// Enable error reporting for debugging (remove this in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set the header to return JSON
-header('Content-Type: application/json');
-
-// Database connection configuration
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "aglugan";
 
-// Create connection to the database
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
-    exit();
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the form data from the request
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    $phone_number = $_POST['phone_number'];
-    $user_type = $_POST['user_type'] ?? 'passenger';
+// Get the route, status, and time from the request
+$route = isset($_GET['route']) ? $_GET['route'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+$time = isset($_GET['time']) ? $_GET['time'] : '';
 
-    // Insert the new user into the database
-    $insert_stmt = $conn->prepare("INSERT INTO users (name, email, password_hash, phone_number, user_type) VALUES (?, ?, ?, ?, ?)");
-    if ($insert_stmt === false) {
-        http_response_code(500); 
-        echo json_encode(["status" => "error", "message" => "Error preparing insert statement"]);
-        exit();
+// Build the SQL query based on selected route, status, and time
+$sql = "SELECT *, time_range AS time_range FROM rides WHERE 1=1";
+
+// Apply route filter if provided
+if (!empty($route)) {
+    switch ($route) {
+        case "SLU-to-Church":
+            $sql .= " AND start_location = 'SLU' AND end_location = 'CHURCH'";
+            break;
+        case "SLU-to-Town":
+            $sql .= " AND start_location = 'SLU' AND end_location = 'TOWN'";
+            break;
+        case "Town-to-SLU":
+            $sql .= " AND start_location = 'TOWN' AND end_location = 'SLU'";
+            break;
+        case "Town-to-Church":
+            $sql .= " AND start_location = 'TOWN' AND end_location = 'CHURCH'";
+            break;
     }
+}
 
-    $insert_stmt->bind_param("sssss", $name, $email, $password, $phone_number, $user_type);
+// Apply status filter if provided
+if (!empty($status)) {
+    $sql .= " AND status = '$status'";
+}
 
-    if ($insert_stmt->execute()) {
-        // Successful registration
-        echo json_encode(["status" => "success", "message" => "Registration successful"]);
-    } else {
-        http_response_code(500); 
-        echo json_encode(["status" => "error", "message" => "Error registering user"]);
+// Apply time filter if provided
+if (!empty($time)) {
+    $sql .= " AND time_range LIKE '%$time%'";
+}
+
+// Execute the query
+$result = $conn->query($sql);
+
+// Prepare the response
+$rides = array();
+if ($result->num_rows > 0) {
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+        $rides[] = $row;
     }
-
-    $insert_stmt->close();
+    echo json_encode($rides);
+} else {
+    echo json_encode(array("error" => "No rides available"));
 }
 
 // Close the connection

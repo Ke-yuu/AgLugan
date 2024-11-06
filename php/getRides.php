@@ -19,26 +19,34 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 $time = isset($_GET['time']) ? $_GET['time'] : '';
 
 // Build the SQL query based on selected route, status, and time
-$sql = "SELECT * FROM rides WHERE 1=1";
+$sql = "SELECT *, time_range AS time_range FROM rides WHERE 1=1";
 
+// Apply route filter if provided
 if (!empty($route)) {
-    if ($route === "SLU-to-Church") {
-        $sql .= " AND start_location = 'SLU' AND end_location = 'Church'";
-    } else if ($route === "SLU-to-Town") {
-        $sql .= " AND start_location = 'SLU' AND end_location = 'Town'";
-    } else if ($route === "Town-to-SLU") {
-        $sql .= " AND start_location = 'Town' AND end_location = 'SLU'";
-    } else if ($route === "Town-to-Church") {
-        $sql .= " AND start_location = 'Town' AND end_location = 'Church'";
+    switch ($route) {
+        case "SLU-CHURCH":
+            $sql .= " AND start_location = 'SLU' AND end_location = 'CHURCH'";
+            break;
+        case "SLU-TOWN":
+            $sql .= " AND start_location = 'SLU' AND end_location = 'TOWN'";
+            break;
+        case "TOWN-SLU":
+            $sql .= " AND start_location = 'TOWN' AND end_location = 'SLU'";
+            break;
+        case "TOWN-CHURCH":
+            $sql .= " AND start_location = 'TOWN' AND end_location = 'CHURCH'";
+            break;
     }
 }
 
+// Apply status filter if provided
 if (!empty($status)) {
     $sql .= " AND status = '$status'";
 }
 
+// Apply time filter if provided
 if (!empty($time)) {
-    $sql .= " AND HOUR(departure_time) = HOUR('$time:00:00')";
+    $sql .= " AND time_range LIKE '%$time%'";
 }
 
 // Execute the query

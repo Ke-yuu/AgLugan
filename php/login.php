@@ -46,11 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect based on user type and send it back in the JSON response
             $redirectUrl = '';
-            if ($user['user_type'] == 'admin') {
-                $redirectUrl = '../html/admin-dashboard.html';
-            } else if ($user['user_type'] == 'passenger') {
+            if ($user['user_type'] == 'Student') {
                 $redirectUrl = '../html/passenger-dashboard.html';
-            } else if ($user['user_type'] == 'driver') {
+            } else if ($user['user_type'] == 'Faculty/Staff') {
+                $redirectUrl = '../html/passenger-dashboard.html';
+            } else if ($user['user_type'] == 'Driver') {
                 $redirectUrl = '../html/driver-dashboard.html';
             }
 

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  showAllRides(); 
+  showAllRides();
 
   const modal = document.getElementById("filter-modal");
   const filterButton = document.getElementById("filter-button");
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function showAllRides() {
-  filterRides(); 
+  filterRides();
 }
 
 // Function to close the modal
@@ -54,7 +54,10 @@ function filterRides() {
 
           data.forEach(ride => {
               let rideElement = document.createElement('li');
-              rideElement.classList.add('ride-item'); 
+              rideElement.classList.add('ride-item');
+
+              // Format the waiting time to remove milliseconds
+              let formattedWaitingTime = ride.waiting_time.split(".")[0];
 
               // Create a div for ride details
               let rideDetails = document.createElement('div');
@@ -63,14 +66,15 @@ function filterRides() {
                   `<span class="ride-id">Ride ID: ${ride.ride_id}</span>
                   <span class="driver-id">Driver ID: ${ride.driver_id || 'N/A'}</span>
                   <span class="status">Status: ${ride.status}</span>
-                  <span class="waiting-time">Waiting Time: ${ride.waiting_time}</span>`;
+                  <span class="waiting-time">Waiting Time: ${formattedWaitingTime}</span>
+                  <span class="time_range">Schedule Time: ${ride.time_range || 'N/A'}</span>`;
 
               // Create the payment button
               let paymentButton = document.createElement('button');
               paymentButton.innerText = 'Book Ride';
               paymentButton.classList.add('payment-button');
               paymentButton.onclick = function () {
-                  window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`; 
+                  window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`;
               };
 
               // Append the ride details and payment button to the ride item
