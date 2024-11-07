@@ -1,7 +1,12 @@
 <?php
 // Start the session to access user information
 session_start();
-
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // Redirect to login page if not logged in
+    header("Location: ../html/login.html");
+    exit();
+}
 header('Content-Type: application/json');
 
 // Enable error logging for debugging (write errors to a log file)

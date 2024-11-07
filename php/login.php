@@ -20,9 +20,22 @@ if ($conn->connect_error) {
     exit();
 }
 
+// Check if the user is already logged in
+if (isset($_SESSION['user_id'])) {
+    echo json_encode(["status" => "success", "redirectUrl" => "../html/passenger-dashboard.html"]);
+    exit();
+}
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
+    // Ensure the required fields are set
+    if (!isset($_POST['name']) || !isset($_POST['password'])) {
+        echo json_encode(["status" => "error", "message" => "Missing required fields."]);
+        exit();
+    }
+
+    // Sanitize user inputs
+    $name = htmlspecialchars($_POST['name']);
     $password = $_POST['password'];
 
     // Prepare the SQL statement to prevent SQL injection
@@ -39,16 +52,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verify the hashed password
         if (password_verify($password, $user['password_hash'])) {
-            // Password matches, store relevant user information in the session
+            // Password matches, regenerate session ID to prevent session fixation
+            session_regenerate_id(true);
+
+            // Store relevant user information in the session
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['name'] = $user['name'];
             $_SESSION['user_type'] = $user['user_type'];
 
             // Redirect based on user type and send it back in the JSON response
             $redirectUrl = '';
-            if ($user['user_type'] == 'Student') {
-                $redirectUrl = '../html/passenger-dashboard.html';
-            } else if ($user['user_type'] == 'Faculty/Staff') {
+            if ($user['user_type'] == 'Student' || $user['user_type'] == 'Faculty/Staff') {
                 $redirectUrl = '../html/passenger-dashboard.html';
             } else if ($user['user_type'] == 'Driver') {
                 $redirectUrl = '../html/driver-dashboard.html';
