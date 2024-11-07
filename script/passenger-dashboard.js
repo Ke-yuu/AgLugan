@@ -33,19 +33,24 @@ document.addEventListener('DOMContentLoaded', function () {
         passengerNameElement.innerText = data.user.name;
       }
 
-      // Display Booked Rides
-      const bookedRidesList = document.getElementById('ride-booked');
-      if (bookedRidesList) {
-        bookedRidesList.innerHTML = '';
+      // Display Available Rides
+      const availableRidesList = document.getElementById('rides-list');
+      if (availableRidesList) {
+        availableRidesList.innerHTML = '';
         if (data.rides && data.rides.length > 0) {
           data.rides.forEach(ride => {
             const listItem = document.createElement('li');
-            listItem.classList.add('booked-ride-item');
-            listItem.innerHTML = `Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location}`;
-            bookedRidesList.appendChild(listItem);
+            listItem.classList.add('available-ride-item');
+            listItem.innerHTML = `
+              Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location} | Time: ${ride.time_range}
+            `;
+            listItem.addEventListener('click', function () {
+              window.location.href = '../html/schedule.html';
+            });
+            availableRidesList.appendChild(listItem);
           });
         } else {
-          bookedRidesList.innerHTML = '<li>No booked rides found.</li>';
+          availableRidesList.innerHTML = '<li>No available rides found.</li>';
         }
       }
 
@@ -112,116 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.onclick = function (event) {
     if (event.target == profileModal) {
       profileModal.style.display = "none";
-    }
-  }
-
-  // Update Profile Functionality
-  const profileForm = document.getElementById('profileForm');
-  if (profileForm) {
-    profileForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById('passenger-name-input').value;
-      const email = document.getElementById('passenger-email-input').value;
-
-      fetch('../php/update_profile.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, email })
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.success) {
-            alert('Profile updated successfully.');
-            // Update the displayed name
-            document.getElementById('passenger-name').innerText = name;
-            // Close the modal after successful update
-            profileModal.style.display = "none";
-          } else {
-            alert('Error: ' + data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Error updating profile:', error);
-          alert('An error occurred. Please try again.');
-        });
-    });
-  }
-
-  // Change Password Functionality
-  const changePasswordForm = document.getElementById('changePasswordForm');
-  if (changePasswordForm) {
-    changePasswordForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const currentPassword = document.getElementById('current-password').value;
-      const newPassword = document.getElementById('new-password').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
-
-      if (newPassword !== confirmPassword) {
-        alert('New passwords do not match.');
-        return;
-      }
-
-      fetch('../php/change_password.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('Password changed successfully.');
-            changePasswordForm.reset();
-            // Close the modal after successful password change
-            profileModal.style.display = "none";
-          } else {
-            alert('Error: ' + data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Error changing password:', error);
-          alert('An error occurred. Please try again.');
-        });
-    });
-  }
-
-  // Terms and Conditions Modal Handling
-  const termsModal = document.getElementById("terms-modal");
-  const btnOpenGcash = document.getElementById("open-modal");
-  const btnOpenMaya = document.getElementById("open-maya-modal");
-  const spanCloseTerms = document.getElementsByClassName("close")[0];
-
-  if (btnOpenGcash) {
-    btnOpenGcash.onclick = function () {
-      termsModal.style.display = "block";
-    };
-  }
-
-  if (btnOpenMaya) {
-    btnOpenMaya.onclick = function () {
-      termsModal.style.display = "block";
-    };
-  }
-
-  if (spanCloseTerms) {
-    spanCloseTerms.onclick = function () {
-      termsModal.style.display = "none";
-    };
-  }
-
-  window.onclick = function (event) {
-    if (event.target == termsModal) {
-      termsModal.style.display = "none";
     }
   }
 });

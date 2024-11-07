@@ -50,7 +50,6 @@ $stmt->execute();
 $user_result = $stmt->get_result();
 $user_data = $user_result->fetch_assoc();
 
-// If no user data is found, log an error
 if (!$user_data) {
     echo json_encode(["status" => "error", "message" => "User data not found."]);
     error_log("User data not found for user ID: " . $user_id);
@@ -58,7 +57,9 @@ if (!$user_data) {
 }
 
 // Fetch booked rides for this user
-$rides_sql = "SELECT ride_id, driver_id, start_location, end_location, waiting_time, time_range FROM rides WHERE user_id = ?";
+$rides_sql = "SELECT ride_id, start_location, end_location, time_range 
+              FROM rides 
+              WHERE user_id = ? AND booking_status = 'Booked'";
 $rides_stmt = $conn->prepare($rides_sql);
 if (!$rides_stmt) {
     echo json_encode(["status" => "error", "message" => "Internal server error."]);
@@ -72,11 +73,6 @@ $rides_result = $rides_stmt->get_result();
 $rides = [];
 while ($row = $rides_result->fetch_assoc()) {
     $rides[] = $row;
-}
-
-// Log if no rides are found for debugging
-if (empty($rides)) {
-    error_log("No rides found for user ID: " . $user_id);
 }
 
 // Fetch payment history for the logged-in user

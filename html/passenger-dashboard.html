@@ -13,7 +13,6 @@
             <div class="logo-container">
                 <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
-            <!-- Section 1: Profile and Welcome Message -->      
             <div class="profile-content">    
                 <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
             </div>
@@ -31,23 +30,23 @@
         
         <div class="dashboard-sections">
 
-            <!-- Section 2: Available Rides -->
-            <div class="section" id="booked-section">
-                <h2>Booked Rides</h2>
-                <ul id="ride-booked">
-                    
+            <!-- Section 1: Available Rides -->
+            <div class="section" id="available-rides-section">
+                <h2>Available Rides</h2>
+                <ul id="rides-list">
+                    <!-- This will be dynamically populated with JavaScript -->
                 </ul>
             </div>
 
-            <!-- Section 4: Payment History -->
+            <!-- Section 2: Payment History -->
             <div class="section" id="ride-history-section">
                 <h2>Payment History</h2>
                 <ul id="ride-history">
-                
+                    <!-- This will be dynamically populated with JavaScript -->
                 </ul>
             </div>
 
-            <!-- Section 5: Help and Support -->
+            <!-- Section 3: Help and Support -->
             <div class="section help-section">
                 <h2>Help and Support</h2>
                 <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
@@ -55,34 +54,33 @@
         </div>
     </main>
 
-<!-- Profile Modal -->
-<div id="profileModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModalBtn">&times;</span>
-        <h2>Update Profile</h2>
-        <form id="profileForm">
-            <label for="passenger-name-input">Name:</label>
-            <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
-            <label for="passenger-email-input">Email:</label>
-            <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
-            <button type="submit" class="save-btn">Save Changes</button>
-        </form>
-        
-        <h2>Change Password</h2>
-        <form id="changePasswordForm">
-            <label for="current-password">Current Password:</label>
-            <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
-            <br>
-            <label for="new-password">New Password:</label>
-            <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
-            <br>
-            <label for="confirm-password">Confirm New Password:</label>
-            <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
-            <button type="submit" class="save-btn">Change Password</button>
-        </form>
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2>Update Profile</h2>
+            <form id="profileForm">
+                <label for="passenger-name-input">Name:</label>
+                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+                <label for="passenger-email-input">Email:</label>
+                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+            
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <label for="current-password">Current Password:</label>
+                <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+                <br>
+                <label for="new-password">New Password:</label>
+                <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+                <br>
+                <label for="confirm-password">Confirm New Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+                <button type="submit" class="save-btn">Change Password</button>
+            </form>
+        </div>
     </div>
-</div>
-
 
     <script src="../script/passenger-dashboard.js"></script>
 </body>
