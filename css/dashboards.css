@@ -110,8 +110,8 @@ h1, p {
   margin-bottom: 20px;
 }
 
-/* Booked Rides Section */
-#booked-section ul {
+/* Available Rides Section */
+#available-rides-section ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -121,12 +121,28 @@ h1, p {
   overflow-y: auto; 
 }
 
-#ride-booked li {
+#rides-list li {
   background-color: #3a3a3a;
   padding: 15px;
   border-radius: 8px;
   color: #f8f8f8;
   font-size: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#rides-list li:hover {
+  background-color: #444444;
+}
+
+#rides-list .no-available-rides {
+  background-color: #3a3a3a;
+  padding: 15px;
+  border-radius: 8px;
+  color: #f8f8f8;
+  font-size: 1rem;
+  text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
