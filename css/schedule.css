@@ -101,14 +101,14 @@ select, .view-button {
 }
 
 .view-button {
-  background-color: red;
+  background-color: #ff0000;
   color: #fff;
   border: none;
   max-width: 20%;
   border-radius: 8px;
   padding: 13px 23px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .view-button:hover {
@@ -238,6 +238,17 @@ select, .view-button {
   background-color: rgba(0, 0, 0, 0.8); 
 }
 
+#route-filter {
+  border-radius: 10px;
+}
+#status-filter {
+  border-radius: 10px;
+}
+#time-filter {
+  border-radius: 10px;
+}
+
+
 .modal-content {
   background-color: #1b1b1b;
   margin: 15% auto; 
@@ -269,6 +280,23 @@ select, .view-button {
   justify-content: center;
   text-align: center;
   width: 100%;
+}
+
+/* Booking Button Styles */
+.booking-button {
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.booking-button:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
 }
 
 /* Responsive Design */

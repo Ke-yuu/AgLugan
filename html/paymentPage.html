@@ -44,7 +44,7 @@
       <form id="cash-form">
         <input type="hidden" name="payment_method" value="cash">
         <label for="cash-amount">Amount (15 for regular, 13 for student):</label>
-        <input type="number" id="cash-amount" name="amount" required>
+        <input type="number" id="cash-amount" name="amount" required readonly>
         <input type="hidden" name="ride_id" id="cash-ride_id">
         <button type="submit" id="cash-submit" class="submit-btn">Submit Payment</button>
       </form>
@@ -58,11 +58,11 @@
         <label for="gcash-name">Name:</label>
         <input type="text" id="gcash-name" name="name" required>
         <label for="gcash-number">GCash Number:</label>
-        <input type="number" id="gcash-number" name="gcash-number" required>
+        <input type="number" id="gcash-number" name="gcash_number" required>
         <label for="gcash-date">Date:</label>
         <input type="text" id="gcash-date" name="date" readonly>
         <label for="gcash-amount">Amount:</label>
-        <input type="number" id="gcash-amount" name="amount" required>
+        <input type="number" id="gcash-amount" name="amount" required readonly>
         <input type="hidden" name="ride_id" id="gcash-ride_id">
         <div class="checkbox-container">
           <input type="checkbox" id="gcash-terms">
@@ -80,11 +80,11 @@
         <label for="maya-name">Name:</label>
         <input type="text" id="maya-name" name="name" required>
         <label for="maya-number">Maya Number:</label>
-        <input type="number" id="maya-number" name="maya-number" required>
+        <input type="number" id="maya-number" name="maya_number" required>
         <label for="maya-date">Date:</label>
         <input type="text" id="maya-date" name="date" readonly>
         <label for="maya-amount">Amount:</label>
-        <input type="number" id="maya-amount" name="amount" required>
+        <input type="number" id="maya-amount" name="amount" required readonly>
         <input type="hidden" name="ride_id" id="maya-ride_id">
         <div class="checkbox-container">
           <input type="checkbox" id="maya-terms">
@@ -113,6 +113,7 @@
     </div>
   </div>
 
+  <!-- Moved script tag to the end of the body -->
   <script src="../script/payment.js"></script>
 </body>
 </html>

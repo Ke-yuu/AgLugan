@@ -15,7 +15,7 @@
         <header>
             <a href="../index.html"><img src="../media/logo.png" alt="AgLugan Logo" class="logo"></a>
             <a href="../html/register.html">
-                <button class="login-btn"><strong>Register</strong></button>
+                <button class="login-btn"><strong>Register Now!</strong></button>
             </a>
         </header>        
         
@@ -30,12 +30,30 @@
                 
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" placeholder="Password" required>
+
+                    <!-- Forgot Password Link to Open Modal -->
+                    <p class="forgot-password">
+                        <a href="#" id="forgotPasswordLink" style="color: brown;">Forgot Password?</a>
+                    </p>
                 
                     <button type="submit" class="login-btn">Enter</button>
                 </form>
                 <!-- Display error messages here -->
-                <p id="error-message" style="color: red; display: none;"></p>
+                <p id="error-message" class="error-message"></p>
             </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Forgot Password</h2>
+            <form id="forgotPasswordForm">
+                <input type="email" id="forgotEmail" name="email" placeholder="Enter your email" required>
+                <button type="submit">Send Reset Link</button>
+            </form>
+            <div id="forgotPasswordMessage"></div>
         </div>
     </div>
 

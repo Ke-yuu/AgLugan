@@ -12,43 +12,30 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 10px 20px;
   background-color: #1b1b1b;
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-}
-
-/* Logo container and size */
 .logo-container {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  gap: 20px;
 }
 
 .logo {
   width: 50px;
-  margin-right: 10px;
 }
 
-/* Profile content beside the logo */
 .profile-content {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
   color: white;
-}
-
-.profile-content h2 {
-  margin: 0;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
-  padding-right: 72rem;
+  margin-left: -1170px;
 }
 
-/* Aligning buttons and making them the same size */
+/* Navigation Buttons */
 ul {
   list-style-type: none;
   display: flex;
@@ -86,6 +73,7 @@ ul li a:hover,
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-left: 10px;
 }
 
 .icon-button i {
@@ -94,96 +82,72 @@ ul li a:hover,
 }
 
 /* Welcome Banner */
-.welcome-banner {
-  text-align: center;
-  padding: 20px 0;
-  background-color: #444444;
-  margin-bottom: 20px;
-}
-
 h1, p {
   text-align: center;
 }
 
 /* Dashboard Sections */
 .dashboard-sections {
-  display: grid;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   padding: 20px;
-  grid-template-columns: repeat(2fr); 
   margin-left: auto;
-  margin-right: auto ;
-  max-width: 60%;
-  grid-auto-rows: minmax(150px, auto); 
+  margin-right: auto;
+  max-width: 800px;
 }
-
-
 
 .section {
   background-color: #1b1b1b;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .section h2 {
   color: #ff0000;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-/* Buttons Styling */
-#join-queue-btn {
-  background-color: #ff0000;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: auto;
+/* Booked Rides Section */
+#booked-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 15px;
+  max-height: 180px; 
+  overflow-y: auto; 
 }
 
-button:hover {
-  background-color: #910b0b;
-}
-
-/* Ride List Styling */
-.ride-list li {
+#ride-booked li {
+  background-color: #3a3a3a;
   padding: 15px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  color: #ffffff;
-  font-weight: bold;
-  position: relative;
-  background-color: #696767;
+  border-radius: 8px;
+  color: #f8f8f8;
+  font-size: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Banner Styling */
-.ride-banner {
-  position: absolute;
-  top: -20px;
-  left: -10px;
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 5px;
-  color: #fff;
+/* Payment History Section */
+#ride-history-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 15px;
+  max-height: 180px; 
+  overflow-y: auto; 
 }
 
-.banner-available {
-  background-color: #28a745; 
-}
-
-.banner-few {
-  background-color: #ffc107; 
-}
-
-.banner-full {
-  background-color: #dc3545; 
+#ride-history li {
+  background-color: #3a3a3a;
+  padding: 15px;
+  border-radius: 8px;
+  color: #f8f8f8;
+  font-size: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Help Section */
@@ -191,35 +155,6 @@ button:hover {
   text-align: center;
   font-size: 1.1rem;
   line-height: 1.5;
-}
-
-/* Ride History Section */
-.ride-history-section ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.ride-history-section ul li {
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #444444;
-  border-radius: 5px;
-  color: #f8f8f8;
-  font-size: 1rem;
-}
-
-/* Ride Booking History Styling */
-.ride-history-item {
-  background-color: #444444;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  text-align: center;
-}
-
-/* Queue Information Styling */
-.queue-info {
-  text-align: center;
 }
 
 /* Modal Styling */
@@ -238,12 +173,13 @@ button:hover {
 .modal-content {
   background-color: #1b1b1b;
   margin: 10% auto;
-  padding: 20px;
+  padding: 30px;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
   border-radius: 10px;
   color: #f8f8f8;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .close-btn {
@@ -259,18 +195,63 @@ button:hover {
   color: #ff0000;
 }
 
-.save-btn {
+label {
+  font-weight: bold;
+  margin-top: 15px;
+  display: inline-block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #333333;
+  color: #f8f8f8;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border: 1px solid #ff0000;
+  box-shadow: 0px 0px 5px #ff0000;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: #a0a0a0;
+}
+
+/* Buttons Styling */
+.save-btn,
+.change-btn {
   background-color: #ff0000;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: block;
-  margin: 20px auto 0;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.save-btn:hover {
+.save-btn:hover,
+.change-btn:hover {
   background-color: #910b0b;
+}
+
+.save-btn:active,
+.change-btn:active {
+  transform: scale(0.98);
 }
