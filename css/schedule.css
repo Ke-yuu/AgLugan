@@ -225,6 +225,35 @@ select, .view-button {
   color: gold;
 }
 
+/* Checkbox Styles */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  color: #f8f8f8;
+  cursor: pointer;
+}
+
+#hideInactiveCheckbox {
+  width: 14px;
+  height: 14px;
+  accent-color: #ff0000; 
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+.checkbox-label:hover,
+#hideInactiveCheckbox:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
 /* Modal Styles */
 .modal {
   display: none;

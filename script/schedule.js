@@ -1,10 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    showAllRides();
+    // Show all rides initially
+    function showAllRides() {
+        filterRides(); 
+    }
 
     const modal = document.getElementById("filter-modal");
     const filterButton = document.getElementById("filter-button");
     const closeButton = document.getElementsByClassName("close-button")[0];
     const applyFilterButton = document.getElementById('apply-filter-button');
+    const hideInactiveCheckbox = document.getElementById('hideInactiveCheckbox');
+
+    if (hideInactiveCheckbox) {
+        // Attach an event listener to the checkbox to re-filter rides when toggled
+        hideInactiveCheckbox.addEventListener('change', filterRides);
+    }
+
+    // Call showAllRides to load all the rides initially
+    showAllRides();
 
     // Open the modal when filter button is clicked
     filterButton.onclick = function () {
@@ -21,9 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // Show all rides initially
-    function showAllRides() {
-        filterRides(); 
+    if (applyFilterButton) {
+        applyFilterButton.addEventListener('click', filterRides);
     }
 
     // Function to close the modal
@@ -34,6 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to filter rides and fetch data from the backend
     function filterRides() {
         console.log("Fetching rides with filters");
+
+        // Check if the checkbox is available and if it is checked
+        const hideInactive = hideInactiveCheckbox && hideInactiveCheckbox.checked;
 
         // Get filter values
         var route = document.getElementById("route-filter").value;
@@ -70,6 +84,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Iterate through the data and create ride items
                 data.forEach(ride => {
+                    // Determine the ride status based on the current time and update it in the database
+                    let updatedStatus = getUpdatedStatus(ride);
+                    updateRideStatusInDatabase(ride.ride_id, updatedStatus);
+
+                    // If "Hide Inactive Rides" is checked, skip rendering inactive rides
+                    if (hideInactive && updatedStatus === "Inactive") {
+                        return; // Skip this ride if it's inactive
+                    }
+
                     let rideElement = document.createElement('li');
                     rideElement.classList.add('ride-item');
 
@@ -82,37 +105,41 @@ document.addEventListener("DOMContentLoaded", function () {
                     rideDetails.innerHTML =
                         `<span class="ride-id">Ride ID: ${ride.ride_id}</span>
                         <span class="driver-id">Driver ID: ${ride.driver_id || 'N/A'}</span>
-                        <span class="status">Status: ${ride.status}</span>
+                        <span class="status">Status: ${updatedStatus}</span>
                         <span class="waiting-time">Waiting Time: ${formattedWaitingTime}</span>
                         <span class="time_range">Schedule Time: ${ride.time_range || 'N/A'}</span>`;
 
                     // Apply color based on status
                     const statusElement = rideDetails.querySelector('.status');
-                    if (ride.status === "Available") {
+                    if (updatedStatus === "Available") {
                         statusElement.style.color = "#28a745"; 
-                    } else if (ride.status === "Inactive") {
+                    } else if (updatedStatus === "Inactive") {
                         statusElement.style.color = "red"; 
-                    } else if (ride.status === "Upcoming") {
+                    } else if (updatedStatus === "Upcoming") {
                         statusElement.style.color = "gold"; 
                     }
 
-                    // Create the booking button
-                    let bookingButton = document.createElement('button');
-                    bookingButton.innerText = 'Book Ride';
-                    bookingButton.classList.add('booking-button');
-
-                    // Handle booking logic for different statuses
-                    bookingButton.onclick = function () {
-                        if (ride.status === "Upcoming") {
-                            alert("Sorry, you cannot book this ride yet.");
-                        } else {
-                            window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`;
-                        }
-                    };
-
-                    // Append the ride details and booking button to the ride item
+                    // Append the ride details to the ride item
                     rideElement.appendChild(rideDetails);
-                    rideElement.appendChild(bookingButton);
+
+                    // Create the booking button only if the ride is not inactive
+                    if (updatedStatus !== "Inactive") {
+                        let bookingButton = document.createElement('button');
+                        bookingButton.innerText = 'Book Ride';
+                        bookingButton.classList.add('booking-button');
+
+                        // Handle booking logic for different statuses
+                        bookingButton.onclick = function () {
+                            if (updatedStatus === "Upcoming") {
+                                alert("Sorry, you cannot book this ride yet.");
+                            } else {
+                                window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`;
+                            }
+                        };
+
+                        // Append the booking button to the ride item
+                        rideElement.appendChild(bookingButton);
+                    }
 
                     // Append the ride element to the rides list
                     ridesList.appendChild(rideElement);
@@ -129,40 +156,51 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Attach the filterRides function to the Apply Filter button
-    if (applyFilterButton) {
-        applyFilterButton.addEventListener('click', filterRides);
-    }
+    // Function to determine the updated status of a ride based on the current time
+    function getUpdatedStatus(ride) {
+        const currentTime = new Date();
+        const [startHour, startMinute] = ride.time_range.split('-')[0].split(':');
+        const [endHour, endMinute] = ride.time_range.split('-')[1].split(':');
 
-    // Handle the Terms and Conditions Modal
-    const termsModal = document.getElementById("terms-modal");
-    const btnOpenGcash = document.getElementById("open-modal");
-    const btnOpenMaya = document.getElementById("open-maya-modal");
-    const spanCloseTerms = document.getElementsByClassName("close")[0];
+        const startTime = new Date();
+        startTime.setHours(startHour, startMinute, 0, 0);
 
-    // Open the modal for GCash and Maya
-    if (btnOpenGcash) {
-        btnOpenGcash.onclick = function () {
-            termsModal.style.display = "block";
-        };
-    }
+        const endTime = new Date();
+        endTime.setHours(endHour, endMinute, 0, 0);
 
-    if (btnOpenMaya) {
-        btnOpenMaya.onclick = function () {
-            termsModal.style.display = "block";
-        };
-    }
-
-    // Close the Terms Modal
-    if (spanCloseTerms) {
-        spanCloseTerms.onclick = function () {
-            termsModal.style.display = "none";
-        };
-    }
-
-    window.onclick = function (event) {
-        if (event.target == termsModal) {
-            termsModal.style.display = "none";
+        if (currentTime < startTime) {
+            return "Upcoming";
+        } else if (currentTime >= startTime && currentTime <= endTime) {
+            return "Available";
+        } else {
+            return "Inactive";
         }
-    };
+    }
+
+    // Function to update ride status in the database
+    function updateRideStatusInDatabase(rideId, updatedStatus) {
+        fetch('../php/updateRideStatus.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ride_id: rideId, status: updatedStatus })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log(`Ride ID ${rideId} status updated to ${updatedStatus}`);
+            } else {
+                console.error(`Failed to update status for ride ID ${rideId}:`, data.message);
+            }
+        })
+        .catch(error => {
+            console.error(`Error updating status for ride ID ${rideId}:`, error);
+        });
+    }
 });

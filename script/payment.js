@@ -20,9 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const rideId = urlParams.get('ride_id');
 
   if (rideId) {
-      document.getElementById('gcash-ride_id').value = rideId;
-      document.getElementById('maya-ride_id').value = rideId;
-      document.getElementById('cash-ride_id').value = rideId;
+    document.getElementById('gcash-ride_id').value = rideId;
+    document.getElementById('maya-ride_id').value = rideId;
+    document.getElementById('cash-ride_id').value = rideId;
   }
 
   // Attach event listener to the select dropdown for payment method change
@@ -33,22 +33,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle form submission for GCash, Maya, and Cash
   document.getElementById('gcash-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (validateMobileNumber('gcash-number')) {
-          submitPaymentForm(new FormData(this));
-      }
+    e.preventDefault();
+    if (validateTermsAgreement('gcash-terms') && validateMobileNumber('gcash-number')) {
+      submitPaymentForm(new FormData(this));
+    }
   });
 
   document.getElementById('maya-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (validateMobileNumber('maya-number')) {
-          submitPaymentForm(new FormData(this));
-      }
+    e.preventDefault();
+    if (validateTermsAgreement('maya-terms') && validateMobileNumber('maya-number')) {
+      submitPaymentForm(new FormData(this));
+    }
   });
 
   document.getElementById('cash-form').addEventListener('submit', function (e) {
-      e.preventDefault();
+    e.preventDefault();
+    if (validateTermsAgreement('cash-terms')) {
       submitPaymentForm(new FormData(this));
+    }
   });
 
   // Enable or disable GCash and Maya submit buttons based on terms acceptance
@@ -58,15 +60,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const mayaSubmit = document.getElementById("maya-submit");
 
   if (gcashTerms) {
-      gcashTerms.addEventListener('change', function () {
-          gcashSubmit.disabled = !this.checked;
-      });
+    gcashTerms.addEventListener('change', function () {
+      gcashSubmit.disabled = !this.checked;
+    });
   }
 
   if (mayaTerms) {
-      mayaTerms.addEventListener('change', function () {
-          mayaSubmit.disabled = !this.checked;
-      });
+    mayaTerms.addEventListener('change', function () {
+      mayaSubmit.disabled = !this.checked;
+    });
   }
 
   // Terms and Conditions Modal Handling
@@ -76,36 +78,38 @@ document.addEventListener("DOMContentLoaded", function () {
   const spanCloseTerms = document.getElementsByClassName("close")[0];
 
   if (btnOpenGcash) {
-      btnOpenGcash.onclick = function () {
-          termsModal.style.display = "block";
-      };
+    btnOpenGcash.onclick = function () {
+      termsModal.style.display = "block";
+    };
   }
 
   if (btnOpenMaya) {
-      btnOpenMaya.onclick = function () {
-          termsModal.style.display = "block";
-      };
+    btnOpenMaya.onclick = function () {
+      termsModal.style.display = "block";
+    };
   }
 
   if (spanCloseTerms) {
-      spanCloseTerms.onclick = function () {
-          termsModal.style.display = "none";
-      };
+    spanCloseTerms.onclick = function () {
+      termsModal.style.display = "none";
+    };
   }
 
   window.onclick = function (event) {
-      if (event.target == termsModal) {
-          termsModal.style.display = "none";
-      }
+    if (event.target == termsModal) {
+      termsModal.style.display = "none";
+    }
   };
 
   // Success modal handling
   const successModal = document.getElementById('success-modal');
   const closeSuccessModal = document.getElementById('close-success-modal');
-  closeSuccessModal.onclick = function () {
+  if (closeSuccessModal) {
+    closeSuccessModal.onclick = function () {
       successModal.style.display = 'none';
       window.location.href = '../html/passenger-dashboard.html';
-  };
+    };
+  }
 });
 
 // Function to show the correct payment form based on the selection
@@ -120,13 +124,13 @@ function showPaymentForm() {
   mayaSection.classList.remove('active');
 
   if (paymentMethod === "gcash") {
-      gcashSection.classList.add('active');
-      populateDate("gcash-date");
+    gcashSection.classList.add('active');
+    populateDate("gcash-date");
   } else if (paymentMethod === "maya") {
-      mayaSection.classList.add('active');
-      populateDate("maya-date");
+    mayaSection.classList.add('active');
+    populateDate("maya-date");
   } else {
-      cashSection.classList.add('active');
+    cashSection.classList.add('active');
   }
 }
 
@@ -144,8 +148,18 @@ function validateMobileNumber(fieldId) {
   const mobileNumberPattern = /^09\d{9}$/;
 
   if (!mobileNumberPattern.test(mobileNumber)) {
-      alert("Please enter a valid mobile number starting with '09' followed by 9 digits.");
-      return false;
+    alert("Please enter a valid mobile number starting with '09' followed by 9 digits.");
+    return false;
+  }
+  return true;
+}
+
+// Function to validate terms and conditions agreement
+function validateTermsAgreement(termsFieldId) {
+  const termsCheckbox = document.getElementById(termsFieldId);
+  if (!termsCheckbox.checked) {
+    alert("You have to agree with the terms and conditions to proceed.");
+    return false;
   }
   return true;
 }
@@ -154,37 +168,37 @@ function validateMobileNumber(fieldId) {
 function submitPaymentForm(formData) {
   console.log('Form data before submission:');
   for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
+    console.log(`${key}: ${value}`);
   }
 
   fetch('../php/process_payment.php', {
-      method: 'POST',
-      body: formData
+    method: 'POST',
+    body: formData
   })
-  .then(response => response.text())
-  .then(text => {
+    .then(response => response.text())
+    .then(text => {
       try {
-          const data = JSON.parse(text);
-          if (data.status === 'success') {
-              console.log("Payment submitted successfully. Showing success modal.");
-              document.getElementById('success-modal').style.display = 'block';
-          } else {
-              console.error('Error: ', data.message);
-              alert('Error: ' + data.message);
-          }
+        const data = JSON.parse(text);
+        if (data.status === 'success') {
+          console.log("Payment submitted successfully. Showing success modal.");
+          document.getElementById('success-modal').style.display = 'block';
+        } else {
+          console.error('Error: ', data.message);
+          alert('Error: ' + data.message);
+        }
       } catch (error) {
-          console.error('Error parsing JSON:', error);
-          console.error('Response:', text);
-          if (text.includes('<!DOCTYPE html>')) {
-              alert('Your session has expired. Please log in again.');
-              window.location.href = '../html/login.html';
-          } else {
-              alert('There was an error processing your payment. Please try again.');
-          }
+        console.error('Error parsing JSON:', error);
+        console.error('Response:', text);
+        if (text.includes('<!DOCTYPE html>')) {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = '../html/login.html';
+        } else {
+          alert('There was an error processing your payment. Please try again.');
+        }
       }
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error('Error:', error);
       alert('There was an error submitting the form. Please try again.');
-  });
+    });
 }

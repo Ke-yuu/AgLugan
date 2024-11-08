@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 07, 2024 at 02:24 PM
+-- Generation Time: Nov 08, 2024 at 04:57 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   PRIMARY KEY (`payment_id`),
   KEY `ride_id` (`ride_id`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `payments`
@@ -73,7 +73,9 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 (9, 10008, 13.00, 'Maya', 'pending', 2147483647, 1),
 (10, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1),
 (11, 10007, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(12, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1);
+(12, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1),
+(13, 1001, 13.00, 'Gcash', 'pending', 2147483647, 22),
+(14, 1001, 13.00, 'Gcash', 'pending', 2147483647, 22);
 
 -- --------------------------------------------------------
 
@@ -88,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `driver_id` int DEFAULT NULL,
   `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('Available','Upcoming','On-Route') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('Available','Upcoming','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
   `time_range` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -102,49 +104,49 @@ CREATE TABLE IF NOT EXISTS `rides` (
 --
 
 INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
-(1001, 1, 4, 'SLU', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '6:00-7:00'),
-(10007, 2, 5, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '7:00-8:00'),
-(10008, 3, 6, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '8:00-9:00'),
-(10009, 4, 7, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '9:00-10:00'),
-(10010, 5, 8, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '10:00-11:00'),
-(10011, 6, 9, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '11:00-12:00'),
-(10012, 7, 10, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '12:00-13:00'),
+(1001, 1, 4, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '6:00-7:00'),
+(10007, 2, 5, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '7:00-8:00'),
+(10008, 3, 6, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '8:00-9:00'),
+(10009, 4, 7, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '9:00-10:00'),
+(10010, 5, 8, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '10:00-11:00'),
+(10011, 6, 9, 'SLU', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '11:00-12:00'),
+(10012, 7, 10, 'SLU', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '12:00-13:00'),
 (10013, 8, 11, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '13:00-14:00'),
 (10014, 9, 12, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '14:00-15:00'),
 (10015, 10, 13, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '15:00-16:00'),
 (10016, 11, 14, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '16:00-17:00'),
 (10017, 12, 15, 'SLU', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '17:00-18:00'),
-(10018, 1, 4, 'SLU', 'TOWN', 'Available', 13.00, '00:10:00.000000', '6:00-7:00'),
-(10019, 2, 5, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '7:00-8:00'),
-(10020, 3, 6, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '8:00-9:00'),
-(10021, 4, 7, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '9:00-10:00'),
-(10022, 5, 8, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '10:00-11:00'),
-(10023, 6, 9, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '11:00-12:00'),
-(10024, 7, 10, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '12:00-13:00'),
+(10018, 1, 4, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '6:00-7:00'),
+(10019, 2, 5, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '7:00-8:00'),
+(10020, 3, 6, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '8:00-9:00'),
+(10021, 4, 7, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '9:00-10:00'),
+(10022, 5, 8, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '10:00-11:00'),
+(10023, 6, 9, 'SLU', 'TOWN', 'Inactive', 13.00, '00:10:00.000000', '11:00-12:00'),
+(10024, 7, 10, 'SLU', 'TOWN', 'Available', 13.00, '00:10:00.000000', '12:00-13:00'),
 (10025, 8, 11, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '13:00-14:00'),
 (10026, 9, 12, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '14:00-15:00'),
 (10027, 10, 13, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '15:00-16:00'),
 (10028, 11, 14, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '16:00-17:00'),
 (10029, 12, 15, 'SLU', 'TOWN', 'Upcoming', 13.00, '00:10:00.000000', '17:00-18:00'),
-(10030, 1, 4, 'TOWN', 'SLU', 'Available', 13.00, '00:10:00.000000', '6:00-7:00'),
-(10031, 2, 5, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '7:00-8:00'),
-(10032, 3, 6, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '8:00-9:00'),
-(10033, 4, 7, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '9:00-10:00'),
-(10034, 5, 8, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '10:00-11:00'),
-(10035, 6, 9, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '11:00-12:00'),
-(10036, 7, 10, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '12:00-13:00'),
+(10030, 1, 4, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '6:00-7:00'),
+(10031, 2, 5, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '7:00-8:00'),
+(10032, 3, 6, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '8:00-9:00'),
+(10033, 4, 7, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '9:00-10:00'),
+(10034, 5, 8, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '10:00-11:00'),
+(10035, 6, 9, 'TOWN', 'SLU', 'Inactive', 13.00, '00:10:00.000000', '11:00-12:00'),
+(10036, 7, 10, 'TOWN', 'SLU', 'Available', 13.00, '00:10:00.000000', '12:00-13:00'),
 (10037, 8, 11, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '13:00-14:00'),
 (10038, 9, 12, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '14:00-15:00'),
 (10039, 10, 13, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '15:00-16:00'),
 (10040, 11, 14, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '16:00-17:00'),
 (10041, 12, 15, 'TOWN', 'SLU', 'Upcoming', 13.00, '00:10:00.000000', '17:00-18:00'),
-(10042, 1, 4, 'TOWN', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '6:00-7:00'),
-(10043, 2, 5, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '7:00-8:00'),
-(10044, 3, 6, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '8:00-9:00'),
-(10045, 4, 7, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '9:00-10:00'),
-(10046, 5, 8, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '10:00-11:00'),
-(10047, 6, 9, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '11:00-12:00'),
-(10048, 7, 10, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '12:00-13:00'),
+(10042, 1, 4, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '6:00-7:00'),
+(10043, 2, 5, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '7:00-8:00'),
+(10044, 3, 6, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '8:00-9:00'),
+(10045, 4, 7, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '9:00-10:00'),
+(10046, 5, 8, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '10:00-11:00'),
+(10047, 6, 9, 'TOWN', 'CHURCH', 'Inactive', 11.00, '00:10:00.000000', '11:00-12:00'),
+(10048, 7, 10, 'TOWN', 'CHURCH', 'Available', 11.00, '00:10:00.000000', '12:00-13:00'),
 (10049, 8, 11, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '13:00-14:00'),
 (10050, 9, 12, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '14:00-15:00'),
 (10051, 10, 13, 'TOWN', 'CHURCH', 'Upcoming', 11.00, '00:10:00.000000', '15:00-16:00'),
