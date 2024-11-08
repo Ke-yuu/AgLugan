@@ -58,7 +58,7 @@ if (!$user_data) {
 }
 
 // Fetch available rides for this user
-$rides_sql = "SELECT ride_id, driver_id, start_location, end_location, waiting_time, time_range FROM rides WHERE user_id = ? OR status = 'Available'";
+$rides_sql = "SELECT ride_id, driver_id, start_location, end_location, status, waiting_time, time_range FROM rides WHERE status = 'Available'";
 $rides_stmt = $conn->prepare($rides_sql);
 if (!$rides_stmt) {
     echo json_encode(["status" => "error", "message" => "Internal server error."]);
@@ -66,7 +66,6 @@ if (!$rides_stmt) {
     exit();
 }
 
-$rides_stmt->bind_param("i", $user_id);
 $rides_stmt->execute();
 $rides_result = $rides_stmt->get_result();
 $rides = [];
@@ -76,7 +75,7 @@ while ($row = $rides_result->fetch_assoc()) {
 
 // Log if no rides are found for debugging
 if (empty($rides)) {
-    error_log("No rides found for user ID: " . $user_id);
+    error_log("No available rides found.");
 }
 
 // Fetch payment history for the logged-in user

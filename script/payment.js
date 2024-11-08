@@ -53,11 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Enable or disable GCash and Maya submit buttons based on terms acceptance
+  // Enable or disable GCash, Maya, and Cash submit buttons based on terms acceptance
   const gcashTerms = document.getElementById("gcash-terms");
   const gcashSubmit = document.getElementById("gcash-submit");
   const mayaTerms = document.getElementById("maya-terms");
   const mayaSubmit = document.getElementById("maya-submit");
+  const cashTerms = document.getElementById("cash-terms");
+  const cashSubmit = document.getElementById("cash-submit");
 
   if (gcashTerms) {
     gcashTerms.addEventListener('change', function () {
@@ -71,30 +73,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  if (cashTerms) {
+    cashTerms.addEventListener('change', function () {
+      cashSubmit.disabled = !this.checked;
+    });
+  }
+
   // Terms and Conditions Modal Handling
   const termsModal = document.getElementById("terms-modal");
-  const btnOpenGcash = document.getElementById("open-modal");
-  const btnOpenMaya = document.getElementById("open-maya-modal");
-  const spanCloseTerms = document.getElementsByClassName("close")[0];
+  const termsLinks = document.querySelectorAll(".open-modal");
+  const spanCloseTerms = document.querySelector(".close");
 
-  if (btnOpenGcash) {
-    btnOpenGcash.onclick = function () {
+  // Attach click event listeners to all Terms and Conditions links
+  termsLinks.forEach((link) => {
+    link.onclick = function () {
       termsModal.style.display = "block";
     };
-  }
+  });
 
-  if (btnOpenMaya) {
-    btnOpenMaya.onclick = function () {
-      termsModal.style.display = "block";
-    };
-  }
-
+  // Close the modal when the close button is clicked
   if (spanCloseTerms) {
     spanCloseTerms.onclick = function () {
       termsModal.style.display = "none";
     };
   }
 
+  // Close the modal when clicking outside of it
   window.onclick = function (event) {
     if (event.target == termsModal) {
       termsModal.style.display = "none";

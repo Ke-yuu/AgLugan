@@ -28,3 +28,23 @@
     [ride_id] => 
 )
 
+[08-Nov-2024 05:42:10 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php:28
+Stack trace:
+#0 C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php(28): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'aglugan')
+#1 {main}
+  thrown in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php on line 28
+[08-Nov-2024 05:42:15 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php:28
+Stack trace:
+#0 C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php(28): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'aglugan')
+#1 {main}
+  thrown in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php on line 28
+[08-Nov-2024 05:43:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php:28
+Stack trace:
+#0 C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php(28): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'aglugan')
+#1 {main}
+  thrown in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php on line 28
+[08-Nov-2024 05:43:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php:28
+Stack trace:
+#0 C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php(28): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'aglugan')
+#1 {main}
+  thrown in C:\Users\Kennely Ray\Desktop\AgLugan-1\php\process_payment.php on line 28

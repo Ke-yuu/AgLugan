@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Handle form submission for changing password
   handleChangePassword();
+
+  // Start polling for ride status updates
+  startRideStatusPolling();
 });
 
 // Function to check session status
@@ -44,6 +47,8 @@ function fetchPassengerDashboardData() {
   fetch('../php/passenger-dashboard.php')
     .then(response => response.json())
     .then(data => {
+      console.log(data); // Debugging: Log the data to check its structure
+
       if (data.status === 'error') {
         alert(data.message);
         return;
@@ -67,34 +72,51 @@ function displayPassengerInfo(data) {
   }
 }
 
-// Function to display available rides
+// Function to display Available Rides
 function displayAvailableRides(data) {
   const availableRidesList = document.getElementById('rides-list');
+  
   if (availableRidesList) {
-    availableRidesList.innerHTML = '';
+    availableRidesList.innerHTML = ''; // Clear previous rides
+
     if (data.rides && data.rides.length > 0) {
+      let ridesAvailable = false;
+
       data.rides.forEach(ride => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('available-ride-item');
-        listItem.innerHTML = `
-          Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location} | Time: ${ride.time_range}
-        `;
-        listItem.addEventListener('click', function () {
-          window.location.href = '../html/schedule.html';
-        });
-        availableRidesList.appendChild(listItem);
+        // Debugging: Log each ride object to check if it has the expected properties
+        console.log('Ride Object:', ride);
+
+        // Ensure ride and status are defined, and only consider rides with "Available" status
+        if (ride && ride.status && ride.status.toLowerCase() === 'available') {
+          ridesAvailable = true;
+          const listItem = document.createElement('li');
+          listItem.classList.add('available-ride-item');
+          listItem.innerHTML = `
+            Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location} | Time: ${ride.time_range}
+          `;
+          listItem.addEventListener('click', function () {
+            window.location.href = '../html/schedule.html';
+          });
+          availableRidesList.appendChild(listItem);
+        }
       });
+
+      if (!ridesAvailable) {
+        availableRidesList.innerHTML = '<li>No available rides found.</li>';
+      }
     } else {
       availableRidesList.innerHTML = '<li>No available rides found.</li>';
     }
   }
 }
 
+
 // Function to display payment history
 function displayPaymentHistory(data) {
   const paymentHistory = document.getElementById('ride-history');
   if (paymentHistory) {
-    paymentHistory.innerHTML = '';
+    paymentHistory.innerHTML = ''; // Clear previous payments
+
     if (data.payments && data.payments.length > 0) {
       data.payments.forEach(payment => {
         const listItem = document.createElement('li');
@@ -292,4 +314,11 @@ function handleChangePassword() {
         });
     });
   }
+}
+
+// Function to start polling for ride status updates every 10 seconds
+function startRideStatusPolling() {
+  setInterval(() => {
+    fetchPassengerDashboardData(); // Correct function name
+  }, 30000); // Poll every 10 seconds (10000 milliseconds)
 }
