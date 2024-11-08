@@ -28,17 +28,61 @@ $data = json_decode(file_get_contents('php://input'), true);
 $name = $data['name'] ?? '';
 $email = $data['email'] ?? '';
 
-if (empty($name) || empty($email)) {
-    echo json_encode(['success' => false, 'message' => 'Name and email are required.']);
+if (empty($name) && empty($email)) {
+    echo json_encode(['success' => false, 'message' => 'No data to update.']);
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
 
+// Prepare the SQL query dynamically
+$updates = [];
+$params = [];
+$types = "";
+
+if (!empty($name)) {
+    $updates[] = "name = ?";
+    $params[] = $name;
+    $types .= "s";
+}
+
+if (!empty($email)) {
+    // Validate email domain
+    $allowedDomains = ['gmail.com', 'hotmail.com', 'yahoo.com', 'slu.edu.ph'];
+    $emailDomain = substr(strrchr($email, "@"), 1);
+    if (!in_array($emailDomain, $allowedDomains)) {
+        echo json_encode(['success' => false, 'message' => 'Only gmail.com, hotmail.com, yahoo.com, and slu.edu.ph domains are allowed.']);
+        exit();
+    }
+
+    // Check if the email is already taken by another user
+    $sql = "SELECT * FROM users WHERE email = ? AND user_id != ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $email, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo json_encode(['success' => false, 'message' => 'The email address is already in use by another account.']);
+        $stmt->close();
+        $conn->close();
+        exit();
+    }
+
+    $stmt->close();
+
+    $updates[] = "email = ?";
+    $params[] = $email;
+    $types .= "s";
+}
+
+$params[] = $user_id;
+$types .= "i";
+
 // Update user profile
-$sql = "UPDATE users SET name = ?, email = ? WHERE user_id = ?";
+$sql = "UPDATE users SET " . implode(", ", $updates) . " WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssi", $name, $email, $user_id);
+$stmt->bind_param($types, ...$params);
 
 if ($stmt->execute()) {
     echo json_encode(['success' => true]);
