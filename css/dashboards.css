@@ -26,6 +26,12 @@ header nav {
   width: 50px;
 }
 
+.logo:hover {
+  width: 50px;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 .profile-content {
   display: flex;
   align-items: center;
@@ -40,15 +46,29 @@ ul {
   list-style-type: none;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   margin: 0;
 }
 
-ul li a,
+li a {
+  text-decoration: none;
+  color: #f8f8f8;
+  padding: 11px 13px;
+  background-color: #ff0000;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  display: inline-block;
+}
+li a:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 #logoutBtn {
   text-decoration: none;
   color: #f8f8f8;
-  padding: 10px 20px;
+  padding: 10px 12px;
   background-color: #ff0000;
   border-radius: 8px;
   transition: background-color 0.3s;
@@ -60,6 +80,8 @@ ul li a:hover,
 #logoutBtn:hover,
 .icon-button:hover {
   background-color: #910b0b;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .icon-button {
@@ -242,6 +264,47 @@ input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 input[type="password"]::placeholder {
   color: #a0a0a0;
+
+}
+  /* Styles for the book ride button */
+  .book-ride-btn {
+    background-color: #e00206;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+    margin-left: 180px;
+  }
+  
+  /* Hover effect for book ride button */
+  .book-ride-btn:hover {
+    background-color: #a70306;
+    transform: scale(1.1);
+  }
+  
+  /* Focus and active states for better accessibility */
+  .book-ride-btn:focus,
+  .book-ride-btn:active {
+    outline: none;
+    background-color: #da0408;
+  }
+
+.available-ride-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.available-ride-item:hover {
+  background-color: #f3f0f0;
+  color: #910b0b;
+}
+
+.available-ride-item:hover::after {
+  display: block;
 }
 
 /* Buttons Styling */

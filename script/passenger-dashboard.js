@@ -75,7 +75,7 @@ function displayPassengerInfo(data) {
 // Function to display Available Rides
 function displayAvailableRides(data) {
   const availableRidesList = document.getElementById('rides-list');
-  
+
   if (availableRidesList) {
     availableRidesList.innerHTML = '';
 
@@ -89,12 +89,16 @@ function displayAvailableRides(data) {
           ridesAvailable = true;
           const listItem = document.createElement('li');
           listItem.classList.add('available-ride-item');
+          listItem.dataset.rideId = ride.ride_id;
+          listItem.dataset.startLocation = ride.start_location;
+          listItem.dataset.endLocation = ride.end_location;
+
+          // Add tooltip using the title attribute
+          listItem.title = 'Click to view Route';
+
           listItem.innerHTML = `
             Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location} | Time: ${ride.time_range}
           `;
-          listItem.addEventListener('click', function () {
-            window.location.href = '../html/schedule.html';
-          });
           availableRidesList.appendChild(listItem);
         }
       });
@@ -317,4 +321,50 @@ function startRideStatusPolling() {
   setInterval(() => {
     fetchPassengerDashboardData(); 
   }, 30000); 
+}
+
+// Function to initialize the route modal and display map for the ride
+function openRouteModal(ride) {
+  const modal = document.getElementById('routeModal');
+  const routeModalContent = document.getElementById('routeModalContent');
+
+  if (!modal || !routeModalContent) {
+    console.error('Modal elements not found in the DOM');
+    return;
+  }
+
+  // Set modal to display
+  modal.style.display = 'block';
+
+  // Clear previous map content if any
+  routeModalContent.innerHTML = `<span class="close-btn" id="closeRouteModalBtn">&times;</span><div id="map-container" style="height: 300px; margin-top: 10px;"></div>`;
+
+  // Initialize map using Leaflet (or any map library)
+  const map = L.map('map-container').setView([16.4023, 120.596], 13); 
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+  }).addTo(map);
+
+  // Add markers for start and end location
+  const startMarker = L.marker([16.4023, 120.596]).addTo(map) 
+    .bindPopup(`Start: ${ride.start_location}`).openPopup();
+  const endMarker = L.marker([16.406, 120.598]).addTo(map) 
+    .bindPopup(`End: ${ride.end_location}`);
+
+  // Close button handling
+  const closeButton = document.getElementById('closeRouteModalBtn');
+  if (closeButton) {
+    closeButton.onclick = function () {
+      modal.style.display = 'none';
+    };
+  } else {
+    console.error('Close button not found in the DOM');
+  }
+
+  // Close the modal when clicking outside of the modal content
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  };
 }
