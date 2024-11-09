@@ -11,10 +11,8 @@ document.getElementById('login-form').addEventListener('submit', function (e) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Redirect to the appropriate dashboard based on user type
             window.location.href = data.redirectUrl;
         } else {
-            // Display the error message
             errorMessage.textContent = data.message;
             errorMessage.style.display = 'block';
         }
@@ -61,17 +59,14 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', functio
         body: JSON.stringify({ email: email })
     })
     .then(response => {
-        // Check if the response is in JSON format
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.text(); // Read response as text
+        return response.text(); 
     })
     .then(text => {
         try {
-            // Try to parse JSON
             const data = JSON.parse(text);
-            // If parsing succeeds, handle the JSON response
             if (data.status === 'success') {
                 document.getElementById('forgotPasswordMessage').innerText = data.message;
                 document.getElementById('forgotPasswordMessage').style.color = 'green';
@@ -80,7 +75,6 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', functio
                 document.getElementById('forgotPasswordMessage').style.color = '#ff6666';
             }
         } catch (e) {
-            // If parsing fails, it means we got an HTML or non-JSON response
             console.error('Unexpected response format:', text);
             document.getElementById('forgotPasswordMessage').innerText = 'An unexpected error occurred. Please try again later.';
             document.getElementById('forgotPasswordMessage').style.color = '#ff6666';

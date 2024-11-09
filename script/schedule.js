@@ -11,10 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const hideInactiveCheckbox = document.getElementById('hideInactiveCheckbox');
 
     if (hideInactiveCheckbox) {
-        // Attach an event listener to the checkbox to re-filter rides when toggled
         hideInactiveCheckbox.addEventListener('change', filterRides);
     }
-
     // Call showAllRides to load all the rides initially
     showAllRides();
 
@@ -37,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
         applyFilterButton.addEventListener('click', filterRides);
     }
 
-    // Function to close the modal
     function closeModal() {
         modal.style.display = "none";
     }
@@ -48,8 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Check if the checkbox is available and if it is checked
         const hideInactive = hideInactiveCheckbox && hideInactiveCheckbox.checked;
-
-        // Get filter values
         var route = document.getElementById("route-filter").value;
         var status = document.getElementById("status-filter").value;
         var time = document.getElementById("time-filter").value;
@@ -64,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(data => {
                 const ridesList = document.getElementById("rides-list");
-
-                // Clear previous results
                 ridesList.innerHTML = "";
 
                 if (data.error) {
@@ -84,13 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Iterate through the data and create ride items
                 data.forEach(ride => {
-                    // Determine the ride status based on the current time and update it in the database
                     let updatedStatus = getUpdatedStatus(ride);
                     updateRideStatusInDatabase(ride.ride_id, updatedStatus);
 
                     // If "Hide Inactive Rides" is checked, skip rendering inactive rides
                     if (hideInactive && updatedStatus === "Inactive") {
-                        return; // Skip this ride if it's inactive
+                        return;
                     }
 
                     let rideElement = document.createElement('li');

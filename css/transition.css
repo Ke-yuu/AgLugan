@@ -1,0 +1,15 @@
+/* Initial state for fade-in effect */
+body {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  /* Fade-in class for when the page is loaded */
+  body.fade-in {
+    opacity: 1;
+  }
+  
+  /* Fade-out class for when navigating away from the page */
+  body.fade-out {
+    opacity: 0;
+  }

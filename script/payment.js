@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Set the correct payment amount based on user type
-  const userType = "<?php echo $_SESSION['user_type']; ?>"; // Assuming user_type is stored in the session
+  const userType = "<?php echo $_SESSION['user_type']; ?>"; 
   const cashAmountField = document.getElementById("cash-amount");
   const gcashAmountField = document.getElementById("gcash-amount");
   const mayaAmountField = document.getElementById("maya-amount");

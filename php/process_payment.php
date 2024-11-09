@@ -11,12 +11,10 @@ if (!isset($_SESSION['user_id'])) {
 
 // Set the response header to JSON
 header('Content-Type: application/json');
-
-// Enable error logging for debugging (write errors to a log file)
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/error_log.txt'); // Adjust the path if needed
-error_reporting(E_ALL); // Enable all error reporting
-ini_set('display_errors', 0); // Disable displaying errors in production
+ini_set('error_log', __DIR__ . '/error_log.txt'); 
+error_reporting(E_ALL); 
+ini_set('display_errors', 0); 
 
 // Database connection configuration
 $servername = "localhost";
@@ -33,12 +31,12 @@ if ($conn->connect_error) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'];  // Fetch user_id from session
+$user_id = $_SESSION['user_id'];  
 
 // Get payment details from form submission
 $payment_method = $_POST['payment_method'] ?? '';
 $amount = $_POST['amount'] ?? 0;
-$ride_id = $_POST['ride_id'] ?? null;  // Ride ID is optional
+$ride_id = $_POST['ride_id'] ?? null;  
 
 // Handle payment method to get the phone number based on GCash or Maya
 $phone_number = null;

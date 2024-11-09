@@ -4,8 +4,8 @@ header("Content-Type: application/json");
 
 // Connect to the database
 $servername = "127.0.0.1";
-$username = "root"; // Change if necessary
-$password = ""; // Change if necessary
+$username = "root"; 
+$password = "";
 $dbname = "aglugan";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -21,7 +21,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 $name = $data['name'];
 $email = $data['email'];
 
-// Assume you have the logged-in user's ID available in a session
 session_start();
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'User is not logged in.']);
