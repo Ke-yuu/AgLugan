@@ -31,6 +31,11 @@ header {
   width: 50px;
 }
 
+.logo:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 .login-btn {
   background-color: #ff0000;
   color: #f8f8f8;
