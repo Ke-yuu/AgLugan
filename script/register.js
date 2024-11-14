@@ -6,13 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
         const phone_number = document.getElementById('phone_number').value;
         const user_type = document.getElementById('user_type').value;
 
         // Validate email format
         const validEmailDomains = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@slu.edu.ph'];
         if (!validEmailDomains.some(domain => email.endsWith(domain))) {
-            alert('Invalid email address or domain address. ');
+            alert('Invalid email address or domain address.');
             return;
         }
 
@@ -27,6 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const passwordRegex = /^(?=.*[0-9]).{8,}$/;
         if (!passwordRegex.test(password)) {
             alert('Password must be at least 8 characters long and contain at least one number.');
+            return;
+        }
+
+        // Validate confirm password matches password
+        if (password !== confirmPassword) {
+            alert('Passwords do not match. Please re-enter your password.');
             return;
         }
 
