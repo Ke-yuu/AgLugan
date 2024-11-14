@@ -1,9 +1,11 @@
-// Update to PHP Script to fix the fetching rides problem
 <?php
-// Display errors for debugging
+// Display errors for debugging (should be disabled in production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Set response type to JSON
+header('Content-Type: application/json');
 
 // Database connection
 $servername = "localhost";
@@ -16,13 +18,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    header('Content-Type: application/json');
-    echo json_encode(array("error" => "Connection failed: " . $conn->connect_error));
+    // Log error to server logs and send a JSON response to the client
+    error_log("Connection failed: " . $conn->connect_error);
+    echo json_encode(["error" => "Connection failed. Please try again later."]);
     exit();
 }
-
-// Set response type to JSON
-header('Content-Type: application/json');
 
 // Get the route, status, time, and show_inactive from the request
 $route = isset($_GET['route']) ? $_GET['route'] : '';
@@ -74,10 +74,13 @@ if ($result) {
         }
         echo json_encode($rides);
     } else {
-        echo json_encode(array("error" => "No rides available"));
+        // No rides found, return an empty array
+        echo json_encode([]);
     }
 } else {
-    echo json_encode(array("error" => "Database query failed: " . $conn->error));
+    // Log the database error to the server logs
+    error_log("Database query failed: " . $conn->error);
+    echo json_encode(["error" => "Database query failed. Please try again later."]);
 }
 
 // Close the connection

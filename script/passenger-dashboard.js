@@ -47,7 +47,7 @@ function fetchPassengerDashboardData() {
   fetch('../php/passenger-dashboard.php')
     .then(response => response.json())
     .then(data => {
-      console.log(data); 
+      console.log('Passenger Dashboard Data:', data);
 
       if (data.status === 'error') {
         alert(data.message);
@@ -85,21 +85,49 @@ function displayAvailableRides(data) {
       data.rides.forEach(ride => {
         console.log('Ride Object:', ride);
 
-        if (ride && ride.status && ride.status.toLowerCase() === 'available') {
-          ridesAvailable = true;
-          const listItem = document.createElement('li');
-          listItem.classList.add('available-ride-item');
-          listItem.dataset.rideId = ride.ride_id;
-          listItem.dataset.startLocation = ride.start_location;
-          listItem.dataset.endLocation = ride.end_location;
+        if (ride && ride.status) {
+          const status = ride.status.toLowerCase();
 
-          // Add tooltip using the title attribute
-          listItem.title = 'Click to view Route';
+          // Display only rides that are "loading"
+          if (status === 'loading') {
+            ridesAvailable = true;
 
-          listItem.innerHTML = `
-            Ride ID: ${ride.ride_id} | From: ${ride.start_location} | To: ${ride.end_location} | Time: ${ride.time_range}
+            const listItem = document.createElement('li');
+            listItem.classList.add('available-ride-item');
+            listItem.dataset.rideId = ride.ride_id;  // Set ride_id data attribute for later use in modal
+            listItem.dataset.startLocation = ride.start_location;
+            listItem.dataset.endLocation = ride.end_location;
+            listItem.dataset.timeRange = ride.time_range;
+
+            // Add tooltip using the title attribute
+            listItem.title = 'Click to view Route';
+
+            // Create ride details (excluding ride ID)
+            const rideDetails = `
+            <div style="padding: 15px; border-radius: 10px; background: #2e2e2e; box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), -4px -4px 10px rgba(60, 60, 60, 0.2); color: #f8f8f8;">
+              <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ff9100;">Destiation:</p>
+              <p style="margin: 0; font-size: 1rem;">${ride.start_location} - ${ride.end_location}</p>
+
+              <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ff9100;">Ride Schedule:</p>
+              <p style="margin: 0; font-size: 1rem;">${ride.time_range}</p>
+          
+              <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ff9100;">Status:</p>
+              <p style="margin: 0; font-size: 1rem; color: ${getStatusColor(status)}; font-weight: bold;">${ride.status}</p>
+          
+              <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ff9100;">Waiting Time:</p>
+              <p style="margin: 0; font-size: 1rem;">${ride.waiting_time ? ride.waiting_time.split(".")[0] : "N/A"}</p>
+            </div>
           `;
-          availableRidesList.appendChild(listItem);
+          
+          listItem.innerHTML = rideDetails;
+
+            // Attach event listener to open route modal when clicking on the ride item
+            listItem.addEventListener('click', function () {
+              openRouteModal(ride);
+            });
+
+            availableRidesList.appendChild(listItem);
+          }
         }
       });
 
@@ -112,14 +140,25 @@ function displayAvailableRides(data) {
   }
 }
 
+// Helper function to get status color based on ride status
+function getStatusColor(status) {
+  switch (status) {
+    case 'loading':
+      return '#28a745'; 
+    case 'inactive':
+      return 'red'; 
+    default:
+      return '#f8f8f8'; 
+  }
+}
 
 // Function to display payment history
 function displayPaymentHistory(data) {
   const paymentHistory = document.getElementById('ride-history');
   if (paymentHistory) {
-    paymentHistory.innerHTML = ''; 
+    paymentHistory.innerHTML = '';
 
-    if (data.payments && data.payments.length > 0) {
+    if (data.payments && Array.isArray(data.payments) && data.payments.length > 0) {
       data.payments.forEach(payment => {
         const listItem = document.createElement('li');
         listItem.classList.add('ride-history-item');
@@ -165,20 +204,20 @@ function setupProfileModal() {
   if (profileBtn) {
     profileBtn.onclick = function () {
       profileModal.style.display = "block";
-    }
+    };
   }
 
   if (closeModalBtn) {
     closeModalBtn.onclick = function () {
       profileModal.style.display = "none";
-    }
+    };
   }
 
   window.onclick = function (event) {
     if (event.target == profileModal) {
       profileModal.style.display = "none";
     }
-  }
+  };
 }
 
 // Function to handle profile update submission
@@ -224,11 +263,9 @@ function handleProfileUpdate() {
           if (data.success) {
             alert('Profile updated successfully.');
             document.getElementById("profileModal").style.display = 'none';
-            // Update the displayed name if it was changed
             if (name) {
               document.getElementById('passenger-name').innerText = name;
             }
-            // Clear the input fields after saving changes
             document.getElementById('passenger-name-input').value = '';
             document.getElementById('passenger-email-input').value = '';
           } else {
@@ -246,7 +283,7 @@ function handleProfileUpdate() {
 // Function to handle password change submission
 function handleChangePassword() {
   const passwordForm = document.getElementById("changePasswordForm");
-  const passwordModal = document.getElementById("profileModal"); 
+  const passwordModal = document.getElementById("profileModal");
 
   if (passwordForm) {
     passwordForm.addEventListener('submit', function (e) {
@@ -256,19 +293,8 @@ function handleChangePassword() {
       const newPassword = document.getElementById('new-password').value.trim();
       const confirmPassword = document.getElementById('confirm-password').value.trim();
 
-      // Validate fields
-      if (!currentPassword) {
-        alert('Current password is required.');
-        return;
-      }
-
-      if (!newPassword) {
-        alert('New password is required.');
-        return;
-      }
-
-      if (!confirmPassword) {
-        alert('Please confirm your new password.');
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('All fields are required.');
         return;
       }
 
@@ -282,7 +308,6 @@ function handleChangePassword() {
         return;
       }
 
-      // Send change password request to server
       fetch('../php/change_password.php', {
         method: 'POST',
         headers: {
@@ -297,10 +322,7 @@ function handleChangePassword() {
         .then(data => {
           if (data.success) {
             alert('Password changed successfully.');
-            document.getElementById('current-password').value = '';
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-password').value = '';
-
+            passwordForm.reset();
             if (passwordModal) {
               passwordModal.style.display = "none";
             }
@@ -319,11 +341,11 @@ function handleChangePassword() {
 // Function to start polling for ride status updates every 10 seconds
 function startRideStatusPolling() {
   setInterval(() => {
-    fetchPassengerDashboardData(); 
-  }, 30000); 
+    fetchPassengerDashboardData();
+  }, 10000);
 }
 
-// Function to initialize the route modal and display map for the ride
+// Function to open route modal and display map for the ride
 function openRouteModal(ride) {
   const modal = document.getElementById('routeModal');
   const routeModalContent = document.getElementById('routeModalContent');
@@ -337,19 +359,51 @@ function openRouteModal(ride) {
   modal.style.display = 'block';
 
   // Clear previous map content if any
-  routeModalContent.innerHTML = `<span class="close-btn" id="closeRouteModalBtn">&times;</span><div id="map-container" style="height: 300px; margin-top: 10px;"></div>`;
+  routeModalContent.innerHTML = `
+    <span class="close-btn" id="closeRouteModalBtn">&times;</span>
+    <div id="map-container" style="height: 400px; margin-top: 10px;"></div>
+    <button class="book-ride-btn" id="bookRideBtn">Book This Ride</button>
+  `;
 
-  // Initialize map using Leaflet (or any map library)
-  const map = L.map('map-container').setView([16.4023, 120.596], 13); 
+  // Hardcoded Coordinates for each location
+  const locations = {
+    "Holy Family Parish Church": [16.390942368673546, 120.59054011271213],
+    "SLU Mary Heights": [16.385441539448166, 120.593292997368],
+    "Igorot Garden": [16.413197650072124, 120.59454902620435]
+  };
+
+  // Get the coordinates for the start and end locations
+  const startCoordinates = locations[ride.start_location];
+  const endCoordinates = locations[ride.end_location];
+
+  if (!startCoordinates || !endCoordinates) {
+    console.error('Invalid start or end location for the ride');
+    return;
+  }
+
+  // Initialize map using Leaflet
+  const map = L.map('map-container').setView(startCoordinates, 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
   }).addTo(map);
 
-  // Add markers for start and end location
-  const startMarker = L.marker([16.4023, 120.596]).addTo(map) 
-    .bindPopup(`Start: ${ride.start_location}`).openPopup();
-  const endMarker = L.marker([16.406, 120.598]).addTo(map) 
-    .bindPopup(`End: ${ride.end_location}`);
+  // Add routing between the start and end locations using Leaflet Routing Machine
+  L.Routing.control({
+    waypoints: [
+      L.latLng(startCoordinates[0], startCoordinates[1]),
+      L.latLng(endCoordinates[0], endCoordinates[1])
+    ],
+    lineOptions: {
+      styles: [{ color: 'blue', opacity: 0.6, weight: 4 }]
+    },
+    draggableWaypoints: false,
+    addWaypoints: false,
+    createMarker: function (i, waypoint, n) {
+      // Create custom markers for start and end locations
+      const markerText = i === 0 ? `Start Location: ${ride.start_location}` : `End Location: ${ride.end_location}`;
+      return L.marker(waypoint.latLng).bindPopup(markerText);
+    }
+  }).addTo(map);
 
   // Close button handling
   const closeButton = document.getElementById('closeRouteModalBtn');
@@ -361,6 +415,17 @@ function openRouteModal(ride) {
     console.error('Close button not found in the DOM');
   }
 
+  // Attach book ride button handling
+  const bookRideBtn = document.getElementById('bookRideBtn');
+  if (bookRideBtn) {
+    bookRideBtn.onclick = function () {
+      alert(`Booking ride with ID: ${ride.ride_id}`);
+      // Add any further booking logic here if needed.
+    };
+  } else {
+    console.error('Book Ride button not found in the DOM');
+  }
+
   // Close the modal when clicking outside of the modal content
   window.onclick = function (event) {
     if (event.target == modal) {
@@ -368,3 +433,6 @@ function openRouteModal(ride) {
     }
   };
 }
+
+
+

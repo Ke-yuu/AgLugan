@@ -115,7 +115,7 @@ h1, p {
   padding: 20px;
   margin-left: auto;
   margin-right: auto;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .section {
@@ -135,36 +135,100 @@ h1, p {
 #available-rides-section ul {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto; 
   display: grid;
-  gap: 15px;
-  max-height: 180px; 
-  overflow-y: auto; 
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px; 
+  max-width: 1000px; 
+  overflow-y: auto;
 }
 
 #rides-list li {
-  background-color: #3a3a3a;
-  padding: 15px;
-  border-radius: 8px;
+  background: linear-gradient(145deg, #3e3e3e, #343434);
+  padding: 20px;
+  border-radius: 15px;
   color: #f8f8f8;
   font-size: 1rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), -4px -4px 10px rgba(60, 60, 60, 0.2);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: transform 0.3s, background 0.3s;
+  height: auto; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
 }
 
 #rides-list li:hover {
-  background-color: #444444;
+  background: linear-gradient(145deg, #484848, #3a3a3a);
 }
 
-#rides-list .no-available-rides {
-  background-color: #3a3a3a;
-  padding: 15px;
-  border-radius: 8px;
+.ride-info-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #6e6e6d;
+}
+
+.ride-details {
+  font-size: 1rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.ride-details strong {
+  color: #ff7b00;
+}
+
+
+
+.ride-details div {
+  margin-bottom: 5px;
+}
+
+.ride-status {
+  font-weight: bold;
+}
+
+.no-available-rides {
+  text-align: center;
+  padding: 20px;
+  border-radius: 15px;
   color: #f8f8f8;
   font-size: 1rem;
-  text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: #3a3a3a;
+}
+
+.book-ride-btn {
+  background-color: #e00206;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: fit-content;
+  align-self: center;
+  margin-top: 15px;
+}
+
+.book-ride-btn:hover {
+  background-color: #a70306;
+  transform: scale(1.05);
+}
+
+.ride-info-header {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+.ride-info {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #252525;
+  margin-top: 5px;
 }
 
 /* Payment History Section */

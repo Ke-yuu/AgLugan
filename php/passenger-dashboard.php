@@ -54,28 +54,22 @@ $user_data = $user_result->fetch_assoc();
 if (!$user_data) {
     echo json_encode(["status" => "error", "message" => "User data not found."]);
     error_log("User data not found for user ID: " . $user_id);
+    $stmt->close();
+    $conn->close();
     exit();
 }
 
 // Fetch available rides for this user
-$rides_sql = "SELECT ride_id, driver_id, start_location, end_location, status, waiting_time, time_range FROM rides WHERE status = 'Available'";
-$rides_stmt = $conn->prepare($rides_sql);
-if (!$rides_stmt) {
-    echo json_encode(["status" => "error", "message" => "Internal server error."]);
-    error_log("Prepare statement failed for rides: " . $conn->error);
-    exit();
-}
+$query = "SELECT ride_id, start_location, end_location, status, time_range, waiting_time FROM rides WHERE status IN ('scheduled', 'loading')";
+$rides_result = $conn->query($query);
 
-$rides_stmt->execute();
-$rides_result = $rides_stmt->get_result();
 $rides = [];
-while ($row = $rides_result->fetch_assoc()) {
-    $rides[] = $row;
-}
-
-// Log if no rides are found for debugging
-if (empty($rides)) {
-    error_log("No available rides found.");
+if ($rides_result && $rides_result->num_rows > 0) {
+    while ($row = $rides_result->fetch_assoc()) {
+        $rides[] = $row;
+    }
+} else {
+    error_log("No rides found in the query result.");
 }
 
 // Fetch payment history for the logged-in user
@@ -84,6 +78,8 @@ $payment_stmt = $conn->prepare($payment_sql);
 if (!$payment_stmt) {
     echo json_encode(["status" => "error", "message" => "Internal server error."]);
     error_log("Prepare statement failed for payments: " . $conn->error);
+    $stmt->close();
+    $conn->close();
     exit();
 }
 
@@ -108,7 +104,6 @@ echo json_encode($response);
 
 // Close the statements and connection
 $stmt->close();
-$rides_stmt->close();
 $payment_stmt->close();
 $conn->close();
 ?>
