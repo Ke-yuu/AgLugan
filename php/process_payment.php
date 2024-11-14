@@ -35,8 +35,28 @@ $user_id = $_SESSION['user_id'];
 
 // Get payment details from form submission
 $payment_method = $_POST['payment_method'] ?? '';
-$amount = $_POST['amount'] ?? 0;
-$ride_id = $_POST['ride_id'] ?? null;  
+$ride_id = $_POST['ride_id'] ?? null;
+$status = strtolower($_POST['status'] ?? 'scheduled');
+
+// Get user type from session
+$user_type = $_SESSION['user_type'] ?? 'Student';
+
+// Calculate amount based on ride status and user type
+if ($status === 'scheduled') {
+    if ($user_type === 'faculty/staff') {
+        $total_amount = 20;
+    } else {
+        $total_amount = 18;
+    }
+} elseif ($status === 'loading') {
+    if ($user_type === 'faculty/staff') {
+        $total_amount = 15; 
+    } else {
+        $total_amount = 13;
+    }
+} else {
+    $total_amount = $user_type === 'faculty/staff' ? 15 : 13; 
+}
 
 // Handle payment method to get the phone number based on GCash or Maya
 $phone_number = null;
@@ -47,7 +67,7 @@ if ($payment_method === "gcash") {
 }
 
 // Validate required fields for non-cash methods
-if (($payment_method === "gcash" || $payment_method === "maya") && (empty($amount) || empty($phone_number))) {
+if (($payment_method === "gcash" || $payment_method === "maya") && (empty($total_amount) || empty($phone_number))) {
     echo json_encode(["status" => "error", "message" => "Missing required fields."]);
     exit();
 }
@@ -63,12 +83,12 @@ if ($payment_method === "cash") {
     // Cash payments don't require a phone number
     $sql = "INSERT INTO payments (ride_id, amount, payment_method, user_id, status) VALUES (?, ?, ?, ?, 'pending')";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("dssi", $ride_id, $amount, $payment_method, $user_id);
+    $stmt->bind_param("idsi", $ride_id, $total_amount, $payment_method, $user_id);
 } else {
     // Non-cash payments (GCash or Maya) require phone number
     $sql = "INSERT INTO payments (ride_id, amount, payment_method, phone_number, user_id, status) VALUES (?, ?, ?, ?, ?, 'pending')";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("dsssi", $ride_id, $amount, $payment_method, $phone_number, $user_id);
+    $stmt->bind_param("idssi", $ride_id, $total_amount, $payment_method, $phone_number, $user_id);
 }
 
 if ($stmt->execute()) {

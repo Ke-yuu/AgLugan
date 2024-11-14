@@ -33,12 +33,11 @@ header nav {
 }
 
 .profile-content {
-  display: flex;
   align-items: center;
   color: white;
   font-size: 12px;
   font-weight: bold;
-  margin-left: -1170px;
+  margin-left: -1340px;
 }
 
 /* Navigation Buttons */
