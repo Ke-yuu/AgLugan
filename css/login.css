@@ -170,3 +170,22 @@ input[type="email"] {
 .modal button:hover {
   background-color: #ff6666;
 }
+
+.password-container {
+  position: relative;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+  padding-right: 30px;
+}
+
+.password-container i {
+  position: absolute;
+  right: 10px;
+  top: 38%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}
+

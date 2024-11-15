@@ -10,6 +10,7 @@
     <link rel="icon" href="../media/logo.png" type="image/png">
     <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="../css/transition.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -27,18 +28,21 @@
                 <img src="../media/logo.png" alt="Login Logo" class="form-logo">
                 <h1>Welcome!</h1>
                 <form id="login-form" method="POST">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Username" required>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
                 
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </div>
+                
                     <!-- Forgot Password Link to Open Modal -->
                     <p class="forgot-password">
                         <a href="#" id="forgotPasswordLink" style="color: brown;">Forgot Password?</a>
                     </p>
                 
-                    <button type="submit" class="login-btn">Enter</button>
+                    <button type="submit" class="login-btn">Login</button>
                 </form>
                 <!-- Display error messages here -->
                 <p id="error-message" class="error-message"></p>

@@ -39,23 +39,14 @@ $ride_id = $_POST['ride_id'] ?? null;
 $status = strtolower($_POST['status'] ?? 'scheduled');
 
 // Get user type from session
-$user_type = $_SESSION['user_type'] ?? 'Student';
+$user_type = strtolower($_SESSION['user_type'] ?? 'student');
 
-// Calculate amount based on ride status and user type
-if ($status === 'scheduled') {
-    if ($user_type === 'faculty/staff') {
-        $total_amount = 20;
-    } else {
-        $total_amount = 18;
-    }
-} elseif ($status === 'loading') {
-    if ($user_type === 'faculty/staff') {
-        $total_amount = 15; 
-    } else {
-        $total_amount = 13;
-    }
-} else {
-    $total_amount = $user_type === 'faculty/staff' ? 15 : 13; 
+// Calculate the base amount based on user type
+$total_amount = ($user_type === 'Faculty/staff') ? 15 : 13;
+
+// Add extra fare if the ride status is 'scheduled'
+if ($status === 'Scheduled') {
+    $total_amount += 5;
 }
 
 // Handle payment method to get the phone number based on GCash or Maya

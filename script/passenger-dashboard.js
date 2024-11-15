@@ -94,7 +94,7 @@ function displayAvailableRides(data) {
 
             const listItem = document.createElement('li');
             listItem.classList.add('available-ride-item');
-            listItem.dataset.rideId = ride.ride_id;  // Set ride_id data attribute for later use in modal
+            listItem.dataset.rideId = ride.ride_id;  
             listItem.dataset.startLocation = ride.start_location;
             listItem.dataset.endLocation = ride.end_location;
             listItem.dataset.timeRange = ride.time_range;
@@ -415,16 +415,20 @@ function openRouteModal(ride) {
     console.error('Close button not found in the DOM');
   }
 
-  // Attach book ride button handling
-  const bookRideBtn = document.getElementById('bookRideBtn');
-  if (bookRideBtn) {
-    bookRideBtn.onclick = function () {
-      alert(`Booking ride with ID: ${ride.ride_id}`);
-      // Add any further booking logic here if needed.
-    };
-  } else {
-    console.error('Book Ride button not found in the DOM');
-  }
+// Attach book ride button handling
+const bookRideBtn = document.getElementById('bookRideBtn');
+if (bookRideBtn) {
+  bookRideBtn.onclick = function () {
+    const rideId = ride.ride_id; 
+    if (rideId) {
+      window.location.href = `../html/schedule.html?ride_id=${rideId}`;
+    } else {
+      console.error("Ride ID is not available");
+    }
+  };
+} else {
+  console.error('Book Ride button not found in the DOM');
+}
 
   // Close the modal when clicking outside of the modal content
   window.onclick = function (event) {

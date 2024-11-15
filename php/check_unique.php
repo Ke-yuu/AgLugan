@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Enable error reporting for debugging (remove this in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -12,61 +14,46 @@ $username = "root";
 $password = "";
 $dbname = "aglugan";
 
-// Create a connection to the database
+// Create connection to the database
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check the connection
+// Check connection
 if ($conn->connect_error) {
     http_response_code(500);
     echo json_encode(["status" => "error", "message" => "Database connection failed"]);
     exit();
 }
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Parse the input data
-    $data = json_decode(file_get_contents("php://input"), true);
-    if (!$data) {
-        http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Invalid input"]);
-        exit();
-    }
+// Get the form data from the request
+$data = json_decode(file_get_contents('php://input'), true);
+$email = $data['email'];
+$phone_number = $data['phone_number'];
+$username = $data['username'];
 
-    // Get the email and phone number from the input data
-    $email = $data['email'] ?? '';
-    $phone_number = $data['phone_number'] ?? '';
+// Prepare and execute query to check uniqueness of email, phone number, and username
+$email_query = $conn->prepare("SELECT * FROM users WHERE email = ?");
+$email_query->bind_param("s", $email);
+$email_query->execute();
+$email_exists = $email_query->get_result()->num_rows > 0;
 
-    // Prepare SQL to check if the email or phone number already exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR phone_number = ?");
-    if ($stmt === false) {
-        http_response_code(500);
-        echo json_encode(["status" => "error", "message" => "Error preparing statement"]);
-        exit();
-    }
+$phone_query = $conn->prepare("SELECT * FROM users WHERE phone_number = ?");
+$phone_query->bind_param("s", $phone_number);
+$phone_query->execute();
+$phone_exists = $phone_query->get_result()->num_rows > 0;
 
-    $stmt->bind_param("ss", $email, $phone_number);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$username_query = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$username_query->bind_param("s", $username);
+$username_query->execute();
+$username_exists = $username_query->get_result()->num_rows > 0;
 
-    $email_exists = false;
-    $phone_exists = false;
+echo json_encode([
+    "email_exists" => $email_exists,
+    "phone_exists" => $phone_exists,
+    "username_exists" => $username_exists
+]);
 
-    while ($row = $result->fetch_assoc()) {
-        if ($row['email'] === $email) {
-            $email_exists = true;
-        }
-        if ($row['phone_number'] === $phone_number) {
-            $phone_exists = true;
-        }
-    }
-
-    echo json_encode([
-        "email_exists" => $email_exists,
-        "phone_exists" => $phone_exists
-    ]);
-
-    // Close the statement and connection
-    $stmt->close();
-    $conn->close();
-}
+$email_query->close();
+$phone_query->close();
+$username_query->close();
+$conn->close();
 ?>

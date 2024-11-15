@@ -29,18 +29,18 @@ if (isset($_SESSION['user_id'])) {
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ensure the required fields are set
-    if (!isset($_POST['name']) || !isset($_POST['password'])) {
+    if (!isset($_POST['username']) || !isset($_POST['password'])) {
         echo json_encode(["status" => "error", "message" => "Missing required fields."]);
         exit();
     }
 
     // Sanitize user inputs
-    $name = htmlspecialchars($_POST['name']);
+    $username = htmlspecialchars($_POST['username']);
     $password = $_POST['password'];
 
     // Prepare the SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE name = ?");
-    $stmt->bind_param("s", $name);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
 
     // Execute the statement
     $stmt->execute();
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Store relevant user information in the session
             $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['name'] = $user['name'];
+            $_SESSION['username'] = $user['username'];
             $_SESSION['user_type'] = $user['user_type'];
 
             // Redirect based on user type and send it back in the JSON response
@@ -74,11 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
         } else {
             // Invalid password
-            echo json_encode(["status" => "error", "message" => "Invalid name or password."]);
+            echo json_encode(["status" => "error", "message" => "Invalid username or password."]);
         }
     } else {
         // Invalid username
-        echo json_encode(["status" => "error", "message" => "Invalid name or password."]);
+        echo json_encode(["status" => "error", "message" => "Invalid username or password."]);
     }
 
     // Close the prepared statement

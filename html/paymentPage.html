@@ -44,6 +44,7 @@
       <p><strong>Note:</strong> The regular fare is 15 pesos, and the student fare is 13 pesos. Please inform the driver if you are eligible for the student discount.</p>
       <br>
       <form id="cash-form">
+        <input type="hidden" id="ride-status" value="loading">
         <input type="hidden" name="payment_method" value="cash">
         <label for="cash-amount">Amount (15 for regular, 13 for student):</label>
         <input type="number" id="cash-amount" name="amount" required readonly>
@@ -60,6 +61,7 @@
     <div id="gcash-section" class="payment-section">
       <h2>Pay with GCash</h2>
       <form id="gcash-form">
+        <input type="hidden" id="ride-status" value="loading">
         <input type="hidden" name="payment_method" value="gcash">
         <label for="gcash-name">Name:</label>
         <input type="text" id="gcash-name" name="name" required>
@@ -82,6 +84,7 @@
     <div id="maya-section" class="payment-section">
       <h2>Pay with Maya</h2>
       <form id="maya-form">
+        <input type="hidden" id="ride-status" value="loading">
         <input type="hidden" name="payment_method" value="maya">
         <label for="maya-name">Name:</label>
         <input type="text" id="maya-name" name="name" required>

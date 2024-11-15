@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
         // Get form values
         const name = document.getElementById('name').value;
+        const username = document.getElementById('username').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm_password').value;
@@ -37,13 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Check uniqueness of email and phone number
+        // Check uniqueness of email, phone number, and username
         fetch('../php/check_unique.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: email, phone_number: phone_number })
+            body: JSON.stringify({ email: email, phone_number: phone_number, username: username })
         })
         .then(response => {
             if (!response.ok) {
@@ -60,10 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('The phone number is already registered.');
                 return;
             }
+            if (data.username_exists) {
+                alert('The username is already taken. Please choose a different one.');
+                return;
+            }
 
             // Prepare form data for submission
             const formData = new FormData();
             formData.append('name', name);
+            formData.append('username', username);
             formData.append('email', email);
             formData.append('password', password);
             formData.append('phone_number', phone_number);
@@ -95,5 +101,41 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('There was a problem with the fetch operation:', error);
             alert(error.message);
         });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    const togglePasswordIcon = document.querySelector('#togglePassword');
+    const toggleConfirmPasswordIcon = document.querySelector('#toggleConfirmPassword');
+
+    if (togglePasswordIcon) {
+        togglePasswordIcon.addEventListener('click', function () {
+            const passwordField = document.querySelector('#password');
+            const passwordFieldType = passwordField.getAttribute('type');
+            passwordField.setAttribute('type', passwordFieldType === 'password' ? 'text' : 'password');
+
+            // Toggle icon style
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+            togglePasswordIcon.classList.toggle('fa-eye');
+        });
+    }
+
+    if (toggleConfirmPasswordIcon) {
+        toggleConfirmPasswordIcon.addEventListener('click', function () {
+            const confirmPasswordField = document.querySelector('#confirm_password');
+            const confirmPasswordFieldType = confirmPasswordField.getAttribute('type');
+            confirmPasswordField.setAttribute('type', confirmPasswordFieldType === 'password' ? 'text' : 'password');
+
+            // Toggle icon style
+            toggleConfirmPasswordIcon.classList.toggle('fa-eye-slash');
+            toggleConfirmPasswordIcon.classList.toggle('fa-eye');
+        });
+    }
+
+    // Handle registration form submission
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Your existing form validation and submission code...
     });
 });
