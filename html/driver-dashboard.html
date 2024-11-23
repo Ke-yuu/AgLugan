@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Dashboard</title>
-    <link rel="stylesheet" href="..//css/dashboards.css">
-    <link rel="icon" href="../media/logo.png" type="image/png">
+    <title>Driver Dashboard - AgLugan</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
@@ -13,17 +13,54 @@
             <div class="logo-container">
                 <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
+            <div class="profile-content">    
+                <h2>Welcome, <span id="driver-name">Master Yi</span>!</h2>
+            </div>
             <ul>
-                <li><a href="../html/landingPage.html">Home</a></li>
-                <li><a href="../html/aboutUsPage.html">About Us</a></li>
-                <li><a href="../html/schedule.html">Schedules</a></li>
+                <li><a href="#active-rides"><i class="fas fa-car"></i></a></li>
+                <li><a href="#earnings"><i class="fas fa-wallet"></i></a></li>
+                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="main-content">
         <h1>Welcome to the Driver Dashboard!</h1>
-        <p>View the number of waiting passengers and jeepney routes.</p>
+        <p>Manage your rides and earnings effectively.</p>
+        
+        <div class="dashboard-sections">
+            <!-- Section 1: Active Rides -->
+            <div class="section" id="active-rides">
+                <h2>Active Rides</h2>
+                <ul id="active-rides-list">
+                    <!-- Dynamically populated -->
+                </ul>
+            </div>
+
+            <!-- Section 2: Earnings -->
+            <div class="section" id="earnings">
+                <h2>Earnings Overview</h2>
+                <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
+                <ul id="completed-rides-list">
+                    <!-- Dynamically populated -->
+                </ul>
+            </div>
+
+            <!-- Section 3: Schedule Availability -->
+            <div class="section" id="schedule-availability">
+                <h2>Schedule Availability</h2>
+                <label for="availability-toggle">Set Availability:</label>
+                <input type="checkbox" id="availability-toggle">
+            </div>
+
+            <!-- Section 4: Help and Support -->
+            <div class="section help-section">
+                <h2>Help and Support</h2>
+                <p>Contact us at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+            </div>
+        </div>
     </main>
+
+    <script src="../script/driver-dashboard.js"></script>
 </body>
 </html>
