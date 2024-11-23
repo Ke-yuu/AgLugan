@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="..//css/dashboards.css">
-    <link rel="icon" href="../media/logo.png" type="image/png">
+    <title>Admin Dashboard - AgLugan</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
@@ -13,17 +13,56 @@
             <div class="logo-container">
                 <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
+            <div class="profile-content">
+                <h2>Welcome, <span id="admin-name">Admin</span>!</h2>
+            </div>
             <ul>
-                <li><a href="../html/landingPage.html">Home</a></li>
-                <li><a href="../html/aboutUsPage.html">About Us</a></li>
-                <li><a href="../html/schedule.html">Schedules</a></li>
+                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="main-content">
         <h1>Welcome to the Admin Dashboard!</h1>
-        <p>Manage jeepney schedules, monitor queues, and more.</p>
+        <p>Manage rides and users with ease.</p>
+
+        <div class="dashboard-sections">
+            <!-- Section: Manage Rides -->
+            <div class="section" id="manage-rides">
+                <h2>Manage Rides</h2>
+                <button id="addRideBtn" class="action-btn">Add Ride</button>
+                <ul id="rides-list">
+                    <!-- Dynamically populated -->
+                </ul>
+            </div>
+
+            <!-- Section: Block Users -->
+            <div class="section" id="block-users">
+                <h2>Block Users</h2>
+                <ul id="users-list">
+                    <!-- Dynamically populated -->
+                </ul>
+            </div>
+        </div>
     </main>
+
+    <!-- Add/Update Ride Modal -->
+    <div id="rideModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeRideModalBtn">&times;</span>
+            <h2 id="rideModalTitle">Add Ride</h2>
+            <form id="rideForm">
+                <label for="ride-id">Ride ID:</label>
+                <input type="text" id="ride-id" name="ride-id" required>
+                <label for="start-location">Start Location:</label>
+                <input type="text" id="start-location" name="start-location" required>
+                <label for="end-location">End Location:</label>
+                <input type="text" id="end-location" name="end-location" required>
+                <button type="submit" id="rideFormSubmit">Save Ride</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../script/admin-dashboard.js"></script>
 </body>
 </html>
