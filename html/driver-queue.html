@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue System</title>
+  <link rel="stylesheet" href="..//css/driver-queue.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="welcome">
+        <img src="bus-icon.png" alt="Bus Icon" class="icon">
+        <span>Welcome, Juan dela cruz</span>
+      </div>
+      <div class="actions">
+        <button class="action-btn"><img src="refresh-icon.png" alt="Refresh"></button>
+        <button class="action-btn"><img src="user-icon.png" alt="User"></button>
+      </div>
+    </header>
+    <main class="main-content">
+      <div class="current-time">
+        Current Time: <span id="time">1:33 PM</span>
+      </div>
+      <button class="queue-btn">queue</button>
+      <table class="queue-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Route</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1:30-2:00</td>
+            <td>SLU(SAMCIS) Gate 2 - Igorot Garden</td>
+            <td>Loading</td>
+          </tr>
+          <tr>
+            <td>2:00-2:30</td>
+            <td>SLU(SAMCIS) Gate 2 - Igorot Garden</td>
+            <td>In Queue</td>
+          </tr>
+          <tr>
+            <td>2:30-3:00</td>
+            <td>SLU(SAMCIS) Gate 2 - Igorot Garden</td>
+            <td>In Queue</td>
+          </tr>
+          <tr>
+            <td>3:00-3:30</td>
+            <td>SLU(SAMCIS) Gate 2 - Igorot Garden</td>
+            <td>Waiting</td>
+          </tr>
+          <tr>
+            <td>3:30-4:00</td>
+            <td>SLU(SAMCIS) Gate 2 - Igorot Garden</td>
+            <td>Waiting</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+  <script src="..//script/driver-queue.js"></script>
+</body>
+</html>
