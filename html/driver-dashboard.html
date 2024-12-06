@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Dashboard - AgLugan</title>
-    <link rel="stylesheet" href="../css/dashboards.css">
+    <title>Aglugan: View Dashboard</title>
+    <link rel="stylesheet" href="../css/driver-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -28,12 +28,17 @@
         <h1>Welcome to the Driver Dashboard!</h1>
         <p>Manage your rides and earnings effectively.</p>
         
+        <!-- Queue A Ride Button -->
+        <div class="queue-ride-section">
+            <a href="driver-queue.html" class="queue-ride-btn">Queue A Ride</a>
+        </div>
+
         <div class="dashboard-sections">
             <!-- Section 1: Active Rides -->
             <div class="section" id="active-rides">
                 <h2>Active Rides</h2>
                 <ul id="active-rides-list">
-                    <!-- Dynamically populated -->
+                    <!-- fethc u data kabil u  dituy from db -->
                 </ul>
             </div>
 
@@ -42,7 +47,7 @@
                 <h2>Earnings Overview</h2>
                 <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
                 <ul id="completed-rides-list">
-                    <!-- Dynamically populated -->
+                    <!-- Fetch u nalang data from db ituy iokarga -->
                 </ul>
             </div>
 

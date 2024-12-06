@@ -1,5 +1,3 @@
-// driver-dashboard.js
-
 // DOM Elements
 const driverNameSpan = document.getElementById('driver-name');
 const activeRidesList = document.getElementById('active-rides-list');
@@ -10,26 +8,25 @@ const availabilityToggle = document.getElementById('availability-toggle');
 // Mock Data (to be replaced with API or backend calls)
 const driverData = {
     name: "John Doe",
-    earnings: 1250.50,
-    activeRides: [
-        {
-            id: "RIDE123",
-            passenger: "Alice Smith",
-            from: "Station A",
-            to: "Station B",
-            status: "In Progress",
-        },
-    ],
     completedRides: [
         {
             id: "RIDE121",
             passenger: "Bob Johnson",
-            fare: 150.00,
+            fare: 230.00,
+            date: "2024-12-07", // Date in YYYY-MM-DD format
         },
         {
-            id: "RIDE122",
-            passenger: "Clara Lee",
-            fare: 200.00,
+            id: "122",
+            fare: 260.00,
+            date: "2024-12-06",
+        },
+    ],
+    activeRides: [
+        {
+            id: "241",
+            from: "SLU Mary Heights",
+            to: "Igorot Park",
+            status: "In Progress",
         },
     ],
     availability: true,
@@ -38,6 +35,10 @@ const driverData = {
 // Utility Functions
 function formatCurrency(value) {
     return `₱${value.toFixed(2)}`;
+}
+
+function getTodayDate() {
+    return new Date().toISOString().split("T")[0]; // Format YYYY-MM-DD
 }
 
 // Load Driver Data
@@ -86,20 +87,29 @@ function loadActiveRides() {
     });
 }
 
-// Load Earnings
+// Load Earnings (Filter today's rides and update the UI)
 function loadEarnings() {
-    // Update Total Earnings
-    totalEarningsSpan.textContent = formatCurrency(driverData.earnings);
+    // Get today's date
+    const today = getTodayDate();
 
-    // Load Completed Rides
+    // Filter today's completed rides
+    const todayRides = driverData.completedRides.filter((ride) => ride.date === today);
+
+    // Calculate today's earnings
+    const todayEarnings = todayRides.reduce((total, ride) => total + ride.fare, 0);
+
+    // Update Total Earnings
+    totalEarningsSpan.textContent = formatCurrency(todayEarnings);
+
+    // Load Completed Rides for Today
     completedRidesList.innerHTML = ""; // Clear the list
 
-    if (driverData.completedRides.length === 0) {
-        completedRidesList.innerHTML = "<li>No completed rides.</li>";
+    if (todayRides.length === 0) {
+        completedRidesList.innerHTML = "<li>No completed rides for today.</li>";
         return;
     }
 
-    driverData.completedRides.forEach((ride) => {
+    todayRides.forEach((ride) => {
         const rideItem = document.createElement('li');
         rideItem.className = 'completed-ride-item';
 
@@ -121,10 +131,8 @@ function markRideAsCompleted(event) {
     if (rideIndex > -1) {
         const completedRide = driverData.activeRides.splice(rideIndex, 1)[0];
         completedRide.fare = 100; // Mocked fare; should come from backend
+        completedRide.date = getTodayDate(); // Set today's date for the ride
         driverData.completedRides.push(completedRide);
-
-        // Update Earnings
-        driverData.earnings += completedRide.fare;
 
         // Reload Data
         loadActiveRides();
