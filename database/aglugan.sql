@@ -264,6 +264,30 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
 INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
 (1, 101, 23, 'WEB 445'),
 (2, 102, 23, 'SAF 214');
+
+-- Table structure for table `passenger_statistics`
+DROP TABLE IF EXISTS `passenger_statistics`;
+CREATE TABLE IF NOT EXISTS `passenger_statistics` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `day_of_week` enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') NOT NULL,
+  `time_slot` varchar(20) NOT NULL, -- e.g., "6:00 AM - 7:00 AM"
+  `bookings_count` int DEFAULT 0, -- Total number of bookings during this slot
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+-- Example Data for `passenger_statistics`
+INSERT INTO `passenger_statistics` (`day_of_week`, `time_slot`, `bookings_count`, `updated_at`) VALUES
+('Monday', '6:00 AM - 7:00 AM', 15, NOW()),
+('Monday', '7:00 AM - 8:00 AM', 25, NOW()),
+('Tuesday', '6:00 AM - 7:00 AM', 10, NOW()),
+('Tuesday', '7:00 AM - 8:00 AM', 30, NOW()),
+('Saturday', '9:00 AM - 10:00 AM', 5, NOW());
+
+-- --------------------------------------------------------
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
