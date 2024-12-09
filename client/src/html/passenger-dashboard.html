@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Dashboard - AgLugan</title>
+    <link rel="icon" href="/media/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="/css/transition.css">
+    <link rel="stylesheet" href="/css/dashboards.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
+            </div>
+            <div class="profile-content">    
+                <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
+            </div>
+            <ul>
+                <li><a href="/schedule"><i class="fas fa-calendar-alt"></i></a></li>
+                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
+                <button id="profileBtn" class="icon-button"><i class="fas fa-user"></i></button>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Welcome to the Passenger Dashboard!</h1>
+        <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
+        
+        <div class="dashboard-sections">
+
+            <!-- Section 1: Available Rides -->
+            <div class="section" id="available-rides-section">
+                <h2>Available Rides</h2>
+                <ul id="rides-list">
+                    <!-- This will be dynamically populated with JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Section 2: Payment History -->
+            <div class="section" id="ride-history-section">
+                <h2>Payment History</h2>
+                <ul id="ride-history">
+                    <!-- This will be dynamically populated with JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Section 3: Help and Support -->
+            <div class="section help-section">
+                <h2>Help and Support</h2>
+                <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2>Update Profile</h2>
+            <form id="profileForm">
+                <label for="passenger-name-input">Name:</label>
+                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+                <label for="passenger-email-input">Email:</label>
+                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+            
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <label for="current-password">Current Password:</label>
+                <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+                <br>
+                <label for="new-password">New Password:</label>
+                <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+                <br>
+                <label for="confirm-password">Confirm New Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+                <button type="submit" class="save-btn">Change Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Route Modal -->
+    <div id="routeModal" class="modal">
+        <div class="modal-content" id="routeModalContent">
+            <span class="close-btn" id="closeRouteModalBtn">&times;</span>
+            <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
+            <p>From: <span id="startLocationDisplay"></span> To: <span id="endLocationDisplay"></span></p>
+            <div id="map" style="height: 400px;"></div>
+            <button id="bookRideBtn" class="book-ride-btn">Book a Ride</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="../js/passenger-dashboard.js"></script>
+    <script src="../js/ride-route-modal.js"></script>
+    <script src="../js/page-transition.js"></script>
+</body>
+</html>

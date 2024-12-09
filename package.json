@@ -1,0 +1,27 @@
+{
+  "name": "aglugan",
+  "version": "1.0.0",
+  "description": "MIDTERMS ACTIVITY 1 - RIDE HAILING WEBAPP\r - WEBAPP NAME - AgLugan\r - MEMBERS - AZURIN, BUCANG, GALAPON, MARRON, RABINO, VILLANUEVA, WANGET",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rabinoo/AgLugan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rabinoo/AgLugan/issues"
+  },
+  "homepage": "https://github.com/rabinoo/AgLugan#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.5"
+  }
+}

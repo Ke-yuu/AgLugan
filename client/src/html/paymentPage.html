@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - AgLugan</title>
+  <link rel="icon" href="/media/logo.png" type="image/png">
+  <link rel="stylesheet" href="/css/paymentStyle.css">
+  <link rel="stylesheet" href="/css/transition.css">
+  <link rel="icon" href="/media/logo.png" type="image/png">
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <nav>
+      <div class="logo-container">
+        <a href="/passengerDashboard"><img src="/media/logo.png" alt="AgLugan Logo" class="logo"></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/schedule"><strong>Schedules</strong></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Payment Container Section -->
+  <div class="payment-container">
+    <h1>Payment Options</h1>
+
+    <!-- Payment Selection Form -->
+    <div class="payment-selection">
+      <label for="payment-method">Choose Payment Method:</label>
+      <select id="payment-method" name="payment_method" onchange="showPaymentForm()">
+        <option value="cash">Cash</option>
+        <option value="gcash">GCash</option>
+        <option value="maya">Maya</option>
+      </select>
+    </div>
+
+    <!-- Cash Payment Section -->
+    <div id="cash-section" class="payment-section active">
+      <h2>Pay with Cash</h2>
+      <p>You have selected to pay via cash. Please hand over the payment directly to the jeepney driver.</p>
+      <br>
+      <p><strong>Note:</strong> The regular fare is 15 pesos, and the student fare is 13 pesos. Please inform the driver if you are eligible for the student discount.</p>
+      <br>
+      <form id="cash-form">
+        <input type="hidden" id="ride-status" value="loading">
+        <input type="hidden" name="payment_method" value="cash">
+        <label for="cash-amount">Amount (15 for regular, 13 for student):</label>
+        <input type="number" id="cash-amount" name="amount" required readonly>
+        <input type="hidden" name="ride_id" id="cash-ride_id">
+        <div class="checkbox-container">
+          <input type="checkbox" id="cash-terms">
+          <label for="cash-terms">I have read and agree to the <a href="#" class="open-modal">Terms and Conditions</a></label>
+        </div>
+        <button type="submit" id="cash-submit" class="submit-btn" disabled>Submit Payment</button>
+      </form>
+    </div>
+
+    <!-- GCash Payment Section -->
+    <div id="gcash-section" class="payment-section">
+      <h2>Pay with GCash</h2>
+      <form id="gcash-form">
+        <input type="hidden" id="ride-status" value="loading">
+        <input type="hidden" name="payment_method" value="gcash">
+        <label for="gcash-name">Name:</label>
+        <input type="text" id="gcash-name" name="name" required>
+        <label for="gcash-number">GCash Number:</label>
+        <input type="number" id="gcash-number" name="gcash_number" required>
+        <label for="gcash-date">Date:</label>
+        <input type="text" id="gcash-date" name="date" readonly>
+        <label for="gcash-amount">Amount:</label>
+        <input type="number" id="gcash-amount" name="amount" required readonly>
+        <input type="hidden" name="ride_id" id="gcash-ride_id">
+        <div class="checkbox-container">
+          <input type="checkbox" id="gcash-terms">
+          <label for="gcash-terms">I have read and agree to the <a href="#" class="open-modal">Terms and Conditions</a></label>
+        </div>
+        <button type="submit" id="gcash-submit" class="submit-btn" disabled>Submit Payment</button>
+      </form>
+    </div>
+
+    <!-- Maya Payment Section -->
+    <div id="maya-section" class="payment-section">
+      <h2>Pay with Maya</h2>
+      <form id="maya-form">
+        <input type="hidden" id="ride-status" value="loading">
+        <input type="hidden" name="payment_method" value="maya">
+        <label for="maya-name">Name:</label>
+        <input type="text" id="maya-name" name="name" required>
+        <label for="maya-number">Maya Number:</label>
+        <input type="number" id="maya-number" name="maya_number" required>
+        <label for="maya-date">Date:</label>
+        <input type="text" id="maya-date" name="date" readonly>
+        <label for="maya-amount">Amount:</label>
+        <input type="number" id="maya-amount" name="amount" required readonly>
+        <input type="hidden" name="ride_id" id="maya-ride_id">
+        <div class="checkbox-container">
+          <input type="checkbox" id="maya-terms">
+          <label for="maya-terms">I have read and agree to the <a href="#" class="open-modal">Terms and Conditions</a></label>
+        </div>
+        <button type="submit" id="maya-submit" class="submit-btn" disabled>Submit Payment</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Terms and Conditions Modal -->
+  <div id="terms-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Terms and Conditions</h2>
+      <p>
+        These terms and conditions (“Terms and Conditions”) govern the booking of a ride made through AgLugan on the AgLugan App and the performance of the ride to the selected destination by the Driver (“Service(s)”). By Booking a Ride and using the Services, you agree to be bound by these Terms and Conditions, which may be amended at any time. AgLugan acts as a platform for booking rides, with services fulfilled by independent third-party drivers. All prices listed are inclusive of taxes and fuel, and payments may be made via cash, card, or other available methods.
+        
+        You may cancel your Booking at any time before a Driver is assigned, but a cancellation fee may apply. Refunds, if applicable, will be made via the original payment method. You are responsible for providing accurate booking information and adhering to all safety and legal requirements during the ride. AgLugan reserves the right to modify these Terms and Conditions without prior notice, and the latest version will be effective immediately upon posting. These Terms and Conditions are governed by the laws of the Philippines.
+      </p>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content">
+      <h2>Payment Successful</h2>
+      <p>Your payment has been processed successfully. Thank you!</p>
+      <button id="close-success-modal">OK</button>
+    </div>
+  </div>
+
+  <!-- Moved script tag to the end of the body -->
+  <script src="../js/payment.js"></script>
+  <script src="../js/page-transition.js"></script>
+  <script src="../js/payment_amount.js"></script>
+</body>
+</html>

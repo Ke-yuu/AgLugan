@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aglugan: View Dashboard</title>
+    <link rel="stylesheet" href="/css/driver-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
+            </div>
+            <div class="profile-content">    
+                <h2>Welcome, <span id="driver-name">Master Yi</span>!</h2>
+            </div>
+            <ul>
+                <li><a href="#active-rides"><i class="fas fa-car"></i></a></li>
+                <li><a href="#earnings"><i class="fas fa-wallet"></i></a></li>
+                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Welcome to the Driver Dashboard!</h1>
+        <p>Manage your rides and earnings effectively.</p>
+        
+        <!-- Queue A Ride Button -->
+        <div class="queue-ride-section">
+            <a href="/driverQueue" class="queue-ride-btn">Queue A Ride</a>
+        </div>
+
+        <div class="dashboard-sections">
+            <!-- Section 1: Active Rides -->
+            <div class="section" id="active-rides">
+                <h2>Active Rides</h2>
+                <ul id="active-rides-list">
+                    <!-- fethc u data kabil u  dituy from db -->
+                </ul>
+            </div>
+
+            <!-- Section 2: Earnings -->
+            <div class="section" id="earnings">
+                <h2>Earnings Overview</h2>
+                <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
+                <ul id="completed-rides-list">
+                    <!-- Fetch u nalang data from db ituy iokarga -->
+                </ul>
+            </div>
+
+            <!-- Section 3: Schedule Availability -->
+            <div class="section" id="schedule-availability">
+                <h2>Schedule Availability</h2>
+                <label for="availability-toggle">Set Availability:</label>
+                <input type="checkbox" id="availability-toggle">
+            </div>
+
+            <!-- Section 4: Help and Support -->
+            <div class="section help-section">
+                <h2>Help and Support</h2>
+                <p>Contact us at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/driver-dashboard.js"></script>
+</body>
+</html>
