@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Check uniqueness of email, phone number, and username
-        fetch('../php/check_unique.php', {
+        fetch('../../src/php/check_unique.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
