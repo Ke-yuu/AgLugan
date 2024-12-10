@@ -1,5 +1,12 @@
 const express = require('express');
-const db = require('../../public/database/db'); // Import database connection
+const mysql = require('mysql2/promise');
+const dbConfig = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'aglugan',
+};
+
 const router = express.Router();
 
 router.post('/check-unique', async (req, res) => {
@@ -10,31 +17,18 @@ router.post('/check-unique', async (req, res) => {
     }
 
     try {
-        // Check email uniqueness
-        let emailExists = false;
-        if (email) {
-            const [emailResult] = await db.promise().query('SELECT 1 FROM users WHERE email = ?', [email]);
-            emailExists = emailResult.length > 0;
-        }
+        const connection = await mysql.createConnection(dbConfig);
 
-        // Check phone number uniqueness
-        let phoneExists = false;
-        if (phone_number) {
-            const [phoneResult] = await db.promise().query('SELECT 1 FROM users WHERE phone_number = ?', [phone_number]);
-            phoneExists = phoneResult.length > 0;
-        }
+        const [emailResult] = await connection.execute('SELECT 1 FROM users WHERE email = ?', [email]);
+        const [phoneResult] = await connection.execute('SELECT 1 FROM users WHERE phone_number = ?', [phone_number]);
+        const [usernameResult] = await connection.execute('SELECT 1 FROM users WHERE username = ?', [username]);
 
-        // Check username uniqueness
-        let usernameExists = false;
-        if (username) {
-            const [usernameResult] = await db.promise().query('SELECT 1 FROM users WHERE username = ?', [username]);
-            usernameExists = usernameResult.length > 0;
-        }
+        await connection.end();
 
         res.json({
-            email_exists: emailExists,
-            phone_exists: phoneExists,
-            username_exists: usernameExists,
+            email_exists: emailResult.length > 0,
+            phone_exists: phoneResult.length > 0,
+            username_exists: usernameResult.length > 0,
         });
     } catch (error) {
         console.error('Error checking uniqueness:', error);

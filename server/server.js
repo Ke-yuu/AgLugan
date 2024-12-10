@@ -10,6 +10,8 @@ const passengerDashboardRoute = require('./routes/passenger_dashboard_route');
 const updateProfileRoute = require('./routes/update_profile_route');
 const changePasswordRoute = require('./routes/change_password_route');
 const logoutRoute = require('./routes/logout_route');
+const registerRoute = require('./routes/register_route');
+const checkUniqueRoute = require('./routes/check_unique_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 // Parse request bodies
 app.use(bodyParser.json());
 app.use(express.json());
@@ -51,6 +54,8 @@ app.use('/api', checkSessionRoute);
 app.use('/api', passengerDashboardRoute);
 app.use('/api', updateProfileRoute); 
 app.use('/api', changePasswordRoute);
+app.use('/api', registerRoute);
+app.use('/api', checkUniqueRoute);
 
 // HTML routes
 const htmlRoutes = {
