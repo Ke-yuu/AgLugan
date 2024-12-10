@@ -1,9 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const bcrypt = require('bcrypt');
 const path = require('path');
 const router = express.Router();
 
-// Database connection configuration
 const dbConfig = {
     host: 'localhost',
     user: 'root',
@@ -11,47 +11,85 @@ const dbConfig = {
     database: 'aglugan'
 };
 
-// Login route
+// Serve the login page
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/src/html/login.html'));
+});
+
+// Login API endpoint
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-
     try {
-        const connection = await mysql.createConnection(dbConfig);
-        const [rows, fields] = await connection.execute('SELECT * FROM users WHERE username = ?', [username]);
+        console.log('Login attempt received:', req.body);
 
-        if (rows.length > 0) {
-            const user = rows[0];
-            if (user.password === password) {
-                // Login successful
-                req.session.user_id = user.user_id; 
-                req.session.username = user.username;
-                res.json({ status: 'success', message: 'Logged in successfully' });
-            } else {
-                res.json({ status: 'error', message: 'Invalid username or password' });
-            }
-        } else {
-            res.json({ status: 'error', message: 'User not found' });
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Username and password are required'
+            });
         }
 
-        await connection.end();
-    } catch (err) {
-        console.error('Database error:', err);
-        res.status(500).json({ status: 'error', message: 'Database error' });
+        const connection = await mysql.createConnection(dbConfig);
+
+        try {
+            console.log('Querying database for username:', username);
+
+            const [rows] = await connection.execute(
+                'SELECT * FROM users WHERE username = ?',
+                [username]
+            );
+
+            console.log('Database response:', rows);
+
+            if (rows.length === 0) {
+                return res.status(401).json({
+                    status: 'error',
+                    message: 'Invalid username or password'
+                });
+            }
+
+            const user = rows[0];
+
+            // Compare with password_hash instead of password
+            const passwordMatch = await bcrypt.compare(password, user.password_hash);
+            console.log('Password match result:', passwordMatch);
+
+            if (passwordMatch) {
+                // Set session
+                req.session.user_id = user.user_id;
+                req.session.username = user.username;
+                req.session.user_type = user.user_type;
+
+                console.log('Login successful, session:', req.session);
+
+                return res.json({
+                    status: 'success',
+                    message: 'Login successful',
+                    redirectUrl: user.user_type === 'Driver' ? '/driverDashboard' : '/passengerDashboard'
+                });
+            }
+
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid username or password'
+            });
+
+        } finally {
+            await connection.end();
+        }
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Server error occurred'
+        });
     }
 });
 
-// Protected route example
-router.get('/protected', (req, res) => {
-    if (req.session.user_id) {
-        res.json({ message: 'This is a protected route' });
-    } else {
-        res.status(401).json({ status: 'error', message: 'Unauthorized' });
-    }
-});
-
-// Serve the login page HTML (optional if you want to serve login.html directly)
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'src', 'html', 'login.html'));
+router.get('/test', (req, res) => {
+    res.json({ message: 'Test route is working!' });
 });
 
 module.exports = router;

@@ -1,18 +1,18 @@
 const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const logoutRoute = require('./routes/logout');
+const router = express.Router();
 
-const app = express();
+router.post('/logout', (req, res) => {
+    // Destroy the session
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ status: 'error', message: 'Failed to log out' });
+        }
 
-app.use(bodyParser.json());
-app.use(session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-}));
+        // Clear the session cookie
+        res.clearCookie('connect.sid', { path: '/' });
+        return res.json({ status: 'success', message: 'Logged out successfully' });
+    });
+});
 
-// Register the logout route
-app.use('/api', logoutRoute);
-
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+module.exports = router;

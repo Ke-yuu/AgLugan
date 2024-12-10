@@ -107,6 +107,56 @@ h1, p {
   text-align: center;
 }
 
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  text-align: center;
+}
+
+/* Profile Picture Styling */
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.profile-picture-container img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #ff0000;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
+}
+
+.profile-upload-label {
+  font-size: 0.9rem;
+  color: #f8f8f8;
+  margin-top: 20px;
+}
+
+
+.profile-upload-label:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Dashboard Title */
+.dashboard-title h1 {
+  font-size: 2rem;
+  color: #f8f8f8;
+}
+
+.dashboard-title p {
+  font-size: 1rem;
+  color: #a0a0a0;
+  margin-top: 5px;
+}
+
 /* Dashboard Sections */
 .dashboard-sections {
   display: flex;
@@ -262,53 +312,129 @@ h1, p {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.8);
+  overflow: auto;
 }
 
 .modal-content {
   background-color: #1b1b1b;
-  margin: 10% auto;
-  padding: 30px;
-  border: 1px solid #888;
+  color: #f8f8f8;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 10px;
   width: 80%;
   max-width: 500px;
-  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.modal-title {
+  font-size: 1.5rem;
   color: #f8f8f8;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+  margin-bottom: 20px;
 }
 
 .close-btn {
   color: #f8f8f8;
   float: right;
-  font-size: 28px;
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
 }
 
-.close-btn:hover,
-.close-btn:focus {
+.close-btn:hover {
   color: #ff0000;
+}
+.profile-dashboard-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+/* Profile picture styling */
+.profile-picture-container img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #ff0000;
+}
+
+/* Dashboard text styling */
+.dashboard-text {
+  text-align: left;
+  color: #f8f8f8;
+}
+
+.dashboard-text h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #ffffff;
+}
+
+.dashboard-text p {
+  font-size: 1.2rem;
+  margin: 5px 0 0;
+  color: #aaaaaa;
+}
+/* Profile Picture Section */
+.profile-picture-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture-container img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #ff0000;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+}
+
+.profile-upload-label {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 5px;
+  width: 70%;
+  margin-left: 65px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-upload-label:hover {
+  background-color: #910b0b;
+}
+
+#profile-picture-input {
+  display: none; /* Hide default input */
+}
+
+/* Form Styling */
+.profile-form, .password-form {
+  margin-bottom: 20px;
 }
 
 label {
   font-weight: bold;
-  margin-top: 15px;
-  display: inline-block;
+  display: block;
+  margin-bottom: 5px;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: 100%;
+  width: 95%;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border-radius: 5px;
   border: 1px solid #555;
   background-color: #333333;
@@ -323,11 +449,22 @@ input[type="password"]:focus {
   box-shadow: 0px 0px 5px #ff0000;
 }
 
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder {
-  color: #a0a0a0;
+.save-btn {
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 37%;
+  transition: background-color 0.3s ease;
+  margin-left: 155px;
+}
 
+.save-btn:hover {
+  background-color: #910b0b;
 }
   /* Styles for the book ride button */
   .book-ride-btn {
@@ -368,32 +505,4 @@ input[type="password"]::placeholder {
 
 .available-ride-item:hover::after {
   display: block;
-}
-
-/* Buttons Styling */
-.save-btn,
-.change-btn {
-  background-color: #ff0000;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.save-btn:hover,
-.change-btn:hover {
-  background-color: #910b0b;
-}
-
-.save-btn:active,
-.change-btn:active {
-  transform: scale(0.98);
 }

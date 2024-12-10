@@ -1,60 +1,53 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const db = require('../../public/database/db'); // Import database connection
-const auth = require('../middleware/auth'); // Middleware to check user authentication
+const mysql = require('mysql2/promise');
+const auth = require('../middleware/auth'); 
 const router = express.Router();
 
+const dbConfig = {
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'aglugan',
+};
+
 router.post('/change-password', auth, async (req, res) => {
-    const { current_password, new_password } = req.body;
-    const userId = req.session.user_id;
+  const userId = req.session.user_id;
 
-    if (!current_password || !new_password) {
-        return res.status(400).json({ success: false, message: 'Both current password and new password are required.' });
-    }
+  if (!userId) {
+    return res.status(401).json({ status: 'error', message: 'Unauthorized access.' });
+  }
 
+  const { current_password, new_password } = req.body;
+
+  if (!current_password || !new_password) {
+    return res.status(400).json({ status: 'error', message: 'Both current and new passwords are required.' });
+  }
+
+  try {
+    const connection = await mysql.createConnection(dbConfig);
     try {
-        // Fetch current password hash from the database
-        const [userRows] = await db.promise().query(
-            'SELECT password_hash FROM users WHERE user_id = ?',
-            [userId]
-        );
+      const [rows] = await connection.execute('SELECT password_hash FROM users WHERE user_id = ?', [userId]);
+      if (rows.length === 0) {
+        return res.status(404).json({ status: 'error', message: 'User not found.' });
+      }
 
-        if (userRows.length === 0) {
-            return res.status(404).json({ success: false, message: 'User not found.' });
-        }
+      const isMatch = await bcrypt.compare(current_password, rows[0].password_hash);
+      if (!isMatch) {
+        return res.status(401).json({ status: 'error', message: 'Current password is incorrect.' });
+      }
 
-        const passwordHash = userRows[0].password_hash;
+      const newPasswordHash = await bcrypt.hash(new_password, 10);
+      await connection.execute('UPDATE users SET password_hash = ? WHERE user_id = ?', [newPasswordHash, userId]);
 
-        // Verify current password
-        const isPasswordCorrect = bcrypt.compareSync(current_password, passwordHash);
-        if (!isPasswordCorrect) {
-            return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
-        }
-
-        // Check if new password is different from the current password
-        const isSamePassword = bcrypt.compareSync(new_password, passwordHash);
-        if (isSamePassword) {
-            return res.status(400).json({ success: false, message: 'New password must be different from the current password.' });
-        }
-
-        // Hash the new password
-        const newPasswordHash = bcrypt.hashSync(new_password, 10);
-
-        // Update the password in the database
-        const [updateResult] = await db.promise().query(
-            'UPDATE users SET password_hash = ? WHERE user_id = ?',
-            [newPasswordHash, userId]
-        );
-
-        if (updateResult.affectedRows === 1) {
-            res.json({ success: true, message: 'Password updated successfully.' });
-        } else {
-            res.status(500).json({ success: false, message: 'Error updating password.' });
-        }
-    } catch (error) {
-        console.error('Error updating password:', error);
-        res.status(500).json({ success: false, message: 'Internal server error.' });
+      res.json({ status: 'success', message: 'Password changed successfully.' });
+    } finally {
+      await connection.end();
     }
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error.' });
+  }
 });
 
 module.exports = router;

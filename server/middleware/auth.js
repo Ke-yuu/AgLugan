@@ -4,3 +4,4 @@ module.exports = (req, res, next) => {
     }
     next();
 };
+console.log('Auth middleware triggered');

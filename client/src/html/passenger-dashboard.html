@@ -30,8 +30,15 @@
     </header>
 
     <main class="main-content">
-        <h1>Welcome to the Passenger Dashboard!</h1>
-        <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
+        <div class="profile-dashboard-container">
+            <div class="profile-picture-container">
+                <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
+            </div>
+            <div class="dashboard-text">
+                <h1>Welcome to the Passenger Dashboard!</h1>
+                <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
+            </div>
+        </div>
         
         <div class="dashboard-sections">
 
@@ -59,34 +66,50 @@
         </div>
     </main>
 
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeModalBtn">&times;</span>
-            <h2>Update Profile</h2>
-            <form id="profileForm">
-                <label for="passenger-name-input">Name:</label>
-                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
-                <label for="passenger-email-input">Email:</label>
-                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
-                <button type="submit" class="save-btn">Save Changes</button>
-            </form>
-            
-            <h2>Change Password</h2>
-            <form id="changePasswordForm">
-                <label for="current-password">Current Password:</label>
-                <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
-                <br>
-                <label for="new-password">New Password:</label>
-                <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
-                <br>
-                <label for="confirm-password">Confirm New Password:</label>
-                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
-                <button type="submit" class="save-btn">Change Password</button>
-            </form>
+<!-- Profile Modal -->
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModalBtn">&times;</span>
+      <h2 class="modal-title">Update Profile</h2>
+  
+      <!-- Profile Picture Section -->
+      <div id="profile-picture-section" class="profile-picture-section">
+        <div class="profile-picture-container">
+          <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
         </div>
+        <div class="profile-upload">
+          <label for="profile-picture-input" class="profile-upload-label">Change Profile Picture</label>
+          <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*">
+        </div>
+      </div>
+  
+      <!-- Profile Form -->
+      <form id="profileForm" class="profile-form">
+        <label for="passenger-name-input">Name:</label>
+        <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+  
+        <label for="passenger-email-input">Email:</label>
+        <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+  
+        <button type="submit" class="save-btn">Save Changes</button>
+      </form>
+      
+      <h2 class="modal-title">Change Password</h2>
+      <form id="changePasswordForm" class="password-form">
+        <label for="current-password">Current Password:</label>
+        <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+  
+        <label for="new-password">New Password:</label>
+        <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+  
+        <label for="confirm-password">Confirm New Password:</label>
+        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+  
+        <button type="submit" class="save-btn">Change Password</button>
+      </form>
     </div>
-
+  </div>
+  
     <!-- Route Modal -->
     <div id="routeModal" class="modal">
         <div class="modal-content" id="routeModalContent">

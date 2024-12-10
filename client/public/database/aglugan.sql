@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 15, 2024 at 04:57 AM
+-- Generation Time: Dec 10, 2024 at 06:51 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -20,6 +20,54 @@ SET time_zone = "+00:00";
 --
 -- Database: `aglugan`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_users`
+--
+
+DROP TABLE IF EXISTS `admin_users`;
+CREATE TABLE IF NOT EXISTS `admin_users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `admin_users`
+--
+
+INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
+(1, 'admin', '$2y$10$Qp46ZzA.w0b23e/Yc3dZaeF9A4DYa2glVK5xoB.RgLlm2c9rTkAi2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passenger_statistics`
+--
+
+DROP TABLE IF EXISTS `passenger_statistics`;
+CREATE TABLE IF NOT EXISTS `passenger_statistics` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time_slot` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookings_count` int DEFAULT '0',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `passenger_statistics`
+--
+
+INSERT INTO `passenger_statistics` (`id`, `day_of_week`, `time_slot`, `bookings_count`, `updated_at`) VALUES
+(1, 'Monday', '6:00 AM - 7:00 AM', 15, '2024-12-10 02:58:00'),
+(2, 'Monday', '7:00 AM - 8:00 AM', 25, '2024-12-10 02:58:00'),
+(3, 'Tuesday', '6:00 AM - 7:00 AM', 10, '2024-12-10 02:58:00'),
+(4, 'Tuesday', '7:00 AM - 8:00 AM', 30, '2024-12-10 02:58:00'),
+(5, 'Saturday', '9:00 AM - 10:00 AM', 5, '2024-12-10 02:58:00');
 
 -- --------------------------------------------------------
 
@@ -224,11 +272,12 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
@@ -238,8 +287,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`) VALUES
-(27, 'Kennely Bucang', 'Kennely', 'krbucang@gmail.com', '$2y$10$RSFBfwR1lyyt1W/Vd4lRduRf7FGo4Ep9tXhQUo4mBR.Bs/g7qQvOq', '9984276714', 'Student');
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`) VALUES
+(27, 'Kennely Ray', 'Kennely', 'krbucang@gmail.com', '$2a$04$1C4FKZqrYJSMO3J/n74wm.MyUdf4Pgn0RpOz8OCQriaW.SMAlLYfK', '9984276714', 'Student', '/uploads/profile_pictures/1733812221356-121137962-Blackpink_RosÃ©_Rimowa_1.jpg');
 
 -- --------------------------------------------------------
 
@@ -264,30 +313,6 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
 INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
 (1, 101, 23, 'WEB 445'),
 (2, 102, 23, 'SAF 214');
-
--- Table structure for table `passenger_statistics`
-DROP TABLE IF EXISTS `passenger_statistics`;
-CREATE TABLE IF NOT EXISTS `passenger_statistics` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `day_of_week` enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') NOT NULL,
-  `time_slot` varchar(20) NOT NULL, -- e.g., "6:00 AM - 7:00 AM"
-  `bookings_count` int DEFAULT 0, -- Total number of bookings during this slot
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
--- Example Data for `passenger_statistics`
-INSERT INTO `passenger_statistics` (`day_of_week`, `time_slot`, `bookings_count`, `updated_at`) VALUES
-('Monday', '6:00 AM - 7:00 AM', 15, NOW()),
-('Monday', '7:00 AM - 8:00 AM', 25, NOW()),
-('Tuesday', '6:00 AM - 7:00 AM', 10, NOW()),
-('Tuesday', '7:00 AM - 8:00 AM', 30, NOW()),
-('Saturday', '9:00 AM - 10:00 AM', 5, NOW());
-
--- --------------------------------------------------------
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
