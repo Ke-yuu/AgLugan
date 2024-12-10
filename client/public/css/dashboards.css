@@ -325,17 +325,19 @@ h1, p {
   background-color: #1b1b1b;
   color: #f8f8f8;
   margin: 5% auto;
-  padding: 20px;
+  padding: 20px 30px;
   border-radius: 10px;
-  width: 80%;
+  width: 90%;
   max-width: 500px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .modal-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #f8f8f8;
   margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .close-btn {
@@ -344,70 +346,40 @@ h1, p {
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .close-btn:hover {
   color: #ff0000;
 }
-.profile-dashboard-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 20px;
-}
 
-/* Profile picture styling */
-.profile-picture-container img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 3px solid #ff0000;
-}
-
-/* Dashboard text styling */
-.dashboard-text {
-  text-align: left;
-  color: #f8f8f8;
-}
-
-.dashboard-text h1 {
-  font-size: 2rem;
-  margin: 0;
-  color: #ffffff;
-}
-
-.dashboard-text p {
-  font-size: 1.2rem;
-  margin: 5px 0 0;
-  color: #aaaaaa;
-}
 /* Profile Picture Section */
-.profile-picture-section {
+.profile-picture-container {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-picture-container img {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  border: 3px solid #ff0000;
+  border: 4px solid #ff0000;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .profile-upload-label {
   background-color: #ff0000;
   color: #fff;
-  padding: 8px 12px;
-  font-size: 0.9rem;
+  padding: 10px 20px;
+  font-size: 1rem;
   font-weight: bold;
   border-radius: 5px;
-  width: 70%;
-  margin-left: 65px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: -20px;
+  margin-left: 140px;
 }
 
 .profile-upload-label:hover {
@@ -415,57 +387,90 @@ h1, p {
 }
 
 #profile-picture-input {
-  display: none; /* Hide default input */
+  display: none;
 }
 
-/* Form Styling */
-.profile-form, .password-form {
-  margin-bottom: 20px;
-}
-
+/* Form Input Styling */
 label {
   font-weight: bold;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-size: 1rem;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: 95%;
-  padding: 10px;
+  width: 100%;
+  padding: 12px;
   margin-bottom: 15px;
   border-radius: 5px;
   border: 1px solid #555;
   background-color: #333333;
   color: #f8f8f8;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
+input:focus {
   outline: none;
   border: 1px solid #ff0000;
   box-shadow: 0px 0px 5px #ff0000;
 }
 
-.save-btn {
+/* Password Field with Toggle */
+.password-field {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 39px;
+  font-size: 1rem;
+  color: #f8f8f8;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: #ff0000;
+}
+
+/* Buttons */
+.save-btn,
+.change-password-btn {
   background-color: #ff0000;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  width: 37%;
+  width: 38%; 
+  margin-left: 158px;
   transition: background-color 0.3s ease;
-  margin-left: 155px;
 }
 
-.save-btn:hover {
+.save-btn:hover,
+.change-password-btn:hover {
   background-color: #910b0b;
 }
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .profile-picture-container img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
   /* Styles for the book ride button */
   .book-ride-btn {
     background-color: #e00206;

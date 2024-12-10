@@ -1,5 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
     const registrationForm = document.getElementById('registrationForm');
+    const togglePasswordIcon = document.getElementById('togglePassword');
+    const toggleConfirmPasswordIcon = document.getElementById('toggleConfirmPassword');
+    
+
+    togglePasswordIcon?.addEventListener('click', function () {
+        const passwordField = document.querySelector('#password');
+        if (passwordField) {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        }
+    });
+
+    toggleConfirmPasswordIcon?.addEventListener('click', function () {
+        const confirmPasswordField = document.querySelector('#confirm_password');
+        if (confirmPasswordField) {
+            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        }
+    });
+
 
     registrationForm.addEventListener('submit', async function (event) {
         event.preventDefault();
@@ -12,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirmPassword = document.getElementById('confirm_password').value;
         const phone_number = document.getElementById('phone_number').value.trim();
         const user_type = document.getElementById('user_type').value;
+
 
         // Validation
         const validEmailDomains = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@slu.edu.ph'];

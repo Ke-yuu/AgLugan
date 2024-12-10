@@ -159,13 +159,15 @@ function handleProfileUpdate() {
 // Function to handle password change submission
 function handleChangePassword() {
   const passwordForm = document.getElementById('changePasswordForm');
-
+  const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+  
   passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const currentPassword = document.getElementById('current-password').value.trim();
     const newPassword = document.getElementById('new-password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
+    
 
     if (newPassword !== confirmPassword) {
       alert('New password and confirmation do not match.');
@@ -193,6 +195,18 @@ function handleChangePassword() {
       console.error('Error changing password:', error);
       alert('An error occurred. Please try again.');
     }
+  });
+  togglePasswordIcons.forEach(icon => {
+    icon.addEventListener('click', function () {
+      const targetInputId = this.getAttribute('data-target');
+      const passwordField = document.getElementById(targetInputId);
+  
+      if (passwordField) {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+      }
+    });
   });
 }
 
