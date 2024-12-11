@@ -7,8 +7,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("filter-modal");
     const filterButton = document.getElementById("filter-button");
     const closeButton = document.getElementsByClassName("close-button")[0];
-    const applyFilterButton = document.getElementById('apply-filter-button');
-    const showInactiveCheckbox = document.getElementById('hideInactiveCheckbox');
+    const applyFilterButton = document.getElementById("apply-filter-button");
+    const showInactiveCheckbox = document.getElementById("hideInactiveCheckbox");
+    const ridesList = document.getElementById("rides-list");
+
+    // Advanced booking modal setup
     const advanceBookingModal = document.createElement('div');
     advanceBookingModal.id = 'advance-booking-modal';
     advanceBookingModal.classList.add('modal');
@@ -43,15 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-        if (event.target == advanceBookingModal) {
-            advanceBookingModal.style.display = "none";
-        }
-    };
-
     if (applyFilterButton) {
         applyFilterButton.addEventListener('click', function () {
             filterRides();
@@ -79,22 +73,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const status = document.getElementById("status-filter").value.trim();
         const time = document.getElementById("time-filter").value.trim();
 
-        // Make a GET request to fetch filtered rides with all filters as parameters
-        fetch(`../php/getRides.php?route=${encodeURIComponent(route)}&status=${encodeURIComponent(status)}&time=${encodeURIComponent(time)}&show_inactive=${showInactive}`)
+        // Fetch rides from backend
+        fetch(`/api/rides?route=${encodeURIComponent(route)}&status=${encodeURIComponent(status)}&time=${encodeURIComponent(time)}&show_inactive=${showInactive}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json(); // Expecting JSON response
+                return response.json();
             })
             .then(data => {
-                const ridesList = document.getElementById("rides-list");
                 ridesList.innerHTML = "";
-
-                if (data.error) {
-                    ridesList.innerHTML = `<li>${data.error}</li>`;
-                    return;
-                }
 
                 if (!Array.isArray(data)) {
                     console.error('Unexpected response format:', data);
@@ -113,83 +101,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Process each ride and display them
                 data.forEach(ride => {
-                    let rideElement = document.createElement('li');
+                    const rideElement = document.createElement('li');
                     rideElement.classList.add('ride-item');
 
-                    let formattedWaitingTime = ride.waiting_time ? ride.waiting_time.split(".")[0] : "N/A";
+                    const formattedWaitingTime = ride.waiting_time ? ride.waiting_time.split(".")[0] : "N/A";
 
-                    let rideDetails = document.createElement('div');
+                    const rideDetails = document.createElement('div');
                     rideDetails.classList.add('ride-details');
-                    rideDetails.innerHTML =
-                        `<span class="plate-number">Plate Number: ${ride.plate_number || 'N/A'}</span>
-                         <span class="status">Status: ${ride.status}</span>
-                         <span class="waiting-time">Waiting Time: ${formattedWaitingTime}</span>
-                         <span class="time_range">Schedule Time: ${ride.time_range || 'N/A'}</span>`;
+                    rideDetails.innerHTML = `
+                        <span class="plate-number">Plate Number: ${ride.plate_number || 'N/A'}</span>
+                        <span class="status">Status: ${ride.status}</span>
+                        <span class="waiting-time">Waiting Time: ${formattedWaitingTime}</span>
+                        <span class="time_range">Schedule Time: ${ride.time_range || 'N/A'}</span>
+                    `;
 
                     const statusElement = rideDetails.querySelector('.status');
                     let currentStatus = ride.status;
 
-                    // Update ride status based on user's PC time if the time range is valid
-                    let rideTimeRange = ride.time_range ? ride.time_range.split('-') : null;
+                    // Update ride status based on user's PC time
+                    const rideTimeRange = ride.time_range ? ride.time_range.split('-') : null;
                     let newStatus = currentStatus;
 
                     if (rideTimeRange && rideTimeRange.length === 2) {
-                        let [startHour, startMinute] = rideTimeRange[0].split(':').map(Number);
-                        let [endHour, endMinute] = rideTimeRange[1].split(':').map(Number);
+                        const [startHour, startMinute] = rideTimeRange[0].split(':').map(Number);
+                        const [endHour, endMinute] = rideTimeRange[1].split(':').map(Number);
 
-                        // Determine the new status based on current time vs. ride schedule
+                        // Determine the new status
                         if ((currentHours > startHour || (currentHours === startHour && currentMinutes >= startMinute)) &&
                             (currentHours < endHour || (currentHours === endHour && currentMinutes <= endMinute))) {
                             newStatus = "Loading";
                         } else if (currentHours > endHour || (currentHours === endHour && currentMinutes > endMinute)) {
-                            newStatus = "Inactive"; // Update to Inactive if the current time is past the ride's end time
+                            newStatus = "Inactive";
                         } else {
                             newStatus = "Scheduled";
                         }
 
-                        // Update the ride status only if it has changed
+                        // Update ride status only if it has changed
                         if (newStatus !== currentStatus) {
                             console.log(`Updating ride status for ride ID ${ride.ride_id}: changing from ${currentStatus} to ${newStatus}`);
                             updateRideStatus(ride.ride_id, newStatus);
-                            currentStatus = newStatus; // Update currentStatus so it displays correctly
+                            currentStatus = newStatus; // Update the displayed status
                         } else {
-                            console.log(`No status change needed for ride ID ${ride.ride_id}: status remains ${currentStatus}`);
+                            console.log(`No status change for ride ID ${ride.ride_id}: remains ${currentStatus}`);
                         }
                     }
 
                     statusElement.innerText = `Status: ${currentStatus}`;
-
-                    // Update status color for better UI indication
-                    if (currentStatus.toLowerCase() === "loading") {
-                        statusElement.style.color = "#28a745"; // Green
-                    } else if (currentStatus.toLowerCase() === "inactive") {
-                        statusElement.style.color = "red"; // Red
-                    } else if (currentStatus.toLowerCase() === "scheduled") {
-                        statusElement.style.color = "gold"; // Gold
-                    }
+                    statusElement.style.color = getStatusColor(currentStatus);
 
                     rideElement.appendChild(rideDetails);
 
-                    // Hide inactive rides if the checkbox is not checked
-                    if (currentStatus.toLowerCase() === "inactive" && showInactive === 'false') {
-                        return;
-                    }
-
-                    // Add a booking button for each active ride
+                    // Add a booking button for active rides
                     if (currentStatus.toLowerCase() !== "inactive") {
-                        let bookingButton = document.createElement('button');
+                        const bookingButton = document.createElement('button');
                         bookingButton.innerText = 'Book Ride';
                         bookingButton.classList.add('booking-button');
 
-                        bookingButton.onclick = function () {
+                        bookingButton.onclick = () => {
                             if (currentStatus.toLowerCase() === "scheduled") {
                                 advanceBookingModal.style.display = "block";
-                                continueToBookButton.onclick = function () {
+                                continueToBookButton.onclick = () => {
                                     advanceBookingModal.style.display = "none";
-                                    window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}&additional_fare=5`;
+                                    window.location.href = `/paymentPage.html?ride_id=${ride.ride_id}&additional_fare=5`;
                                 };
                             } else {
-                                window.location.href = `../html/paymentPage.html?ride_id=${ride.ride_id}`;
+                                window.location.href = `/paymentPage.html?ride_id=${ride.ride_id}`;
                             }
                         };
 
@@ -201,41 +177,47 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => {
                 console.error('Error fetching rides:', error);
-                const ridesList = document.getElementById("rides-list");
                 ridesList.innerHTML = `<li>Error fetching rides. Please try again later.</li>`;
             });
     }
+
     // Function to update ride status
-async function updateRideStatus(rideId, newStatus) {
-    try {
-        console.log("Updating ride status:", { rideId, newStatus }); // Log for debugging
+    async function updateRideStatus(rideId, newStatus) {
+        try {
+            const response = await fetch('/api/update-ride-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ride_id: rideId, status: newStatus }),
+            });
+            
 
-        let response = await fetch('../php/updateRideStatus.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ride_id: rideId, status: newStatus })
-        });
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
 
-        if (!response.ok) {
-            throw new Error(`Network response was not ok, status: ${response.status}`);
-        }
+            const data = await response.json();
 
-        let data = await response.json();
-
-        if (data.success) {
-            console.log(data.message || 'Ride status updated successfully in the database');
-            return true;
-        } else {
-            console.error('Error updating ride status:', data.message);
-            alert('Error updating ride status: ' + data.message);
+            if (data.success) {
+                console.log(data.message || 'Ride status updated successfully in the database');
+                return true;
+            } else {
+                console.error('Error updating ride status:', data.message);
+                alert('Error updating ride status: ' + data.message);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error updating ride status:', error);
+            alert('Error updating ride status. Please try again later.');
             return false;
         }
-    } catch (error) {
-        console.error('Error updating ride status:', error);
-        alert('Error updating ride status. Please try again later.');
-        return false;
     }
-}
+
+    function getStatusColor(status) {
+        if (status.toLowerCase() === "loading") return "#28a745"; // Green
+        if (status.toLowerCase() === "inactive") return "red"; // Red
+        if (status.toLowerCase() === "scheduled") return "gold"; // Gold
+        return "black"; // Default
+    }
 });
