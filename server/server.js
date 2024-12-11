@@ -19,6 +19,8 @@ const updateRideStatusRoute = require('./routes/update_ride_status_route');
 const paymentAmountRoute = require('./routes/payment_amount_route');
 const processPaymentRoute = require('./routes/process_payment_route');
 const driverDashboardRoute = require('./routes/driver_dashboard_route');
+const adminLoginRoute = require('./routes/admin_login_route');
+const getUsersRoute = require('./routes/get_users_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,7 +33,7 @@ app.use((req, res, next) => {
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.1.119:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.1.2:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -75,6 +77,8 @@ app.use('/api', updateRideStatusRoute);
 app.use('/api', paymentAmountRoute);
 app.use('/api', processPaymentRoute);
 app.use('/api', driverDashboardRoute);
+app.use('/api', adminLoginRoute);
+app.use('/api', getUsersRoute);
 
 // HTML Routes
 const htmlRoutes = {
@@ -88,8 +92,9 @@ const htmlRoutes = {
     '/register': 'register.html',
     '/resetPassword': 'reset_password.html',
     '/passengerDashboard': 'passenger-dashboard.html',
-    '/adminDashboard': 'admin-dashboard.html',
-    '/driverStats': 'driver-statistics.html'
+    '/driverStats': 'driver-statistics.html',
+    '/adminlogin': 'admin-login.html',
+    '/admindashboard': 'admin-dashboard.html'
 };
 
 // Set up HTML routes
