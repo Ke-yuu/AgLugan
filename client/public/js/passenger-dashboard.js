@@ -171,7 +171,6 @@ function handleChangePassword() {
     const currentPassword = document.getElementById('current-password').value.trim();
     const newPassword = document.getElementById('new-password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
-    
 
     if (newPassword !== confirmPassword) {
       alert('New password and confirmation do not match.');
@@ -200,40 +199,110 @@ function handleChangePassword() {
       alert('An error occurred. Please try again.');
     }
   });
-  togglePasswordIcons.forEach(icon => {
-    icon.addEventListener('click', function () {
-      const targetInputId = this.getAttribute('data-target');
-      const passwordField = document.getElementById(targetInputId);
-  
-      if (passwordField) {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-      }
-    });
-  });
 }
+// Global variable to store fetched data
+let passengerDashboardData = null;
 
-// Function to setup Logout Functionality
-function setupLogout() {
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function () {
-      fetch('/api/logout', { 
-        method: 'POST', 
-      })
-        .then(response => {
-          if (response.ok) {
-            alert('You have been logged out.');
-            window.location.href = '/login'; 
-          } else {
-            throw new Error('Failed to log out properly.');
-          }
+// Fetch passenger dashboard data
+function fetchPassengerDashboardData() {
+    // Assume an API endpoint that returns the necessary data (e.g., user info and available rides)
+    fetch('/api/passenger-dashboard')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Passenger Dashboard Data:', data);
+
+            // Store the fetched data
+            passengerDashboardData = data;
+            console.log(data);
+
+            // Call function to display available rides in a list
+            displayAvailableRidesList(passengerDashboardData);
         })
         .catch(error => {
-          console.error('Error during logout:', error);
-          alert('An error occurred while trying to log out. Please try again.');
+            console.error('Error fetching dashboard data:', error);
         });
-    });
-  }
 }
+
+// Function to display available rides in a grid list
+function displayAvailableRidesList(data) {
+    const ridesList = document.getElementById('rides-list');
+
+    // Clear any existing list content
+    ridesList.innerHTML = '';
+
+    // Loop through the available rides and create list items for each ride
+    if (data.rides && data.rides.length > 0) {
+        // Limit to the first 4 rides
+        const firstfourRides = data.rides.slice(0, 4);
+        
+        firstfourRides.forEach(ride => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('ride-item'); // Add a class for styling
+
+            // Populate the list item with ride data
+            listItem.innerHTML = `
+                <h3>Ride ID: ${ride.ride_id}</h3>
+                <p><strong>From:</strong> ${ride.start_location}</p>
+                <p><strong>To:</strong> ${ride.end_location}</p>
+                <button class="view-route-btn" onclick="showRouteModal(${ride.ride_id})">View Route</button>
+            `;
+            ridesList.appendChild(listItem);
+        });
+    } else {
+        const noDataItem = document.createElement('li');
+        noDataItem.classList.add('no-ride-item');
+        noDataItem.innerHTML = `<p>No available rides at the moment.</p>`;
+        ridesList.appendChild(noDataItem);
+    }
+}
+
+// Function to show the route modal when the "View Route" button is clicked
+function showRouteModal(rideId) {
+    console.log('Showing route for rideId:', rideId);  // Log the rideId passed
+
+    // Find the ride object by ride_id in the passengerDashboardData
+    const ride = passengerDashboardData.rides.find(r => r.ride_id === rideId);
+
+    if (ride) {
+        // Populate the modal with the ride data
+        document.getElementById('routeModal').style.display = 'flex';  // Show the modal
+        document.getElementById('rideIdDisplay').textContent = ride.ride_id;
+        document.getElementById('startLocationDisplay').textContent = ride.start_location;
+        document.getElementById('endLocationDisplay').textContent = ride.end_location;
+
+        // Add route description if available
+        if (ride.route) {
+            document.getElementById('routeDescription').textContent = ride.route;
+        }
+
+        // Embed a Google map link (opens in a new tab)
+        if (ride.start_location && ride.end_location) {
+            const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ride.start_location)}&destination=${encodeURIComponent(ride.end_location)}`;
+            document.getElementById('map').innerHTML = `<a href="${mapUrl}" target="_blank">Click here to view the route on Google Maps</a>`;
+        } else {
+            document.getElementById('map').innerHTML = '<p>No map available for this route.</p>';
+        }
+    } else {
+        console.log('Ride not found for the given rideId');
+    }
+}
+
+// Function to close the modal when the close button or outside the modal content is clicked
+function closeModal() {
+    document.getElementById('routeModal').style.display = 'none';  // Hide the modal
+}
+
+// Attach the event listener to close the modal when the close button is clicked
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+// Close the modal when clicking anywhere outside the modal content
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('routeModal')) {
+        closeModal();  // Close the modal if clicked outside the modal content
+    }
+});
+
+// Call fetchPassengerDashboardData() when the page loads
+fetchPassengerDashboardData();
+
+

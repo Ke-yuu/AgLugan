@@ -12,13 +12,14 @@ const changePasswordRoute = require('./routes/change_password_route');
 const logoutRoute = require('./routes/logout_route');
 const registerRoute = require('./routes/register_route');
 const checkUniqueRoute = require('./routes/check_unique_route');
+const getRidesRoute = require('./routes/get_rides_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // CORS configuration
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.0.119:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.254.196:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -56,6 +57,7 @@ app.use('/api', updateProfileRoute);
 app.use('/api', changePasswordRoute);
 app.use('/api', registerRoute);
 app.use('/api', checkUniqueRoute);
+app.use('/api', getRidesRoute);
 
 // HTML routes
 const htmlRoutes = {
