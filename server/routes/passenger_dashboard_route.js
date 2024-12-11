@@ -47,15 +47,16 @@ router.get('/passenger-dashboard', auth, async (req, res) => {
                 `SELECT ride_id, start_location, end_location, status, time_range, waiting_time 
                  FROM rides 
                  WHERE status IN ('scheduled', 'loading')`
-            );
+                );
 
-            // Fetch payment history
-            const [paymentRows] = await connection.execute(
-                `SELECT ride_id, amount, payment_method, status 
-                 FROM payments 
-                 WHERE user_id = ?`,
-                [userId]
-            );
+                // Fetch payment history
+                const [paymentRows] = await connection.execute(
+                    `SELECT ride_id, amount, payment_method, status, payment_date
+                     FROM payments 
+                     WHERE user_id = ? 
+                     ORDER BY payment_date DESC`,
+                    [userId]
+                );
 
             // Send combined data
             res.json({
@@ -69,6 +70,56 @@ router.get('/passenger-dashboard', auth, async (req, res) => {
         }
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error.' });
+    }
+});
+
+module.exports = router;
+
+router.get('/ride-details', auth, async (req, res) => {
+    const { ride_id } = req.query;
+
+    if (!ride_id) {
+        return res.status(400).json({ status: 'error', message: 'Ride ID is required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        try {
+            const [rideRows] = await connection.execute(
+                `SELECT 
+                    r.ride_id, 
+                    CONCAT(r.start_location, ' - ', r.end_location) AS route, 
+                    r.time_range AS schedule, 
+                    v.plate_number
+                 FROM rides r
+                 LEFT JOIN vehicles v ON r.driver_id = v.driver_id
+                 WHERE r.ride_id = ?`,
+                [ride_id]
+            );
+
+            const [paymentRows] = await connection.execute(
+                `SELECT amount, payment_method, status, payment_date 
+                 FROM payments 
+                 WHERE ride_id = ?`,
+                [ride_id]
+            );
+
+            if (rideRows.length === 0 || paymentRows.length === 0) {
+                return res.status(404).json({ status: 'error', message: 'Details not found.' });
+            }
+
+            res.json({
+                status: 'success',
+                ride: rideRows[0],
+                payment: paymentRows[0],
+            });
+        } finally {
+            await connection.end();
+        }
+    } catch (error) {
+        console.error('Error fetching ride details:', error);
         res.status(500).json({ status: 'error', message: 'Internal server error.' });
     }
 });

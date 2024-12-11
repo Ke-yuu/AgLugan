@@ -95,14 +95,29 @@
   
         <div class="ride-info">
           <h2>Ride Schedules</h2>
-          <!-- Updated List to show Plate Number -->
-          <ul id="rides-list" class="ride-list" style="display: block;"></ul>
+          <!-- Table Container -->
+          <div class="table-container">
+            <table class="schedule-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Plate Number</th>
+                  <th>Status</th>
+                  <th>Waiting Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rides-list">
+                <!-- JavaScript will populate this -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </main>
-  
-    <script src="../js/schedule.js"></script>
-    <script src="../js/page-transition.js"></script>
-  </body>
-  </html>
-  
+    </div>
+  </main>
+
+  <script src="../js/schedule.js"></script>
+  <script src="../js/page-transition.js"></script>
+</body>
+</html>

@@ -14,15 +14,23 @@ const changePasswordRoute = require('./routes/change_password_route');
 const logoutRoute = require('./routes/logout_route');
 const registerRoute = require('./routes/register_route');
 const checkUniqueRoute = require('./routes/check_unique_route');
-const getRidesRoute = require('./routes/get_rides_route'); // Add getRides route
-const updateRideStatusRoute = require('./routes/update_ride_status_route'); // Add updateRideStatus route
+const getRidesRoute = require('./routes/get_rides_route'); 
+const updateRideStatusRoute = require('./routes/update_ride_status_route'); 
+const paymentAmountRoute = require('./routes/payment_amount_route');
+const processPaymentRoute = require('./routes/process_payment_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Logging middleware (placed first to catch all requests)
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    next();
+});
+
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.1.19:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.1.119:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -41,7 +49,7 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000 
     }
 }));
 
@@ -60,8 +68,10 @@ app.use('/api', updateProfileRoute);
 app.use('/api', changePasswordRoute);
 app.use('/api', registerRoute);
 app.use('/api', checkUniqueRoute);
-app.use('/api', getRidesRoute); // Add getRides route
-app.use('/api', updateRideStatusRoute); // Add updateRideStatus route
+app.use('/api', getRidesRoute);
+app.use('/api', updateRideStatusRoute); 
+app.use('/api', paymentAmountRoute);
+app.use('/api', processPaymentRoute);
 
 // HTML Routes
 const htmlRoutes = {
@@ -101,12 +111,6 @@ app.use((err, req, res, next) => {
             ? 'Internal server error' 
             : err.message
     });
-});
-
-// Logging middleware for debugging
-app.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.url}`);
-    next();
 });
 
 // Start the server

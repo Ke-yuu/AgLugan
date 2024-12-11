@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Handle form submission for changing password
   handleChangePassword();
 
-  // Start polling for ride status updates
-  startRideStatusPolling();
 });
 
 function checkSessionStatus() {
@@ -59,12 +57,60 @@ function fetchPassengerDashboardData() {
               console.error('User information is missing in the fetched data.');
           }
 
+          // Display payment history
+          if (data.payments) {
+            displayPaymentHistory(data.payments);
+          }          
+
           // Call function to display available rides in a list
           displayAvailableRidesList(passengerDashboardData);
       })
       .catch(error => {
           console.error('Error fetching dashboard data:', error);
       });
+}
+
+function displayPaymentHistory(payments) {
+  const paymentHistoryTableBody = document.querySelector('#payment-history-table tbody');
+
+  // Clear existing rows
+  paymentHistoryTableBody.innerHTML = '';
+
+  if (payments.length > 0) {
+      payments.forEach(payment => {
+          const row = document.createElement('tr');
+
+          // Format payment amount and date
+          const amount = parseFloat(payment.amount);
+          const formattedAmount = isNaN(amount) ? 'N/A' : `₱${amount.toFixed(2)}`;
+          const paymentDate = payment.payment_date
+              ? new Date(payment.payment_date).toLocaleDateString()
+              : 'Invalid Date';
+
+          // Create status badge
+          const statusBadge = `<span class="payment-status ${payment.status.toLowerCase()}">${payment.status}</span>`;
+
+          // Add View Details button
+          const actionButton = `<button class="action-btn" onclick="showDetailsModal(${payment.ride_id})">View Details</button>`;
+
+          // Populate table row with payment data
+          row.innerHTML = `
+              <td>${payment.ride_id}</td>
+              <td>${formattedAmount}</td>
+              <td>${payment.payment_method}</td>
+              <td>${statusBadge}</td>
+              <td>${paymentDate}</td>
+              <td>${actionButton}</td>
+          `;
+
+          paymentHistoryTableBody.appendChild(row);
+      });
+  } else {
+      // Add a row indicating no payments found
+      const row = document.createElement('tr');
+      row.innerHTML = `<td colspan="6" class="no-payment">No payment history found.</td>`;
+      paymentHistoryTableBody.appendChild(row);
+  }
 }
 
 // Function to display passenger information
@@ -271,6 +317,52 @@ function handleChangePassword() {
   });
 }
 
+function showDetailsModal(rideId) {
+  if (!rideId) {
+      alert('Invalid Ride ID');
+      return;
+  }
+
+  fetch(`/api/ride-details?ride_id=${rideId}`)
+  .then(response => response.json())
+  .then(data => {
+      console.log('Ride Details Data:', data);
+
+      if (data.status === 'success') {
+          document.getElementById('modal-ride-id').textContent = data.ride.ride_id || 'N/A';
+          document.getElementById('modal-route').textContent = data.ride.route || 'N/A';
+          document.getElementById('modal-schedule').textContent = data.ride.schedule || 'N/A';
+          document.getElementById('modal-plate-number').textContent = data.ride.plate_number || 'N/A';
+          document.getElementById('modal-payment-amount').textContent = `₱${parseFloat(data.payment.amount).toFixed(2)}` || 'N/A';
+          document.getElementById('modal-payment-method').textContent = data.payment.payment_method || 'N/A';
+          document.getElementById('modal-payment-status').textContent = data.payment.status || 'N/A';
+          document.getElementById('modal-payment-date').textContent = new Date(data.payment.payment_date).toLocaleDateString() || 'N/A';
+
+          // Display the modal
+          document.getElementById('detailsModal').style.display = 'block';
+      } else {
+          alert('Failed to fetch ride details.');
+      }
+  })
+  .catch(error => {
+      console.error('Error fetching ride details:', error);
+      alert('An error occurred while fetching details.');
+  });
+}
+
+// Close modal function
+document.getElementById('closeDetailsModal').addEventListener('click', () => {
+  document.getElementById('detailsModal').style.display = 'none';
+});
+
+// Close modal when clicking outside the modal content
+window.addEventListener('click', event => {
+  const modal = document.getElementById('detailsModal');
+  if (event.target === modal) {
+      modal.style.display = 'none';
+  }
+});
+
 // Function to setup Logout Functionality
 function setupLogout() {
   const logoutBtn = document.getElementById('logoutBtn');
@@ -340,3 +432,22 @@ window.addEventListener('click', function(event) {
       closeModal();  // Close the modal if clicked outside the modal content
   }
 });
+
+// Function to poll for payment status updates
+function pollPaymentStatus() {
+  setInterval(() => {
+      fetch('/api/passenger-dashboard')
+          .then(response => response.json())
+          .then(data => {
+              if (data.payments) {
+                  displayPaymentHistory(data.payments); 
+              }
+          })
+          .catch(error => {
+              console.error('Error polling payment status:', error);
+          });
+  }, 30000); // Poll every 5 seconds
+}
+
+// Start polling on page load
+pollPaymentStatus();
