@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModal = document.getElementsByClassName('close')[0];
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
     const togglePasswordIcon = document.querySelector('#togglePassword');
+    const BASE_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
     loginForm?.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 password: formData.get('password')
             });
     
-            const response = await fetch('http://192.168.1.19:3000/api/login', {
+            const response = await fetch(`${BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
