@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const uniqueResponse = await fetch('/api/check-unique', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, phone_number, username }),
+                body: JSON.stringify({ email, phone_number, username, user_type }),
             });
 
             if (!uniqueResponse.ok) throw new Error('Error checking uniqueness.');

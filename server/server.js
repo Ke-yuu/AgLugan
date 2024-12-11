@@ -12,6 +12,7 @@ const changePasswordRoute = require('./routes/change_password_route');
 const logoutRoute = require('./routes/logout_route');
 const registerRoute = require('./routes/register_route');
 const checkUniqueRoute = require('./routes/check_unique_route');
+const getRidesRoute = require('./routes/get_rides_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -56,6 +57,7 @@ app.use('/api', updateProfileRoute);
 app.use('/api', changePasswordRoute);
 app.use('/api', registerRoute);
 app.use('/api', checkUniqueRoute);
+app.use('/api', getRidesRoute);
 
 // HTML routes
 const htmlRoutes = {
