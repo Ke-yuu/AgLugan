@@ -16,13 +16,14 @@ const registerRoute = require('./routes/register_route');
 const checkUniqueRoute = require('./routes/check_unique_route');
 const getRidesRoute = require('./routes/get_rides_route'); // Add getRides route
 const updateRideStatusRoute = require('./routes/update_ride_status_route'); // Add updateRideStatus route
+const driverDashboardRoute = require('./routes/driver_dashboard_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.1.19:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.56.1:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -41,7 +42,8 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'lax',
     }
 }));
 
@@ -62,6 +64,7 @@ app.use('/api', registerRoute);
 app.use('/api', checkUniqueRoute);
 app.use('/api', getRidesRoute); // Add getRides route
 app.use('/api', updateRideStatusRoute); // Add updateRideStatus route
+app.use('/api', driverDashboardRoute);
 
 // HTML Routes
 const htmlRoutes = {
