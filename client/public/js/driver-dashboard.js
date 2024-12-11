@@ -15,6 +15,9 @@ const queueRideBtn = document.getElementById('queueRideBtn');
 const closeQueueRideModalBtn = document.getElementById('closeQueueRideModalBtn');
 const queueRideForm = document.getElementById('queueRideForm');
 const logoutBtn = document.getElementById('logoutBtn');
+const addVehicleLink = document.querySelector('li a[href="#addVehicleModal"]');
+const addVehicleModal = document.getElementById('addVehicleModal');
+const closeAddVehicleModalBtn = document.getElementById('closeAddVehicleModalBtn');
 
 // Utility Functions
 function formatCurrency(value) {
@@ -222,6 +225,59 @@ function toggleAvailability() {
             console.error('Error updating availability:', error);
         });
 }
+
+// Show modal on click of the car icon link
+addVehicleLink.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default anchor behavior
+    addVehicleModal.style.display = 'block';
+});
+
+// Hide modal on click of the close button
+closeAddVehicleModalBtn.addEventListener('click', () => {
+    addVehicleModal.style.display = 'none';
+});
+
+// Optional: Close the modal when clicking outside the modal content
+window.addEventListener('click', (event) => {
+    if (event.target === addVehicleModal) {
+        addVehicleModal.style.display = 'none';
+    }
+});
+
+document.querySelector("#addVehicleForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const capacity = document.querySelector("#capacity").value;
+    const plateNumber = document.querySelector("#plate-number").value;
+
+    const payload = {
+        capacity: capacity,
+        plate_number: plateNumber,
+        driver_id: 101 // Replace with dynamically fetched driver ID
+    };
+
+    try {
+        const response = await fetch("/api/driver-dashboard/vehicles", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert("Vehicle added successfully!");
+            document.getElementById("addVehicleModal").style.display = "none";
+            // Optionally refresh the vehicle list
+        } else {
+            const errorText = await response.text();
+            alert(`Failed to add vehicle: ${errorText}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+});
+
 
 // Logout Function
 async function handleLogout() {

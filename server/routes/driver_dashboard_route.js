@@ -72,6 +72,33 @@ router.patch('/driver-dashboard/cancel/:id', async (req, res) => {
     }
 });
 
+// Add a Vehicle
+router.post('/driver-dashboard/vehicles', async (req, res) => {
+    const { driver_id, capacity, plate_number } = req.body;
+
+    // Validate inputs
+    if (!driver_id || !capacity || !plate_number) {
+        return res.status(400).send('All fields are required.');
+    }
+
+    try {
+        // Insert vehicle into the database
+        await db.query(
+            `
+            INSERT INTO vehicles (driver_id, capacity, plate_number)
+            VALUES (?, ?, ?)
+            `,
+            [driver_id, capacity, plate_number]
+        );
+
+        res.status(201).send('Vehicle added successfully.');
+    } catch (error) {
+        console.error('Error adding vehicle:', error);
+        res.status(500).send('Error adding the vehicle.');
+    }
+});
+
+
 // Update Driver Availability
 router.patch('/driver-dashboard/availability', async (req, res) => {
     const { driver_id, availability } = req.body;
