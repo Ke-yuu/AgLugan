@@ -2,13 +2,13 @@
 const driverNameSpan = document.getElementById('driver-name');
 const queuedRidesList = document.getElementById('queued-rides-list');
 const ongoingQueueList = document.getElementById('ongoing-queue-list');
-const totalEarningsSpan = document.getElementById('total-earnings');
+// const totalEarningsSpan = document.getElementById('total-earnings');
 const completedRidesList = document.getElementById('completed-rides-list');
 const totalRidesSpan = document.getElementById('total-rides');
 const completedRidesSpan = document.getElementById('completed-rides');
 const cancelledRidesSpan = document.getElementById('cancelled-rides');
-const earningsOverviewSpan = document.getElementById('earnings-overview');
-const averageRatingSpan = document.getElementById('average-rating');
+// const earningsOverviewSpan = document.getElementById('earnings-overview');
+// const averageRatingSpan = document.getElementById('average-rating');
 const queueRideModal = document.getElementById('queueRideModal');
 const queueRideBtn = document.getElementById('queueRideBtn');
 const closeQueueRideModalBtn = document.getElementById('closeQueueRideModalBtn');
@@ -20,8 +20,12 @@ const closeAddVehicleModalBtn = document.getElementById('closeAddVehicleModalBtn
 
 // Utility Functions
 function formatCurrency(value) {
-    return `₱${value.toFixed(2)}`;
+    if (isNaN(value) || value === null) {
+        value = 0; // Default to 0 if value is not a valid number
+    }
+    return `₱${parseFloat(value).toFixed(2)}`;
 }
+
 
 function getTodayDate() {
     return new Date().toISOString().split("T")[0];
@@ -34,11 +38,14 @@ async function fetchData(route) {
         if (!response.ok) {
             throw new Error(`Error fetching data: ${response.statusText}`);
         }
-        return response.json();
+        const data = await response.json();
+        console.log('Fetched Data:', data); // Log the fetched data
+        return data;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
+
 
 // Load Driver Data
 async function loadDriverData() {
@@ -49,19 +56,21 @@ async function loadDriverData() {
             throw new Error('Driver data is undefined');
         }
         
+        console.log('Driver Data:', driverData); // Log driver data
         // Set Driver Name
         driverNameSpan.textContent = driverData.name;
 
         // Load Sections
         loadQueuedRides(driverData.queuedRides);
         loadOngoingQueue(driverData.ongoingQueue);
-        loadEarnings(driverData.completedRides);
+        // loadEarnings(driverData.completedRides);
         loadPerformanceOverview(driverData.performance);
     } catch (error) {
         console.error('Error loading driver data:', error);
     }
 }
 
+// Load Queued Rides
 // Load Queued Rides
 function loadQueuedRides(queuedRides) {
     queuedRidesList.innerHTML = ""; // Clear the list
@@ -76,21 +85,74 @@ function loadQueuedRides(queuedRides) {
         rideItem.className = 'queued-ride-item';
 
         rideItem.innerHTML = `
-            <p><strong>Ride ID:</strong> ${ride.queue_id}</p>
-            <p><strong>From:</strong> ${ride.start_location}</p>
-            <p><strong>To:</strong> ${ride.end_location}</p>
-            <p><strong>Status:</strong> ${ride.status}</p>
-            <button class="cancel-ride-btn" data-ride-id="${ride.queue_id}">Cancel Ride</button>
-        `;
-
+        <p><strong>Ride ID:</strong> ${ride.ride_id}</p>
+        <p><strong>From:</strong> ${ride.start_location}</p>
+        <p><strong>To:</strong> ${ride.end_location}</p>
+        <p><strong>Status:</strong> ${ride.status}</p>
+        <button class="done-ride-btn" data-ride-id="${ride.ride_id}">Done</button>
+        <button class="cancel-ride-btn" data-ride-id="${ride.ride_id}">Cancel</button>
+    `;
+    
         queuedRidesList.appendChild(rideItem);
     });
 
-    // Add Event Listeners for "Cancel Ride" buttons
+    // Add Event Listeners for "Done" buttons
+    document.querySelectorAll('.done-ride-btn').forEach((button) => {
+        button.addEventListener('click', markRideAsDone);
+    });
+
+    // Add Event Listeners for "Cancel" buttons
     document.querySelectorAll('.cancel-ride-btn').forEach((button) => {
         button.addEventListener('click', cancelRide);
     });
 }
+
+// Event Listener for "Done" button
+async function markRideAsDone(event) {
+    const rideId = event.target.getAttribute('data-ride-id');
+
+    try {
+        const response = await fetch(`/api/driver-dashboard/markDone/${rideId}`, {
+            method: 'PATCH',
+        });
+
+        if (response.ok) {
+            alert('Ride marked as done!');
+            loadDriverData(); // Refresh the dashboard
+        } else {
+            const errorText = await response.text();
+            alert(`Failed to mark ride as done: ${errorText}`);
+        }
+    } catch (error) {
+        console.error('Error marking ride as done:', error);
+    }
+}
+
+
+async function cancelRide(event) {
+    const rideId = event.target.getAttribute('data-ride-id');
+
+    try {
+        const response = await fetch(`/api/driver-dashboard/cancel/${rideId}`, {
+            method: 'PATCH',
+        });
+
+        if (response.ok) {
+            alert('Ride cancelled and removed successfully!');
+            loadDriverData(); // Refresh the dashboard to reflect changes
+        } else {
+            const errorText = await response.text();
+            alert(`Failed to cancel ride: ${errorText}`);
+        }
+    } catch (error) {
+        console.error('Error cancelling ride:', error);
+    }
+}
+
+
+
+
+
 
 // Load Ongoing Queue
 function loadOngoingQueue(ongoingQueue) {
@@ -106,42 +168,50 @@ function loadOngoingQueue(ongoingQueue) {
         rideItem.className = 'ongoing-ride-item';
 
         rideItem.innerHTML = `
-            <p><strong>Ride ID:</strong> ${ride.queue_id}</p>
-            <p><strong>From:</strong> ${ride.start_location}</p>
-            <p><strong>To:</strong> ${ride.end_location}</p>
-            <p><strong>Status:</strong> ${ride.status}</p>
-        `;
+        <p><strong>Ride ID:</strong> ${ride.ride_id}</p>
+        <p><strong>From:</strong> ${ride.start_location}</p>
+        <p><strong>To:</strong> ${ride.end_location}</p>
+        <p><strong>Status:</strong> ${ride.status}</p>
+        <button class="done-ride-btn" data-ride-id="${ride.ride_id}">Done</button>
+        <button class="cancel-ride-btn" data-ride-id="${ride.ride_id}">Cancel</button>
+    `;
+    
+    // Attach event listener to Done button
+    rideItem.querySelector('.done-ride-btn').addEventListener('click', markRideAsDone);
+    rideItem.querySelector('.cancel-ride-btn').addEventListener('click', cancelRide);
 
         ongoingQueueList.appendChild(rideItem);
     });
 }
 
+
+
 // Load Earnings
-function loadEarnings(completedRides) {
-    if (!completedRides) return;
+// function loadEarnings(completedRides) {
+//     if (!completedRides) return;
 
-    const totalEarnings = completedRides.reduce((total, ride) => total + ride.fare, 0);
-    totalEarningsSpan.textContent = formatCurrency(totalEarnings);
+//     const totalEarnings = completedRides.reduce((total, ride) => total + ride.fare, 0);
+//     totalEarningsSpan.textContent = formatCurrency(totalEarnings);
 
-    completedRidesList.innerHTML = ""; // Clear the list
+//     completedRidesList.innerHTML = ""; // Clear the list
 
-    if (completedRides.length === 0) {
-        completedRidesList.innerHTML = "<li>No completed rides yet.</li>";
-        return;
-    }
+//     if (completedRides.length === 0) {
+//         completedRidesList.innerHTML = "<li>No completed rides yet.</li>";
+//         return;
+//     }
 
-    completedRides.forEach((ride) => {
-        const rideItem = document.createElement('li');
-        rideItem.className = 'completed-ride-item';
+//     completedRides.forEach((ride) => {
+//         const rideItem = document.createElement('li');
+//         rideItem.className = 'completed-ride-item';
 
-        rideItem.innerHTML = `
-            <p><strong>Ride ID:</strong> ${ride.ride_id}</p>
-            <p><strong>Fare:</strong> ${formatCurrency(ride.fare)}</p>
-        `;
+//         rideItem.innerHTML = `
+//             <p><strong>Ride ID:</strong> ${ride.ride_id}</p>
+//             <p><strong>Fare:</strong> ${formatCurrency(ride.fare)}</p>
+//         `;
 
-        completedRidesList.appendChild(rideItem);
-    });
-}
+//         completedRidesList.appendChild(rideItem);
+//     });
+// }
 
 // Load Performance Overview
 function loadPerformanceOverview(performance) {
@@ -150,8 +220,8 @@ function loadPerformanceOverview(performance) {
     totalRidesSpan.textContent = performance.totalRides || 0;
     completedRidesSpan.textContent = performance.completedRides || 0;
     cancelledRidesSpan.textContent = performance.cancelledRides || 0;
-    earningsOverviewSpan.textContent = formatCurrency(performance.totalEarnings || 0);
-    averageRatingSpan.textContent = performance.averageRating || "N/A";
+    // earningsOverviewSpan.textContent = formatCurrency(performance.totalEarnings || 0);
+    // averageRatingSpan.textContent = performance.averageRating || "N/A";
 }
 
 // Open Queue Ride Modal
@@ -200,46 +270,113 @@ async function populateVehicleDropdown() {
 
 
 
-// Submit Queue Ride Form
 async function submitQueueRideForm(event) {
     event.preventDefault();
 
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser || !currentUser.user_id) {
+        alert('Unable to fetch user data. Please try again.');
+        return;
+    }
+
     const formData = new FormData(queueRideForm);
+    const rideType = formData.get('ride-type'); // Now or Scheduled
     const payload = {
-        driver_id: 1, // Replace with the logged-in driver's ID
+        driver_id: currentUser.user_id,
         vehicle_id: formData.get('vehicle-id'),
         start_location: formData.get('start-location'),
         end_location: formData.get('end-location'),
+        type: rideType,
+        schedule_time: rideType === 'scheduled' ? formData.get('schedule-time') : null,
     };
 
     try {
-        await fetch('/api/driver-dashboard/queue', {
+        const response = await fetch('/api/driver-dashboard/queue', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
 
-        loadDriverData();
-        closeQueueRideModal();
+        if (response.ok) {
+            alert('Ride queued successfully!');
+            loadDriverData();
+            closeQueueRideModal();
+        } else {
+            const errorText = await response.text();
+            console.error('Error:', errorText);
+            alert(`Failed to queue ride: ${errorText}`);
+        }
     } catch (error) {
         console.error('Error submitting queue ride form:', error);
     }
 }
 
-// Cancel Ride
-async function cancelRide(event) {
-    const rideId = event.target.getAttribute('data-ride-id');
+// Show/hide schedule time input based on ride type selection
+document.getElementById('ride-type').addEventListener('change', (event) => {
+    const scheduleTimeSection = document.getElementById('schedule-time-section');
+    scheduleTimeSection.style.display = event.target.value === 'scheduled' ? 'block' : 'none';
+});
 
-    try {
-        await fetch(`/api/driver-dashboard/cancel/${rideId}`, {
-            method: 'PATCH',
-        });
 
-        loadDriverData();
-    } catch (error) {
-        console.error('Error cancelling ride:', error);
-    }
-}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const cancelRideBtn = document.getElementById('cancelRideBtn');
+    const markDoneBtn = document.getElementById('markDoneBtn');
+
+    // Event Listener for Cancel Button
+    cancelRideBtn.addEventListener('click', async () => {
+        const rideId = prompt("Enter the Ride ID to cancel:");
+        if (!rideId) {
+            alert("Ride ID is required.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/driver-dashboard/cancel/${rideId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.ok) {
+                alert("Ride cancelled successfully.");
+                loadDriverData();
+            } else {
+                alert("Failed to cancel the ride.");
+            }
+        } catch (error) {
+            console.error("Error cancelling the ride:", error);
+        }
+    });
+
+    // Event Listener for Done Button
+    markDoneBtn.addEventListener('click', async () => {
+        const rideId = prompt("Enter the Ride ID to mark as done:");
+        if (!rideId) {
+            alert("Ride ID is required.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/driver-dashboard/done/${rideId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.ok) {
+                alert("Ride marked as done successfully.");
+                loadDriverData();
+            } else {
+                alert("Failed to mark the ride as done.");
+            }
+        } catch (error) {
+            console.error("Error marking the ride as done:", error);
+        }
+    });
+});
+
 
 async function getCurrentUser() {
     try {

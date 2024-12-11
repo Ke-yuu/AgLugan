@@ -45,13 +45,13 @@
         </div>
 
         <!-- Earnings Section -->
-        <div class="section" id="earnings">
+        <!-- <div class="section" id="earnings">
             <h2>Earnings Overview</h2>
             <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
             <ul id="completed-rides-list">
-                <!-- Completed rides from DB -->
+  
             </ul>
-        </div>
+        </div> -->
 
         <!-- Performance Overview Section -->
         <div class="section" id="performance-overview">
@@ -59,8 +59,8 @@
             <p><strong>Total Rides:</strong> <span id="total-rides">0</span></p>
             <p><strong>Completed Rides:</strong> <span id="completed-rides">0</span></p>
             <p><strong>Cancelled Rides:</strong> <span id="cancelled-rides">0</span></p>
-            <p><strong>Total Earnings:</strong> <span id="earnings-overview">₱0.00</span></p>
-            <p><strong>Average Rating:</strong> <span id="average-rating">N/A</span></p>
+            <!-- <p><strong>Total Earnings:</strong> <span id="earnings-overview">₱0.00</span></p> -->
+            <!-- <p><strong>Average Rating:</strong> <span id="average-rating">N/A</span></p> -->
         </div>
 
 
@@ -81,14 +81,29 @@
                 <select id="vehicle-id" name="vehicle-id" required>
                     <!-- Populate with driver's vehicles from DB -->
                 </select>
+    
                 <label for="start-location">Start Location:</label>
                 <input type="text" id="start-location" name="start-location" required>
+    
                 <label for="end-location">End Location:</label>
                 <input type="text" id="end-location" name="end-location" required>
+    
+                <label for="ride-type">Ride Type:</label>
+                <select id="ride-type" name="ride-type" required>
+                    <option value="now">Now</option>
+                    <option value="scheduled">Scheduled</option>
+                </select>
+    
+                <div id="schedule-time-section" style="display: none;">
+                    <label for="schedule-time">Schedule Time:</label>
+                    <input type="datetime-local" id="schedule-time" name="schedule-time">
+                </div>
+    
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
             </form>
         </div>
     </div>
+    
 
     <!-- Modal for Adding/Editing a Vehicle -->
 <div id="addVehicleModal" class="modal">
