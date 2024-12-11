@@ -221,6 +221,7 @@ h1, p {
 
 #rides-list li:hover {
   background: linear-gradient(145deg, #484848, #3a3a3a);
+  transform: scale(0.9);
 }
 
 .ride-info-header {

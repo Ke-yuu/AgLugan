@@ -6,7 +6,7 @@
     <title>Passenger Dashboard - AgLugan</title>
     <link rel="icon" href="/media/logo.png" type="image/png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="/css/transition.css">
     <link rel="stylesheet" href="/css/dashboards.css">
@@ -41,134 +41,104 @@
         </div>
         
         <div class="dashboard-sections">
-
             <!-- Section 1: Available Rides -->
             <div class="section" id="available-rides-section">
                 <h2>Available Rides</h2>
-                <ul id="rides-list">
-                    <!-- This will be dynamically populated with JavaScript -->
-                </ul>
+                <ul id="rides-list"></ul>
             </div>
 
-<!-- Section 2: Payment History -->
-<div class="section" id="ride-history-section">
-  <h2>Payment History</h2>
-  <table id="payment-history-table" class="styled-table">
-      <thead>
-          <tr>
-              <th>Ride ID</th>
-              <th>Amount</th>
-              <th>Method</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          <!-- This will be dynamically populated with JavaScript -->
-      </tbody>
-  </table>
-</div>
+            <!-- Section 2: Payment History -->
+            <div class="section" id="ride-history-section">
+                <h2>Payment History</h2>
+                <table id="payment-history-table" class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Ride ID</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
-<!-- Details Modal -->
-<div id="detailsModal" class="modal">
-  <div class="modal-content">
-      <span class="close-btn" id="closeDetailsModal">&times;</span>
-      <h2>Payment & Ride Details</h2>
-      <div class="modal-details">
-          <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
-          <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
-          <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
-          <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
-          <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
-          <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
-          <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
-          <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
-      </div>
-  </div>
-</div>
-            <!-- Section 3: Help and Support -->
+            <!-- Profile Modal -->
+            <div id="profileModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">&times;</span>
+                    <h2>Update Profile</h2>
+                    <!-- Profile Picture Section -->
+                    <div class="profile-picture-container">
+                        <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
+                        <label for="profile-picture-input">Change Profile Picture:</label>
+                        <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*">
+                    </div>
+                    <!-- Profile Form -->
+                    <form id="profileForm">
+                        <label for="passenger-name-input">Name:</label>
+                        <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+                        <label for="passenger-email-input">Email:</label>
+                        <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </form>
+                    <!-- Password Change Section -->
+                    <h2>Change Password</h2>
+                    <form id="changePasswordForm">
+                        <label for="current-password">Current Password:</label>
+                        <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+                        <label for="new-password">New Password:</label>
+                        <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+                        <label for="confirm-password">Confirm New Password:</label>
+                        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+                        <button type="submit" class="save-btn">Change Password</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Ride Details Modal -->
+            <div id="detailsModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeDetailsModal">&times;</span>
+                    <h2>Payment & Ride Details</h2>
+                    <div class="modal-details">
+                        <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
+                        <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
+                        <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
+                        <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
+                        <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
+                        <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
+                        <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
+                        <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
             <div class="section help-section">
                 <h2>Help and Support</h2>
                 <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
             </div>
         </div>
+
+<!-- Route Modal -->
+<div id="routeModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeRouteModalBtn">&times;</span>
+    <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
+    <p><strong>From:</strong> <span id="startLocationDisplay"></span></p>
+    <p><strong>To:</strong> <span id="endLocationDisplay"></span></p>
+    <div id="mapContainer" style="height: 400px; margin-top: 10px;"></div>
+  </div>
+</div>
     </main>
 
-<!-- Profile Modal -->
-<div id="profileModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" id="closeModalBtn">&times;</span>
-      <h2 class="modal-title">Update Profile</h2>
-  
-      <!-- Profile Picture Section -->
-      <div id="profile-picture-section" class="profile-picture-section">
-        <div class="profile-picture-container">
-          <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
-        </div>
-        <div class="profile-upload">
-          <label for="profile-picture-input" class="profile-upload-label">Change Profile Picture</label>
-          <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*">
-        </div>
-      </div>
-  
-      <!-- Profile Form -->
-      <form id="profileForm" class="profile-form">
-        <label for="passenger-name-input">Name:</label>
-        <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
-  
-        <label for="passenger-email-input">Email:</label>
-        <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
-  
-        <button type="submit" class="save-btn">Save Changes</button>
-      </form>
-      
-      <h2 class="modal-title">Change Password</h2>
-      <form id="changePasswordForm" class="password-form">
-            <div class="password-field">
-                <label for="current-password">Current Password:</label>
-                <div class="password-input-container">
-                  <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
-                  <i class="fas fa-eye toggle-password" data-target="current-password"></i>
-                </div>
-              </div>
-      
-        <div class="password-field">
-          <label for="new-password">New Password:</label>
-          <div class="password-input-container">
-            <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
-            <i class="fas fa-eye toggle-password" data-target="new-password"></i>
-          </div>
-        </div>
-      
-        <div class="password-field">
-          <label for="confirm-password">Confirm New Password:</label>
-          <div class="password-input-container">
-            <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
-            <i class="fas fa-eye toggle-password" data-target="confirm-password"></i>
-  
-        <button type="submit" class="save-btn">Change Password</button>
-      </form>
-    </div>
-  </div>
-  
-    <!-- Route Modal -->
-    <div id="routeModal" class="modal">
-        <div class="modal-content" id="routeModalContent">
-            <span class="close-btn" id="closeRouteModalBtn">&times;</span>
-            <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
-            <p>From: <span id="startLocationDisplay"></span> To: <span id="endLocationDisplay"></span></p>
-            <div id="map" style="height: 400px;"></div>
-            <button id="bookRideBtn" class="book-ride-btn">Book a Ride</button>
-        </div>
-    </div>
-
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <script src="../js/passenger-dashboard.js"></script>
-    <script src="../js/ride-route-modal.js"></script>
     <script src="../js/page-transition.js"></script>
 </body>
 </html>

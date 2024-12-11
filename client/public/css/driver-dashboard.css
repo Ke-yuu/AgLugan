@@ -418,3 +418,70 @@ input[type="password"]::placeholder {
   background-color: #910b0b;
   transform: scale(1.1);
 }
+
+/* Styling for Route Icon */
+.ride-item .fas.fa-route {
+  font-size: 1.5rem;
+  color: #ff0000;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Modal Button */
+#schedulePageButton {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
+}
+
+#schedulePageButton:hover {
+  background-color: #a70306;
+  transform: scale(1.1);
+}
+
+/* Ride Item with Icon */
+.ride-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border: 1px solid #444;
+  background-color: #1b1b1b;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.ride-item:hover {
+  background-color: #252525;
+  transform: scale(1.02);
+}
+
+/* Map/Route Icon */
+.map-icon {
+  font-size: 2rem;
+  color: #ff0000;
+  margin-right: 15px;
+}
+
+/* Ride Details Content */
+.ride-details-content {
+  flex: 1;
+  text-align: left;
+}
+
+.ride-details-content strong {
+  color: #ff7b00;
+  font-weight: bold;
+}
+
+.ride-status {
+  font-weight: bold;
+  color: #00c853;
+}

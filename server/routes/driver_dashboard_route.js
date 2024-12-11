@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../client/public/database/db'); // Ensure you have a database connection setup in `db.js`
+const auth = require('../middleware/auth'); 
 
 // Get Driver Dashboard Data
 router.get('/driver-dashboard', async (req, res) => {
@@ -27,7 +28,6 @@ router.get('/driver-dashboard', async (req, res) => {
 
         res.json({
             name: driver[0].name,
-            availability: driver[0].availability,
             queuedRides,
             ongoingQueue,
             completedRides,
@@ -36,6 +36,28 @@ router.get('/driver-dashboard', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching driver dashboard data.');
+    }
+});
+
+router.get('/driver-dashboard/getCurrent', async (req, res) => {
+    try {
+        if (!req.session || !req.session.user_id) {
+            return res.status(401).json({ error: 'Not logged in' });
+        }
+
+        const [user] = await db.query(
+            `SELECT user_id, name FROM users WHERE user_id = ?`,
+            [req.session.user_id]
+        );
+
+        if (user.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user[0]);
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        res.status(500).send('Error fetching user data.');
     }
 });
 
@@ -72,19 +94,46 @@ router.patch('/driver-dashboard/cancel/:id', async (req, res) => {
     }
 });
 
-// Update Driver Availability
-router.patch('/driver-dashboard/availability', async (req, res) => {
-    const { driver_id, availability } = req.body;
+// Add a Vehicle
+router.post('/driver-dashboard/vehicles', async (req, res) => {
+    const { driver_id, capacity, plate_number } = req.body;
+
+    // Validate inputs
+    if (!driver_id || !capacity || !plate_number) {
+        return res.status(400).send('All fields are required.');
+    }
 
     try {
-        await db.query(`
-            UPDATE users SET availability = ? WHERE id = ? AND user_type = 'Driver'
-        `, [availability, driver_id]);
+        // Insert vehicle into the database
+        await db.query(
+            `
+            INSERT INTO vehicles (driver_id, capacity, plate_number)
+            VALUES (?, ?, ?)
+            `,
+            [driver_id, capacity, plate_number]
+        );
 
-        res.send('Availability updated successfully.');
+        res.status(201).send('Vehicle added successfully.');
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error updating availability.');
+        console.error('Error adding vehicle:', error);
+        res.status(500).send('Error adding the vehicle.');
+    }
+});
+
+// Get Vehicles for the Authenticated Driver
+router.get('/driver-dashboard/getVehicles', auth, async (req, res) => {
+
+    console.log('Driver ID:', req.driver_id);
+    try {
+        const [vehicles] = await db.query(
+            `SELECT vehicle_id, plate_number FROM vehicles WHERE driver_id = ?`,
+            [req.driver_id]
+        );
+
+        res.json(vehicles);
+    } catch (error) {
+        console.error('Error fetching vehicles:', error);
+        res.status(500).send('Error fetching vehicles.');
     }
 });
 

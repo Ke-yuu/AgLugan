@@ -4,7 +4,6 @@ const queuedRidesList = document.getElementById('queued-rides-list');
 const ongoingQueueList = document.getElementById('ongoing-queue-list');
 const totalEarningsSpan = document.getElementById('total-earnings');
 const completedRidesList = document.getElementById('completed-rides-list');
-const availabilityToggle = document.getElementById('availability-toggle');
 const totalRidesSpan = document.getElementById('total-rides');
 const completedRidesSpan = document.getElementById('completed-rides');
 const cancelledRidesSpan = document.getElementById('cancelled-rides');
@@ -15,6 +14,9 @@ const queueRideBtn = document.getElementById('queueRideBtn');
 const closeQueueRideModalBtn = document.getElementById('closeQueueRideModalBtn');
 const queueRideForm = document.getElementById('queueRideForm');
 const logoutBtn = document.getElementById('logoutBtn');
+const addVehicleLink = document.querySelector('li a[href="#addVehicleModal"]');
+const addVehicleModal = document.getElementById('addVehicleModal');
+const closeAddVehicleModalBtn = document.getElementById('closeAddVehicleModalBtn');
 
 // Utility Functions
 function formatCurrency(value) {
@@ -49,9 +51,6 @@ async function loadDriverData() {
         
         // Set Driver Name
         driverNameSpan.textContent = driverData.name;
-
-        // Set Availability Toggle
-        availabilityToggle.checked = driverData.availability;
 
         // Load Sections
         loadQueuedRides(driverData.queuedRides);
@@ -165,6 +164,42 @@ function closeQueueRideModal() {
     queueRideModal.style.display = "none";
 }
 
+// Fetch and Populate Vehicles in Dropdown
+async function populateVehicleDropdown() {
+    const vehicleSelect = document.getElementById('vehicle-id');
+    vehicleSelect.innerHTML = ''; // Clear existing options
+
+    try {
+        const response = await fetch('/api/driver-dashboard/getVehicles', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // Include session cookies
+        });
+        if (response.ok) {
+            const vehicles = await response.json();
+
+            if (vehicles.length === 0) {
+                vehicleSelect.innerHTML = '<option value="">No vehicles available</option>';
+                return;
+            }
+
+            vehicles.forEach(vehicle => {
+                const option = document.createElement('option');
+                option.value = vehicle.vehicle_id;
+                option.textContent = vehicle.plate_number;
+                vehicleSelect.appendChild(option);
+            });
+        } else {
+            vehicleSelect.innerHTML = '<option value="">Error loading vehicles</option>';
+        }
+    } catch (error) {
+        console.error('Error fetching vehicles:', error);
+        vehicleSelect.innerHTML = '<option value="">Error loading vehicles</option>';
+    }
+}
+
+
+
 // Submit Queue Ride Form
 async function submitQueueRideForm(event) {
     event.preventDefault();
@@ -206,22 +241,87 @@ async function cancelRide(event) {
     }
 }
 
-// Toggle Availability
-function toggleAvailability() {
-    const availability = availabilityToggle.checked;
-
-    fetch('/api/driver-dashboard/availability', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ driver_id: 1, availability }), // Replace with the logged-in driver's ID
-    })
-        .then(() => {
-            alert(`You are now ${availability ? "available" : "unavailable"} for rides.`);
-        })
-        .catch((error) => {
-            console.error('Error updating availability:', error);
+async function getCurrentUser() {
+    try {
+        const response = await fetch('/api/driver-dashboard/getCurrent', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // Include session cookies
         });
+
+        if (response.ok) {
+            const userData = await response.json();
+            return userData;
+        } else {
+            console.error('Failed to fetch user data');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        return null;
+    }
 }
+
+// Show modal on click of the car icon link
+addVehicleLink.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default anchor behavior
+    addVehicleModal.style.display = 'block';
+});
+
+// Hide modal on click of the close button
+closeAddVehicleModalBtn.addEventListener('click', () => {
+    addVehicleModal.style.display = 'none';
+});
+
+// Optional: Close the modal when clicking outside the modal content
+window.addEventListener('click', (event) => {
+    if (event.target === addVehicleModal) {
+        addVehicleModal.style.display = 'none';
+    }
+});
+
+document.querySelector("#addVehicleForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const capacity = document.querySelector("#capacity").value;
+    const plateNumber = document.querySelector("#plate-number").value;
+
+    try {
+        const currentUser = await getCurrentUser();
+
+        if (!currentUser || !currentUser.user_id) {
+            alert('Unable to fetch user data. Please try again.');
+            return;
+        }
+
+        const payload = {
+            capacity: capacity,
+            plate_number: plateNumber,
+            driver_id: currentUser.user_id, // Dynamically include driver ID
+        };
+
+        const response = await fetch('/api/driver-dashboard/vehicles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+            alert('Vehicle added successfully!');
+            document.getElementById('addVehicleModal').style.display = 'none';
+            // Optionally refresh the vehicle list
+        } else {
+            const errorText = await response.text();
+            alert(`Failed to add vehicle: ${errorText}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+
 
 // Logout Function
 async function handleLogout() {
@@ -243,10 +343,12 @@ async function handleLogout() {
 
 // Event Listeners
 logoutBtn.addEventListener('click', handleLogout);
-queueRideBtn.addEventListener('click', openQueueRideModal);
+queueRideBtn.addEventListener('click', async () => {
+    await populateVehicleDropdown();
+    openQueueRideModal();
+});
 closeQueueRideModalBtn.addEventListener('click', closeQueueRideModal);
 queueRideForm.addEventListener('submit', submitQueueRideForm);
-availabilityToggle.addEventListener('change', toggleAvailability);
 
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', loadDriverData);

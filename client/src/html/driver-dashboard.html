@@ -17,8 +17,7 @@
                 <h2>Welcome, <span id="driver-name">Master Yi</span>!</h2>
             </div>
             <ul>
-                <li><a href="#queue-ride-section"><i class="fas fa-car"></i></a></li>
-                <li><a href="#performance-overview"><i class="fas fa-chart-line"></i></a></li>
+                <li><a href="#addVehicleModal"><i class="fas fa-car"></i></a></li>
                 <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
             </ul>
         </nav>
@@ -64,12 +63,6 @@
             <p><strong>Average Rating:</strong> <span id="average-rating">N/A</span></p>
         </div>
 
-        <!-- Schedule Availability Section -->
-        <div class="section" id="schedule-availability">
-            <h2>Schedule Availability</h2>
-            <label for="availability-toggle">Set Availability:</label>
-            <input type="checkbox" id="availability-toggle">
-        </div>
 
         <!-- Help and Support Section -->
         <div class="section help-section">
@@ -96,6 +89,24 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal for Adding/Editing a Vehicle -->
+<div id="addVehicleModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeAddVehicleModalBtn">&times;</span>
+        <h2>Add or Edit Vehicle</h2>
+        <form id="addVehicleForm">
+            <label for="capacity">Capacity:</label>
+            <input type="number" id="capacity" name="capacity" required min="1" placeholder="Enter vehicle capacity">
+
+            <label for="plate-number">Plate Number:</label>
+            <input type="text" id="plate-number" name="plate-number" required placeholder="Enter plate number">
+
+            <button type="submit" id="addVehicleSubmit">Save Vehicle</button>
+        </form>
+    </div>
+</div>
+
 
     <script src="../js/driver-dashboard.js"></script>
 </body>
