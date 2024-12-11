@@ -41,21 +41,30 @@ function checkSessionStatus() {
     });
 }
 
+// Fetch passenger dashboard data
 function fetchPassengerDashboardData() {
+  // Assume an API endpoint that returns the necessary data (e.g., user info and available rides)
   fetch('/api/passenger-dashboard')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Passenger Dashboard Data:', data);
+      .then(response => response.json())
+      .then(data => {
+          console.log('Passenger Dashboard Data:', data);
 
-      if (data.status === 'success') {
-        displayPassengerInfo(data);
-      } else {
-        console.error('Error fetching passenger data:', data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching passenger dashboard data:', error);
-    });
+          // Store the fetched data
+          passengerDashboardData = data;
+
+          // Display passenger information
+          if (data.user) {
+              displayPassengerInfo(data);
+          } else {
+              console.error('User information is missing in the fetched data.');
+          }
+
+          // Call function to display available rides in a list
+          displayAvailableRidesList(passengerDashboardData);
+      })
+      .catch(error => {
+          console.error('Error fetching dashboard data:', error);
+      });
 }
 
 // Function to display passenger information
@@ -76,7 +85,51 @@ function displayPassengerInfo(data) {
   }
 }
 
-// Function to setup Profile Modal interactions
+// Function to display available rides in a grid list
+function displayAvailableRidesList(data) {
+  const ridesList = document.getElementById('rides-list');
+
+  // Clear any existing list content
+  ridesList.innerHTML = '';
+
+  // Loop through the available rides and create list items for each ride
+  if (data.rides && data.rides.length > 0) {
+      // Limit to the first 4 rides
+      const firstFourRides = data.rides.slice(0, 4);
+
+      firstFourRides.forEach(ride => {
+          const listItem = document.createElement('li');
+          listItem.classList.add('ride-item'); // Add a class for styling
+
+          // Add an event listener to open the modal when the card is clicked
+          listItem.addEventListener('click', () => {
+              showRouteModal(ride); // Open modal with ride details
+          });
+
+          // Populate the list item with ride data
+          listItem.innerHTML = `
+              <div class="ride-info">
+                <div class="ride-info-header">Destination:</div>
+                <div class="ride-details">
+                  <div><strong>From:</strong> ${ride.start_location}</div>
+                  <div><strong>To:</strong> ${ride.end_location}</div>
+                  <div><strong>Ride Schedule:</strong> ${ride.time_range}</div>
+                  <div><strong>Status:</strong> <span class="ride-status">${ride.status}</span></div>
+                  <div><strong>Waiting Time:</strong> ${ride.waiting_time}</div>
+                </div>
+              </div>
+          `;
+          ridesList.appendChild(listItem);
+      });
+  } else {
+      const noDataItem = document.createElement('li');
+      noDataItem.classList.add('no-ride-item');
+      noDataItem.innerHTML = `<p>No available rides at the moment.</p>`;
+      ridesList.appendChild(noDataItem);
+  }
+}
+
+// Function to setup Profile Modasl interactions
 function setupProfileModal() {
   const profileModal = document.getElementById('profileModal');
   const profileBtn = document.getElementById('profileBtn');
@@ -241,3 +294,49 @@ function setupLogout() {
     });
   }
 }
+
+// Function to show the route modal when the "View Route" button is clicked
+function showRouteModal(rideId) {
+  console.log('Showing route for rideId:', rideId);  // Log the rideId passed
+
+  // Find the ride object by ride_id in the passengerDashboardData
+  const ride = passengerDashboardData.rides.find(r => r.ride_id === rideId);
+
+  if (ride) {
+      // Populate the modal with the ride data
+      document.getElementById('routeModal').style.display = 'flex';  // Show the modal
+      document.getElementById('rideIdDisplay').textContent = ride.ride_id;
+      document.getElementById('startLocationDisplay').textContent = ride.start_location;
+      document.getElementById('endLocationDisplay').textContent = ride.end_location;
+
+      // Add route description if available
+      if (ride.route) {
+          document.getElementById('routeDescription').textContent = ride.route;
+      }
+
+      // Embed a Google map link (opens in a new tab)
+      if (ride.start_location && ride.end_location) {
+          const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ride.start_location)}&destination=${encodeURIComponent(ride.end_location)}`;
+          document.getElementById('map').innerHTML = `<a href="${mapUrl}" target="_blank">Click here to view the route on Google Maps</a>`;
+      } else {
+          document.getElementById('map').innerHTML = '<p>No map available for this route.</p>';
+      }
+  } else {
+      console.log('Ride not found for the given rideId');
+  }
+}
+
+// Function to close the modal when the close button or outside the modal content is clicked
+function closeModal() {
+  document.getElementById('routeModal').style.display = 'none';  // Hide the modal
+}
+
+// Attach the event listener to close the modal when the close button is clicked
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+// Close the modal when clicking anywhere outside the modal content
+window.addEventListener('click', function(event) {
+  if (event.target === document.getElementById('routeModal')) {
+      closeModal();  // Close the modal if clicked outside the modal content
+  }
+});
