@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aglugan: View Dashboard</title>
+    <title>Aglugan: Driver Dashboard</title>
     <link rel="stylesheet" href="/css/driver-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -17,8 +17,8 @@
                 <h2>Welcome, <span id="driver-name">Master Yi</span>!</h2>
             </div>
             <ul>
-                <li><a href="#active-rides"><i class="fas fa-car"></i></a></li>
-                <li><a href="#earnings"><i class="fas fa-wallet"></i></a></li>
+                <li><a href="#queue-ride-section"><i class="fas fa-car"></i></a></li>
+                <li><a href="#performance-overview"><i class="fas fa-chart-line"></i></a></li>
                 <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
             </ul>
         </nav>
@@ -26,45 +26,76 @@
 
     <main class="main-content">
         <h1>Welcome to the Driver Dashboard!</h1>
-        <p>Manage your rides and earnings effectively.</p>
+        <p>Manage your rides, queues, and performance effectively.</p>
         
-        <!-- Queue A Ride Button -->
-        <div class="queue-ride-section">
-            <a href="/driverQueue" class="queue-ride-btn">Queue A Ride</a>
+        <!-- Queue a Ride Section -->
+        <div class="section queue-ride-section" id="queue-ride-section">
+            <h2>Queue a Ride</h2>
+            <button id="queueRideBtn" class="action-btn">Queue a Ride</button>
+            <ul id="queued-rides-list">
+                <!-- Queued rides from DB -->
+            </ul>
         </div>
 
-        <div class="dashboard-sections">
-            <!-- Section 1: Active Rides -->
-            <div class="section" id="active-rides">
-                <h2>Active Rides</h2>
-                <ul id="active-rides-list">
-                    <!-- fethc u data kabil u  dituy from db -->
-                </ul>
-            </div>
+        <!-- Ongoing Queue Section -->
+        <div class="section" id="ongoing-queue">
+            <h2>Ongoing Queue</h2>
+            <ul id="ongoing-queue-list">
+                <!-- Ongoing queued rides from DB -->
+            </ul>
+        </div>
 
-            <!-- Section 2: Earnings -->
-            <div class="section" id="earnings">
-                <h2>Earnings Overview</h2>
-                <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
-                <ul id="completed-rides-list">
-                    <!-- Fetch u nalang data from db ituy iokarga -->
-                </ul>
-            </div>
+        <!-- Earnings Section -->
+        <div class="section" id="earnings">
+            <h2>Earnings Overview</h2>
+            <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
+            <ul id="completed-rides-list">
+                <!-- Completed rides from DB -->
+            </ul>
+        </div>
 
-            <!-- Section 3: Schedule Availability -->
-            <div class="section" id="schedule-availability">
-                <h2>Schedule Availability</h2>
-                <label for="availability-toggle">Set Availability:</label>
-                <input type="checkbox" id="availability-toggle">
-            </div>
+        <!-- Performance Overview Section -->
+        <div class="section" id="performance-overview">
+            <h2>Performance Overview</h2>
+            <p><strong>Total Rides:</strong> <span id="total-rides">0</span></p>
+            <p><strong>Completed Rides:</strong> <span id="completed-rides">0</span></p>
+            <p><strong>Cancelled Rides:</strong> <span id="cancelled-rides">0</span></p>
+            <p><strong>Total Earnings:</strong> <span id="earnings-overview">₱0.00</span></p>
+            <p><strong>Average Rating:</strong> <span id="average-rating">N/A</span></p>
+        </div>
 
-            <!-- Section 4: Help and Support -->
-            <div class="section help-section">
-                <h2>Help and Support</h2>
-                <p>Contact us at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
-            </div>
+        <!-- Schedule Availability Section -->
+        <div class="section" id="schedule-availability">
+            <h2>Schedule Availability</h2>
+            <label for="availability-toggle">Set Availability:</label>
+            <input type="checkbox" id="availability-toggle">
+        </div>
+
+        <!-- Help and Support Section -->
+        <div class="section help-section">
+            <h2>Help and Support</h2>
+            <p>Contact us at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
         </div>
     </main>
+
+    <!-- Modal for Queuing a Ride -->
+    <div id="queueRideModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeQueueRideModalBtn">&times;</span>
+            <h2>Queue a Ride</h2>
+            <form id="queueRideForm">
+                <label for="vehicle-id">Vehicle:</label>
+                <select id="vehicle-id" name="vehicle-id" required>
+                    <!-- Populate with driver's vehicles from DB -->
+                </select>
+                <label for="start-location">Start Location:</label>
+                <input type="text" id="start-location" name="start-location" required>
+                <label for="end-location">End Location:</label>
+                <input type="text" id="end-location" name="end-location" required>
+                <button type="submit" id="queueRideSubmit">Add to Queue</button>
+            </form>
+        </div>
+    </div>
 
     <script src="../js/driver-dashboard.js"></script>
 </body>

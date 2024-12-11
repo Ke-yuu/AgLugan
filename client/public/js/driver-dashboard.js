@@ -1,36 +1,20 @@
 // DOM Elements
 const driverNameSpan = document.getElementById('driver-name');
-const activeRidesList = document.getElementById('active-rides-list');
+const queuedRidesList = document.getElementById('queued-rides-list');
+const ongoingQueueList = document.getElementById('ongoing-queue-list');
 const totalEarningsSpan = document.getElementById('total-earnings');
 const completedRidesList = document.getElementById('completed-rides-list');
 const availabilityToggle = document.getElementById('availability-toggle');
-
-// Mock Data (to be replaced with API or backend calls)
-const driverData = {
-    name: "John Doe",
-    completedRides: [
-        {
-            id: "RIDE121",
-            passenger: "Bob Johnson",
-            fare: 230.00,
-            date: "2024-12-07", // Date in YYYY-MM-DD format
-        },
-        {
-            id: "122",
-            fare: 260.00,
-            date: "2024-12-06",
-        },
-    ],
-    activeRides: [
-        {
-            id: "241",
-            from: "SLU Mary Heights",
-            to: "Igorot Park",
-            status: "In Progress",
-        },
-    ],
-    availability: true,
-};
+const totalRidesSpan = document.getElementById('total-rides');
+const completedRidesSpan = document.getElementById('completed-rides');
+const cancelledRidesSpan = document.getElementById('cancelled-rides');
+const earningsOverviewSpan = document.getElementById('earnings-overview');
+const averageRatingSpan = document.getElementById('average-rating');
+const queueRideModal = document.getElementById('queueRideModal');
+const queueRideBtn = document.getElementById('queueRideBtn');
+const closeQueueRideModalBtn = document.getElementById('closeQueueRideModalBtn');
+const queueRideForm = document.getElementById('queueRideForm');
+const logoutBtn = document.getElementById('logoutBtn');
 
 // Utility Functions
 function formatCurrency(value) {
@@ -38,84 +22,121 @@ function formatCurrency(value) {
 }
 
 function getTodayDate() {
-    return new Date().toISOString().split("T")[0]; // Format YYYY-MM-DD
+    return new Date().toISOString().split("T")[0];
+}
+
+// Fetch Data from API
+async function fetchData(route) {
+    try {
+        const response = await fetch(route);
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 // Load Driver Data
-function loadDriverData() {
-    // Set Driver Name
-    driverNameSpan.textContent = driverData.name;
+async function loadDriverData() {
+    try {
+        const driverData = await fetchData('/api/driver-dashboard');
 
-    // Set Availability Toggle
-    availabilityToggle.checked = driverData.availability;
+        if (!driverData) {
+            throw new Error('Driver data is undefined');
+        }
+        
+        // Set Driver Name
+        driverNameSpan.textContent = driverData.name;
 
-    // Load Active Rides
-    loadActiveRides();
+        // Set Availability Toggle
+        availabilityToggle.checked = driverData.availability;
 
-    // Load Earnings Overview
-    loadEarnings();
+        // Load Sections
+        loadQueuedRides(driverData.queuedRides);
+        loadOngoingQueue(driverData.ongoingQueue);
+        loadEarnings(driverData.completedRides);
+        loadPerformanceOverview(driverData.performance);
+    } catch (error) {
+        console.error('Error loading driver data:', error);
+    }
 }
 
-// Load Active Rides
-function loadActiveRides() {
-    activeRidesList.innerHTML = ""; // Clear the list
+// Load Queued Rides
+function loadQueuedRides(queuedRides) {
+    queuedRidesList.innerHTML = ""; // Clear the list
 
-    if (driverData.activeRides.length === 0) {
-        activeRidesList.innerHTML = "<li>No active rides at the moment.</li>";
+    if (!queuedRides || queuedRides.length === 0) {
+        queuedRidesList.innerHTML = "<li>No queued rides at the moment.</li>";
         return;
     }
 
-    driverData.activeRides.forEach((ride) => {
+    queuedRides.forEach((ride) => {
         const rideItem = document.createElement('li');
-        rideItem.className = 'ride-item';
+        rideItem.className = 'queued-ride-item';
 
         rideItem.innerHTML = `
-            <h3>Ride ID: ${ride.id}</h3>
-            <p><strong>Passenger:</strong> ${ride.passenger}</p>
-            <p><strong>From:</strong> ${ride.from}</p>
-            <p><strong>To:</strong> ${ride.to}</p>
+            <p><strong>Ride ID:</strong> ${ride.queue_id}</p>
+            <p><strong>From:</strong> ${ride.start_location}</p>
+            <p><strong>To:</strong> ${ride.end_location}</p>
             <p><strong>Status:</strong> ${ride.status}</p>
-            <button class="mark-completed-btn" data-ride-id="${ride.id}">Mark as Completed</button>
+            <button class="cancel-ride-btn" data-ride-id="${ride.queue_id}">Cancel Ride</button>
         `;
 
-        activeRidesList.appendChild(rideItem);
+        queuedRidesList.appendChild(rideItem);
     });
 
-    // Add Event Listeners for "Mark as Completed" buttons
-    document.querySelectorAll('.mark-completed-btn').forEach((button) => {
-        button.addEventListener('click', markRideAsCompleted);
+    // Add Event Listeners for "Cancel Ride" buttons
+    document.querySelectorAll('.cancel-ride-btn').forEach((button) => {
+        button.addEventListener('click', cancelRide);
     });
 }
 
-// Load Earnings (Filter today's rides and update the UI)
-function loadEarnings() {
-    // Get today's date
-    const today = getTodayDate();
+// Load Ongoing Queue
+function loadOngoingQueue(ongoingQueue) {
+    ongoingQueueList.innerHTML = ""; // Clear the list
 
-    // Filter today's completed rides
-    const todayRides = driverData.completedRides.filter((ride) => ride.date === today);
-
-    // Calculate today's earnings
-    const todayEarnings = todayRides.reduce((total, ride) => total + ride.fare, 0);
-
-    // Update Total Earnings
-    totalEarningsSpan.textContent = formatCurrency(todayEarnings);
-
-    // Load Completed Rides for Today
-    completedRidesList.innerHTML = ""; // Clear the list
-
-    if (todayRides.length === 0) {
-        completedRidesList.innerHTML = "<li>No completed rides for today.</li>";
+    if (!ongoingQueue || ongoingQueue.length === 0) {
+        ongoingQueueList.innerHTML = "<li>No ongoing rides at the moment.</li>";
         return;
     }
 
-    todayRides.forEach((ride) => {
+    ongoingQueue.forEach((ride) => {
+        const rideItem = document.createElement('li');
+        rideItem.className = 'ongoing-ride-item';
+
+        rideItem.innerHTML = `
+            <p><strong>Ride ID:</strong> ${ride.queue_id}</p>
+            <p><strong>From:</strong> ${ride.start_location}</p>
+            <p><strong>To:</strong> ${ride.end_location}</p>
+            <p><strong>Status:</strong> ${ride.status}</p>
+        `;
+
+        ongoingQueueList.appendChild(rideItem);
+    });
+}
+
+// Load Earnings
+function loadEarnings(completedRides) {
+    if (!completedRides) return;
+
+    const totalEarnings = completedRides.reduce((total, ride) => total + ride.fare, 0);
+    totalEarningsSpan.textContent = formatCurrency(totalEarnings);
+
+    completedRidesList.innerHTML = ""; // Clear the list
+
+    if (completedRides.length === 0) {
+        completedRidesList.innerHTML = "<li>No completed rides yet.</li>";
+        return;
+    }
+
+    completedRides.forEach((ride) => {
         const rideItem = document.createElement('li');
         rideItem.className = 'completed-ride-item';
 
         rideItem.innerHTML = `
-            <p><strong>Ride ID:</strong> ${ride.id}</p>
-            <p><strong>Passenger:</strong> ${ride.passenger}</p>
+            <p><strong>Ride ID:</strong> ${ride.ride_id}</p>
             <p><strong>Fare:</strong> ${formatCurrency(ride.fare)}</p>
         `;
 
@@ -123,30 +144,108 @@ function loadEarnings() {
     });
 }
 
-// Mark Ride as Completed
-function markRideAsCompleted(event) {
+// Load Performance Overview
+function loadPerformanceOverview(performance) {
+    if (!performance) return;
+
+    totalRidesSpan.textContent = performance.totalRides || 0;
+    completedRidesSpan.textContent = performance.completedRides || 0;
+    cancelledRidesSpan.textContent = performance.cancelledRides || 0;
+    earningsOverviewSpan.textContent = formatCurrency(performance.totalEarnings || 0);
+    averageRatingSpan.textContent = performance.averageRating || "N/A";
+}
+
+// Open Queue Ride Modal
+function openQueueRideModal() {
+    queueRideModal.style.display = "block";
+}
+
+// Close Queue Ride Modal
+function closeQueueRideModal() {
+    queueRideModal.style.display = "none";
+}
+
+// Submit Queue Ride Form
+async function submitQueueRideForm(event) {
+    event.preventDefault();
+
+    const formData = new FormData(queueRideForm);
+    const payload = {
+        driver_id: 1, // Replace with the logged-in driver's ID
+        vehicle_id: formData.get('vehicle-id'),
+        start_location: formData.get('start-location'),
+        end_location: formData.get('end-location'),
+    };
+
+    try {
+        await fetch('/api/driver-dashboard/queue', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        loadDriverData();
+        closeQueueRideModal();
+    } catch (error) {
+        console.error('Error submitting queue ride form:', error);
+    }
+}
+
+// Cancel Ride
+async function cancelRide(event) {
     const rideId = event.target.getAttribute('data-ride-id');
-    const rideIndex = driverData.activeRides.findIndex((ride) => ride.id === rideId);
 
-    if (rideIndex > -1) {
-        const completedRide = driverData.activeRides.splice(rideIndex, 1)[0];
-        completedRide.fare = 100; // Mocked fare; should come from backend
-        completedRide.date = getTodayDate(); // Set today's date for the ride
-        driverData.completedRides.push(completedRide);
+    try {
+        await fetch(`/api/driver-dashboard/cancel/${rideId}`, {
+            method: 'PATCH',
+        });
 
-        // Reload Data
-        loadActiveRides();
-        loadEarnings();
+        loadDriverData();
+    } catch (error) {
+        console.error('Error cancelling ride:', error);
     }
 }
 
 // Toggle Availability
 function toggleAvailability() {
-    driverData.availability = availabilityToggle.checked;
-    alert(`You are now ${driverData.availability ? "available" : "unavailable"} for rides.`);
+    const availability = availabilityToggle.checked;
+
+    fetch('/api/driver-dashboard/availability', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ driver_id: 1, availability }), // Replace with the logged-in driver's ID
+    })
+        .then(() => {
+            alert(`You are now ${availability ? "available" : "unavailable"} for rides.`);
+        })
+        .catch((error) => {
+            console.error('Error updating availability:', error);
+        });
+}
+
+// Logout Function
+async function handleLogout() {
+    try {
+        const response = await fetch('/api/logout', { method: 'POST' });
+
+        if (response.ok) {
+            alert('You have been logged out.');
+            window.location.href = '/login'; // Redirect to the login page
+        } else {
+            const errorData = await response.json();
+            alert(`Logout failed: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('Error during logout:', error);
+        alert('An error occurred while logging out. Please try again.');
+    }
 }
 
 // Event Listeners
+logoutBtn.addEventListener('click', handleLogout);
+queueRideBtn.addEventListener('click', openQueueRideModal);
+closeQueueRideModalBtn.addEventListener('click', closeQueueRideModal);
+queueRideForm.addEventListener('submit', submitQueueRideForm);
 availabilityToggle.addEventListener('change', toggleAvailability);
 
 // Initialize Dashboard

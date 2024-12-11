@@ -18,6 +18,9 @@ const getRidesRoute = require('./routes/get_rides_route');
 const updateRideStatusRoute = require('./routes/update_ride_status_route'); 
 const paymentAmountRoute = require('./routes/payment_amount_route');
 const processPaymentRoute = require('./routes/process_payment_route');
+const getRidesRoute = require('./routes/get_rides_route'); // Add getRides route
+const updateRideStatusRoute = require('./routes/update_ride_status_route'); // Add updateRideStatus route
+const driverDashboardRoute = require('./routes/driver_dashboard_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,7 +52,8 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'lax',
     }
 }));
 
@@ -72,6 +76,9 @@ app.use('/api', getRidesRoute);
 app.use('/api', updateRideStatusRoute); 
 app.use('/api', paymentAmountRoute);
 app.use('/api', processPaymentRoute);
+app.use('/api', getRidesRoute); // Add getRides route
+app.use('/api', updateRideStatusRoute); // Add updateRideStatus route
+app.use('/api', driverDashboardRoute);
 
 // HTML Routes
 const htmlRoutes = {
