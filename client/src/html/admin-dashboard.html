@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aglugan: View Dashboard</title>
-    <link rel="stylesheet" href="/css/dashboards.css">
+    <link rel="stylesheet" href="../css/admindashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -28,19 +28,16 @@
 
         <div class="dashboard-sections">
             <!-- Section: Manage Rides -->
-            <div class="section" id="manage-rides">
-                <h2>Manage Rides</h2>
-                <button id="addRideBtn" class="action-btn">Add Ride</button>
-                <ul id="rides-list">
-                    <!-- DB data -->
-                </ul>
+            <div id="manage-rides" class="section">
+                <h2>View Rides</h2>
+                <div id="rides-list"></div>
             </div>
 
             <!-- Section: Block Users -->
             <div class="section" id="block-users">
-                <h2>Block Users</h2>
+                <h2>View Users</h2>
                 <ul id="users-list">
-                    <!-- pati dituy-->
+                    <!-- Users will be dynamically loaded here -->
                 </ul>
             </div>
         </div>
@@ -52,7 +49,7 @@
             <span class="close-btn" id="closeRideModalBtn">&times;</span>
             <h2 id="rideModalTitle">Add Ride</h2>
             <form id="rideForm">
-                <label for="ride-id">Ride ID:</label> <!-- auto increment ride id ijay db -->
+                <label for="ride-id">Ride ID:</label>
                 <input type="text" id="ride-id" name="ride-id" required>
                 <label for="start-location">Start Location:</label>
                 <input type="text" id="start-location" name="start-location" required>

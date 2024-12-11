@@ -1,0 +1,417 @@
+/* General Styling for Dashboard */
+body {
+    background-color: #333333;
+    color: #f8f8f8;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Navigation Bar */
+  header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1b1b1b;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .logo {
+    width: 50px;
+  }
+  
+  .logo:hover {
+    width: 50px;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  
+  .profile-content {
+    align-items: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: -1300px;
+  }
+  
+  /* Navigation Buttons */
+  ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+  
+  li a {
+    text-decoration: none;
+    color: #f8f8f8;
+    padding: 11px 13px;
+    background-color: #ff0000;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    display: inline-block;
+  }
+  li a:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  
+  #logoutBtn {
+    text-decoration: none;
+    color: #f8f8f8;
+    padding: 10px 12px;
+    background-color: #ff0000;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    display: inline-block;
+  }
+  
+  ul li a:hover,
+  #logoutBtn:hover,
+  .icon-button:hover {
+    background-color: #910b0b;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  
+  .icon-button {
+    background-color: #ff0000;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+  }
+  
+  .icon-button i {
+    color: #f8f8f8;
+    font-size: 1.2rem;
+  }
+  
+  /* Welcome Banner */
+  h1, p {
+    text-align: center;
+  }
+  
+  /* Dashboard Sections */
+  .dashboard-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+  }
+  
+  .section {
+    background-color: #1b1b1b;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  .section h2 {
+    color: #ff0000;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Available Rides Section */
+  #available-rides-section ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto; 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px; 
+    max-width: 1000px; 
+    overflow-y: auto;
+  }
+  
+  #rides-list li {
+    background: linear-gradient(145deg, #3e3e3e, #343434);
+    padding: 20px;
+    border-radius: 15px;
+    color: #f8f8f8;
+    font-size: 1rem;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), -4px -4px 10px rgba(60, 60, 60, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+    height: auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  #rides-list li:hover {
+    background: linear-gradient(145deg, #484848, #3a3a3a);
+  }
+  
+  .ride-info-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6e6e6d;
+  }
+  
+  .ride-details {
+    font-size: 1rem;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  
+  .ride-details strong {
+    color: #ff7b00;
+  }
+  
+  
+  
+  .ride-details div {
+    margin-bottom: 5px;
+  }
+  
+  .ride-status {
+    font-weight: bold;
+  }
+  
+  .no-available-rides {
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    color: #f8f8f8;
+    font-size: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #3a3a3a;
+  }
+  
+  .book-ride-btn {
+    background-color: #e00206;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: fit-content;
+    align-self: center;
+    margin-top: 15px;
+  }
+  
+  .book-ride-btn:hover {
+    background-color: #a70306;
+    transform: scale(1.05);
+  }
+  
+  .ride-info-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ff0000;
+  }
+  
+  .ride-info {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #252525;
+    margin-top: 5px;
+  }
+  
+  /* Payment History Section */
+  #ride-history-section ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 15px;
+    max-height: 180px; 
+    overflow-y: auto; 
+  }
+  
+  #ride-history li {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    color: #f8f8f8;
+    font-size: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Help Section */
+  .help-section p {
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+  
+  /* Modal Styling */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .modal-content {
+    background-color: #1b1b1b;
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    color: #f8f8f8;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+  }
+  
+  .close-btn {
+    color: #f8f8f8;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover,
+  .close-btn:focus {
+    color: #ff0000;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: inline-block;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #333333;
+    color: #f8f8f8;
+  }
+  
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    border: 1px solid #ff0000;
+    box-shadow: 0px 0px 5px #ff0000;
+  }
+  
+  input[type="text"]::placeholder,
+  input[type="email"]::placeholder,
+  input[type="password"]::placeholder {
+    color: #a0a0a0;
+  
+  }
+    /* Styles for the book ride button */
+    .book-ride-btn {
+      background-color: #e00206;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 15px;
+      margin-left: 180px;
+    }
+    
+    /* Hover effect for book ride button */
+    .book-ride-btn:hover {
+      background-color: #a70306;
+      transform: scale(1.1);
+    }
+    
+    /* Focus and active states for better accessibility */
+    .book-ride-btn:focus,
+    .book-ride-btn:active {
+      outline: none;
+      background-color: #da0408;
+    }
+  
+  .available-ride-item {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .available-ride-item:hover {
+    background-color: #f3f0f0;
+    color: #910b0b;
+  }
+  
+  .available-ride-item:hover::after {
+    display: block;
+  }
+  
+  /* Buttons Styling */
+  .save-btn,
+  .change-btn {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .save-btn:hover,
+  .change-btn:hover {
+    background-color: #910b0b;
+  }
+  
+  .save-btn:active,
+  .change-btn:active {
+    transform: scale(0.98);
+  }
+
+  #rides-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-height: 400px; /* Adjust the height as needed */
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  #rides-list .ride-info {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 200px;
+    box-sizing: border-box;
+  }
