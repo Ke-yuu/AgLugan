@@ -191,6 +191,11 @@ function handleChangePassword() {
       if (data.status === 'success') {
         alert('Password changed successfully.');
         passwordForm.reset();
+        document.getElementById('profileModal').style.display = 'none';
+              
+        // Reload the page
+        location.reload();
+        window.location.href = '/login'; 
       } else {
         alert(data.message || 'Failed to change password.');
       }
