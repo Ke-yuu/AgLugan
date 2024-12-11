@@ -146,6 +146,10 @@ function handleProfileUpdate() {
 
               // Close the modal
               document.getElementById('profileModal').style.display = 'none';
+              
+                // Reload the page
+                location.reload();
+
           } else {
               alert(data.message || 'Failed to update profile.');
           }
@@ -160,7 +164,7 @@ function handleProfileUpdate() {
 function handleChangePassword() {
   const passwordForm = document.getElementById('changePasswordForm');
   const togglePasswordIcons = document.querySelectorAll('.toggle-password');
-  
+
   passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
