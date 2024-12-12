@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
 --
 
 INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
-(1, 'admin', '$2y$10$Qp46ZzA.w0b23e/Yc3dZaeF9A4DYa2glVK5xoB.RgLlm2c9rTkAi2');
+(1, 'admin', '123');
 
 -- --------------------------------------------------------
 
@@ -51,8 +51,8 @@ INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
 DROP TABLE IF EXISTS `passenger_statistics`;
 CREATE TABLE IF NOT EXISTS `passenger_statistics` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time_slot` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time_slot` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookings_count` int DEFAULT '0',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
