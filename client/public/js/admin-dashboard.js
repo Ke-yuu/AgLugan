@@ -7,51 +7,22 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function setupSearch() {
-        // Create search container for users
-        const userSearchContainer = document.createElement('div');
-        userSearchContainer.className = 'search-container';
+        // Get existing search inputs
+        const userSearchInput = document.getElementById('user-search');
+        const rideSearchInput = document.getElementById('ride-search');
         
-        // Create user search input
-        const userSearchInput = document.createElement('input');
-        userSearchInput.type = 'text';
-        userSearchInput.id = 'user-search';
-        userSearchInput.className = 'search-input';
-        userSearchInput.placeholder = 'Search users by name, email, or type...';
-        
-        // Create search container for rides
-        const rideSearchContainer = document.createElement('div');
-        rideSearchContainer.className = 'search-container';
-        
-        // Create ride search input
-        const rideSearchInput = document.createElement('input');
-        rideSearchInput.type = 'text';
-        rideSearchInput.id = 'ride-search';
-        rideSearchInput.className = 'search-input';
-        rideSearchInput.placeholder = 'Search rides by location, status...';
-        
-        // Add inputs to their containers
-        userSearchContainer.appendChild(userSearchInput);
-        rideSearchContainer.appendChild(rideSearchInput);
-    
-        // Insert search components
-        const usersList = document.getElementById('users-list');
-        if (usersList) {
-            usersList.parentNode.insertBefore(userSearchContainer, usersList);
-        }
-    
-        const ridesTable = document.getElementById('rides-table');
-        if (ridesTable) {
-            ridesTable.parentNode.insertBefore(rideSearchContainer, ridesTable);
-        }
-    
         // Add event listeners with debouncing
-        userSearchInput.addEventListener('input', debounce(function(e) {
-            fetchUsers(e.target.value.trim());
-        }, 300));
-    
-        rideSearchInput.addEventListener('input', debounce(function(e) {
-            fetchRides(e.target.value.trim());
-        }, 300));
+        if (userSearchInput) {
+            userSearchInput.addEventListener('input', debounce(function(e) {
+                fetchUsers(e.target.value.trim());
+            }, 300));
+        }
+
+        if (rideSearchInput) {
+            rideSearchInput.addEventListener('input', debounce(function(e) {
+                fetchRides(e.target.value.trim());
+            }, 300));
+        }
     }
 
     // Initialize everything
