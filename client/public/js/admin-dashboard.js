@@ -14,11 +14,17 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/adminlogin';
         });
 
-        window.onload = function () {
-            if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
-                window.location.reload();
-            }
-        };    
+    window.onload = function () {
+        if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+            window.location.reload();
+        }
+    };    
+
+    // Add close button handler
+    const closeBtn = document.querySelector('.close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeUserModal);
+    }
 
     function setupSearch() {
         // Get existing search inputs
@@ -39,11 +45,40 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    const styles = `
+.refresh-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.refresh-btn:hover {
+    background-color: #45a049;
+}
+
+.refresh-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.refresh-btn i {
+    font-size: 14px;
+}
+`;
     // Initialize everything
     setupSearch();
     fetchRides();
     fetchUsers();
     setupLogout();
+    setupRefreshButton();
 
     // Form handlers setup
     const addDriverForm = document.getElementById('add-driver-form');
@@ -115,6 +150,12 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+function handleEscapeKey(event) {
+    if (event.key === 'Escape') {
+        closeUserModal();
+    }
 }
 
 // Data Fetching Functions
@@ -206,11 +247,11 @@ function fetchUsers(searchQuery = '') {
             return response.json();
         })
         .then(data => {
-            console.log('Received users data:', data);
+            console.log('Frontend - Full received data:', data);
             const usersList = document.getElementById('users-list');
             if (!usersList) return;
             
-            usersList.innerHTML = ''; 
+            usersList.innerHTML = '';
 
             if (data.length === 0) {
                 usersList.innerHTML = '<li class="no-users">No users found</li>';
@@ -234,8 +275,14 @@ function fetchUsers(searchQuery = '') {
                 const userElement = document.createElement('li');
                 userElement.className = 'user-item';
                 userElement.textContent = `${user.name} (${user.email}) - ${user.user_type}`;
-                userElement.setAttribute('data-user-id', user.user_id);
-                userElement.onclick = () => showUserModal(user);
+                userElement.style.cursor = 'pointer';
+                
+                // Log individual user data before showing modal
+                userElement.addEventListener('click', () => {
+                    console.log('Clicked user data:', user);
+                    showUserModal(user);
+                });
+                
                 usersList.appendChild(userElement);
             });
         })
@@ -243,35 +290,61 @@ function fetchUsers(searchQuery = '') {
             console.error('Error fetching users:', error);
             const usersList = document.getElementById('users-list');
             if (usersList) {
-                usersList.innerHTML = '<div class="error-message">Error loading users. Please try again later.</div>';
+                usersList.innerHTML = '<li class="error-message">Error loading users. Please try again later.</li>';
             }
         });
 }
-
-// Modal and User Management Functions
 function showUserModal(user) {
-    const userModal = document.getElementById('user-modal');
-    const modalContent = document.getElementById('user-modal-content');
-    if (!userModal || !modalContent) return;
+    const modal = document.getElementById('user-modal');
+    if (!modal) return;
 
-    modalContent.innerHTML = `
-        <h2>User Details</h2>
-        <p><strong>Username:</strong> ${user.username}</p>
-        <p><strong>Name:</strong> ${user.name}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Phone Number:</strong> ${user.phone_number || 'N/A'}</p>
-        <p><strong>ID Number:</strong> ${user.id_number || 'N/A'}</p>
-        <button class="ban-user-btn" onclick="banUser(${user.user_id})">Ban User</button>
-        <button class="close-user-modal" onclick="closeUserModal()">Close</button>
-    `;
+    console.log('User data in modal:', user); // Debug log
 
-    userModal.style.display = 'block';
+    // Update modal content with null checks and proper property access
+    document.getElementById('modal-username').textContent = user.username || 'N/A';
+    document.getElementById('modal-name').textContent = user.name || 'N/A';
+    document.getElementById('modal-email').textContent = user.email || 'N/A';
+    document.getElementById('modal-number').textContent = 
+        user.phone_number !== null && user.phone_number !== undefined ? user.phone_number : 'N/A';
+    document.getElementById('modal-id-number').textContent = 
+        user.id_number !== null && user.id_number !== undefined ? user.id_number : 'N/A';
+
+    // Set up ban button
+    const banButton = document.getElementById('banUserButton');
+    if (banButton) {
+        banButton.onclick = () => banUser(user.user_id);
+    }
+
+    // Show modal
+    modal.style.display = 'flex';
+    document.addEventListener('keydown', handleEscapeKey);
+
+    // Add escape key listener
+    document.addEventListener('keydown', handleEscapeKey);
+
+    // Set up click outside to close
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            closeUserModal();
+        }
+    };
+}
+
+// Utility function to format phone numbers
+function formatPhoneNumber(phoneNumber) {
+    if (!phoneNumber) return null;
+    // Remove non-numeric characters
+    const cleaned = phoneNumber.replace(/\D/g, '');
+    // Format as XXX-XXX-XXXX
+    return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
 }
 
 function closeUserModal() {
-    const userModal = document.getElementById('user-modal');
-    if (userModal) {
-        userModal.style.display = 'none';
+    const modal = document.getElementById('user-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        // Clean up event listener
+        document.removeEventListener('keydown', handleEscapeKey);
     }
 }
 
@@ -327,5 +400,105 @@ function setupLogout() {
                     alert('An error occurred while trying to log out. Please try again.');
                 });
         });
+    }
+}
+
+function setupRefreshButton() {
+    const ridesSection = document.querySelector('.full-width-section');
+    if (!ridesSection) return;
+
+    // Get the existing h2 element
+    const existingHeader = ridesSection.querySelector('h2');
+    if (!existingHeader) return;
+
+    // Create header container
+    const headerContainer = document.createElement('div');
+    headerContainer.className = 'rides-header';
+    headerContainer.style.display = 'flex';
+    headerContainer.style.alignItems = 'center';
+    headerContainer.style.justifyContent = 'space-between';
+    headerContainer.style.marginBottom = '1rem';
+
+    // Move the existing h2 into the container
+    existingHeader.parentNode.replaceChild(headerContainer, existingHeader);
+    headerContainer.appendChild(existingHeader);
+
+    // Create refresh button
+    const refreshButton = document.createElement('button');
+    refreshButton.id = 'refreshRidesButton';
+    refreshButton.className = 'refresh-btn';
+    refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+    
+    // Add styles
+    refreshButton.style.backgroundColor = '#4CAF50';
+    refreshButton.style.color = 'white';
+    refreshButton.style.padding = '8px 16px';
+    refreshButton.style.border = 'none';
+    refreshButton.style.borderRadius = '4px';
+    refreshButton.style.cursor = 'pointer';
+    refreshButton.style.display = 'inline-flex';
+    refreshButton.style.alignItems = 'center';
+    refreshButton.style.gap = '8px';
+
+    // Add hover effect
+    refreshButton.addEventListener('mouseover', () => {
+        refreshButton.style.backgroundColor = '#45a049';
+    });
+    refreshButton.addEventListener('mouseout', () => {
+        refreshButton.style.backgroundColor = '#4CAF50';
+    });
+
+    
+    refreshButton.addEventListener('click', refreshRideStatus);
+
+    
+    headerContainer.appendChild(refreshButton);
+}
+
+async function refreshRideStatus() {
+    console.log('Refresh status function called'); 
+    
+    const refreshButton = document.getElementById('refreshRidesButton');
+    if (!refreshButton) {
+        console.error('Refresh button not found');
+        return;
+    }
+
+    try {
+        refreshButton.disabled = true;
+        refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+        
+        console.log('Making fetch request to update-ride-status'); 
+        const response = await fetch('/api/update-ride-status', {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include' 
+        });
+
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Response data:', data); 
+
+        await fetchRides();
+
+        refreshButton.disabled = false;
+        refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+
+    } catch (error) {
+        console.error('Detailed error:', error); 
+        alert('Failed to refresh ride status. Please try again.');
+        
+        if (refreshButton) {
+            refreshButton.disabled = false;
+            refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+        }
     }
 }

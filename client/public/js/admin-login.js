@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.status === 'success') {
-                console.log('Login successful. Redirecting to:', data.redirectUrl); // Debugging
-                window.location.href = data.redirectUrl; // Redirect to admin dashboard
+                console.log('Login successful. Redirecting to:', data.redirectUrl); 
+                window.location.href = data.redirectUrl; 
             } else if (data.status === 'error') {
-                console.error('Login error:', data.message); // Debugging
+                console.error('Login error:', data.message); 
                 // Show error message
                 errorMessage.textContent = data.message || 'Login failed.';
                 errorMessage.style.display = 'block';
