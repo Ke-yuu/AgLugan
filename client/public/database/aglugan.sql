@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 11, 2024 at 06:56 AM
+-- Generation Time: Dec 13, 2024 at 04:19 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -40,7 +40,32 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
 --
 
 INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
-(1, 'admin', '123');
+(1, 'admin', '$2y$10$Qp46ZzA.w0b23e/Yc3dZaeF9A4DYa2glVK5xoB.RgLlm2c9rTkAi2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `id_numbers`
+--
+
+DROP TABLE IF EXISTS `id_numbers`;
+CREATE TABLE IF NOT EXISTS `id_numbers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `faculty_id_num` varchar(50) DEFAULT NULL,
+  `student_id_num` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `id_numbers`
+--
+
+INSERT INTO `id_numbers` (`id`, `faculty_id_num`, `student_id_num`) VALUES
+(1, '2351426', NULL),
+(2, NULL, '2222725'),
+(3, NULL, '2234223'),
+(4, NULL, '2222723'),
+(5, NULL, '22224982');
 
 -- --------------------------------------------------------
 
@@ -51,8 +76,8 @@ INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
 DROP TABLE IF EXISTS `passenger_statistics`;
 CREATE TABLE IF NOT EXISTS `passenger_statistics` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time_slot` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time_slot` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookings_count` int DEFAULT '0',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -100,43 +125,24 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `status` enum('pending','completed','failed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` int NOT NULL,
   `user_id` int NOT NULL,
+  `payment_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`payment_id`),
   KEY `ride_id` (`ride_id`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `payments`
 --
 
-INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `status`, `phone_number`, `user_id`) VALUES
-(1, NULL, 13.00, 'Gcash', 'pending', 0, 0),
-(2, NULL, 13.00, 'cash', 'pending', 0, 0),
-(3, NULL, 13.00, 'cash', 'completed', 0, 0),
-(4, NULL, 13.00, 'Maya', 'failed', 0, 0),
-(5, 1001, 15.00, 'cash', 'pending', 0, 1),
-(6, 1001, 13.00, 'cash', 'pending', 0, 1),
-(7, 10007, 13.00, 'cash', 'pending', 0, 1),
-(8, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(9, 10008, 13.00, 'Maya', 'pending', 2147483647, 1),
-(10, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(11, 10007, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(12, 1001, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(13, 1001, 13.00, 'Gcash', 'pending', 2147483647, 22),
-(14, 1001, 13.00, 'Gcash', 'pending', 2147483647, 22),
-(15, 10016, 13.00, 'cash', 'pending', 0, 1),
-(16, 10016, 13.00, 'Gcash', 'pending', 2147483647, 1),
-(17, 1008, 18.00, 'cash', 'pending', 0, 1),
-(18, 1059, 18.00, 'cash', 'pending', 0, 1),
-(19, 1048, 18.00, 'Gcash', 'pending', 2147483647, 1),
-(20, 1059, 18.00, 'cash', 'pending', 0, 22),
-(21, 1054, 20.00, 'cash', 'pending', 0, 24),
-(22, 1051, 20.00, 'cash', 'pending', 0, 24),
-(23, 1052, 20.00, 'Gcash', 'pending', 2147483647, 24),
-(24, 1053, 13.00, 'cash', 'pending', 0, 24),
-(25, 1013, 13.00, 'Gcash', 'pending', 2147483647, 24),
-(26, 1059, 13.00, 'cash', 'pending', 0, 24),
-(27, 1053, 13.00, 'Maya', 'pending', 2147483647, 24);
+INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `status`, `phone_number`, `user_id`, `payment_date`) VALUES
+(26, 1059, 13.00, 'cash', 'pending', 0, 24, '2024-12-11 10:01:51'),
+(27, 1053, 13.00, 'Maya', 'pending', 2147483647, 24, '2024-12-11 10:01:51'),
+(28, 1048, 18.00, 'cash', 'pending', 0, 27, '2024-12-11 10:01:51'),
+(29, 1048, 18.00, 'cash', 'pending', 0, 27, '2024-12-11 10:01:51'),
+(30, 1018, 18.00, 'cash', 'pending', 0, 31, '2024-12-12 14:40:38'),
+(31, 1058, 18.00, 'cash', 'pending', 0, 32, '2024-12-12 14:42:54'),
+(32, 1059, 18.00, 'cash', 'pending', 0, 37, '2024-12-13 00:02:16');
 
 -- --------------------------------------------------------
 
@@ -277,18 +283,28 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`) VALUES
-(27, 'Kennely Ray', 'Kennely', 'krbucang@gmail.com', '$2a$04$1C4FKZqrYJSMO3J/n74wm.MyUdf4Pgn0RpOz8OCQriaW.SMAlLYfK', '9984276714', 'Student', '/uploads/profile_pictures/1733812221356-121137962-Blackpink_RosÃ©_Rimowa_1.jpg');
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`, `id_number`) VALUES
+(27, 'Kennely Ray', 'Kennely', 'krbucang@gmail.com', '$2b$10$PKPD5XPXhnK26H2G4R6wBO55vrfYT7z27IdZUGPSYWO3FBme8N0X2', '9984276714', 'Student', '/uploads/profile_pictures/1733885279499-bot.png', NULL),
+(28, 'Aisea Marie Factor', 'Aisea', 'asieamarie@gmail.com', '$2b$10$8wSIRmu0rB8mecY6TsA/7uNTBaViMYvuVfaEteiRS5lakMOTyXJxu', '9183724988', 'Student', '/uploads/profile_pictures/1733847649371-4043260_avatar_male_man_portrait_icon.ico', NULL),
+(29, 'Bleu Cordon', 'Bleu', 'condonbleu@gmail.com', '$2b$10$9Iso7ZsSTKRBCxCLVhbq6eypX6LY4.Yw7Jso4hdY0na4kQ07x.KXG', '9324515486', 'Faculty/Staff', '/uploads/profile_pictures/1733852564901-IMG_2914.jpeg', NULL),
+(30, 'Martin Kapitan', 'Martin', 'kapitanmartin@gmail.com', '$2b$10$6p4PWt5901vHTalFLmlEdOTCiomaEYLk/zRvMtD8zB7RZiByL5u1y', '9234693982', 'Driver', NULL, NULL),
+(31, 'Kendal Bucang', 'Cappucinaur', 'kabucang@gmail.com', '$2b$10$KjIDiPiM0ml95OHqZbHlButHrBujwQ60QjWIfMUr68.yyiuhvw60u', '9496629168', 'Student', '/uploads/profile_pictures/1733985574681-DO_Start_DO_End_and_DO_Difference_1.png', NULL),
+(32, 'JM', 'Jm', 'jmpasngadan@gmail.com', '$2b$10$acETuiip13HihzXocAaU8OIXk8eBncywYjbKsBMFDjUvn9Pa1xQUu', '9299571186', 'Student', NULL, NULL),
+(35, 'Daniel Chuyat', 'Yagako', 'daniel@gmail.com', '$2b$10$2gpkQpYoq2Qv67iALJ3ZYuT9ynSZJB1R7PiQOo6eXRIGe5DsEr3zi', '9857463745', 'Student', NULL, '2222725'),
+(34, 'Ben Tennison', 'Ben10', 'benandben@gmail.com', '$2b$10$21PwUxE6brOIKFSBCxby0.AJwiphdFhJAIGBTH.anqaREG5lGGxGi', '9847563423', 'Student', NULL, '2234223'),
+(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Student', NULL, '2222723'),
+(37, 'Jermin Odcheo', 'Jermin', 'jermsodcheo@gmail.com', '$2b$10$HKgp2SpcCumUmbZY0FYUmu3jciVIV2hb5WZ5YQACIYbDoOfSIUQ.e', '9785674856', 'Student', '/uploads/profile_pictures/1734063456700-4043260_avatar_male_man_portrait_icon.ico', '22224982');
 
 -- --------------------------------------------------------
 
