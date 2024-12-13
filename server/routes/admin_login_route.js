@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const router = express.Router();
 
@@ -9,85 +10,58 @@ const dbConfig = {
     database: 'aglugan'
 };
 
+// Middleware to check if admin is logged in
+function isAdminLoggedIn(req, res, next) {
+    if (req.session && req.session.isAdmin) {
+        next();
+    } else {
+        res.status(401).json({ status: 'error', message: 'Unauthorized access' });
+    }
+}
+
+// Admin Login Route
 router.post('/admin-login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ status: 'error', message: 'Username and password are required.' });
+    }
+
     try {
-        console.log('Admin login attempt received:', req.body);
-        const { username, password } = req.body;
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute('SELECT * FROM admin_users WHERE username = ?', [username]);
 
-        if (!username || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Username and password are required'
-            });
+        if (rows.length === 0) {
+            return res.status(401).json({ status: 'error', message: 'Invalid username or password.' });
         }
 
-        let connection;
-        try {
-            connection = await mysql.createConnection(dbConfig);
-            
-            // Convert values to strings for comparison
-            const sanitizedUsername = String(username).trim();
-            const sanitizedPassword = String(password).trim();
-            
-            console.log('Sanitized credentials:', {
-                username: sanitizedUsername,
-                password: sanitizedPassword
-            });
+        const admin = rows[0];
+        const isPasswordMatch = await bcrypt.compare(password, admin.password);
 
-            const [rows] = await connection.execute(
-                'SELECT * FROM admin_users WHERE username = ? AND password = ?',
-                [sanitizedUsername, sanitizedPassword]
-            );
-
-            console.log('Database response:', rows);
-
-            if (!rows || rows.length === 0) {
-                return res.status(401).json({
-                    status: 'error',
-                    message: 'Invalid administrator credentials'
-                });
-            }
-
-            const admin = rows[0];
-            console.log('Found admin:', admin);
-
-            // Set session
-            req.session.admin_id = admin.id;
-            req.session.username = admin.username;
-            req.session.isAdmin = true;
-
-            // Save session explicitly
-            req.session.save((err) => {
-                if (err) {
-                    console.error('Session save error:', err);
-                    return res.status(500).json({
-                        status: 'error',
-                        message: 'Session error occurred'
-                    });
-                }
-
-                console.log('Session saved successfully:', req.session);
-                return res.json({
-                    status: 'success',
-                    message: 'Admin login successful',
-                    redirectUrl: '/admindashboard'
-                });
-            });
-
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
+        if (!isPasswordMatch) {
+            return res.status(401).json({ status: 'error', message: 'Invalid username or password.' });
         }
 
+        res.json({ status: 'success', message: 'Login successful', redirectUrl: '/admindashboard' });
     } catch (error) {
-        console.error('Admin login error:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Server error occurred'
-        });
+        console.error('Error during login:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error.' });
     }
 });
 
-// The rest of your code remains the same...
+module.exports = router;
+
+
+// Admin logout route
+router.post('/admin-logout', isAdminLoggedIn, (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).json({ status: 'error', message: 'Failed to log out' });
+        }
+
+        res.json({ status: 'success', message: 'Logged out successfully' });
+    });
+});
+
 module.exports = router;

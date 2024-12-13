@@ -21,6 +21,7 @@ const processPaymentRoute = require('./routes/process_payment_route');
 const driverDashboardRoute = require('./routes/driver_dashboard_route');
 const adminLoginRoute = require('./routes/admin_login_route');
 const getUsersRoute = require('./routes/get_users_route');
+const adminDashboardRoute = require('./routes/admin_dashboard_route');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -79,6 +80,7 @@ app.use('/api', processPaymentRoute);
 app.use('/api', driverDashboardRoute);
 app.use('/api', adminLoginRoute);
 app.use('/api', getUsersRoute);
+app.use('/api', adminDashboardRoute);
 
 // HTML Routes
 const htmlRoutes = {
