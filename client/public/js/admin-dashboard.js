@@ -35,12 +35,16 @@ document.addEventListener('DOMContentLoaded', function () {
     
         // Insert search components
         const usersList = document.getElementById('users-list');
-        usersList.parentNode.insertBefore(userSearchContainer, usersList);
+        if (usersList) {
+            usersList.parentNode.insertBefore(userSearchContainer, usersList);
+        }
     
         const ridesTable = document.getElementById('rides-table');
-        ridesTable.parentNode.insertBefore(rideSearchContainer, ridesTable);
+        if (ridesTable) {
+            ridesTable.parentNode.insertBefore(rideSearchContainer, ridesTable);
+        }
     
-        
+        // Add event listeners with debouncing
         userSearchInput.addEventListener('input', debounce(function(e) {
             fetchUsers(e.target.value.trim());
         }, 300));
@@ -49,14 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchRides(e.target.value.trim());
         }, 300));
     }
-    // Initialize search inputs
+
+    // Initialize everything
     setupSearch();
-    
-    // Immediately fetch rides and users when the page loads
     fetchRides();
     fetchUsers();
     setupLogout();
 
+    // Form handlers setup
     const addDriverForm = document.getElementById('add-driver-form');
     const addIdForm = document.getElementById('add-id-form');
 
@@ -85,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const data = await response.json();
             alert(data.message || 'Driver added successfully.');
-            fetchUsers(); // Refresh the user list after adding a driver
+            fetchUsers();
         } catch (error) {
             console.error('Error adding driver:', error);
             alert('Failed to add driver.');
@@ -115,46 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Setup Search Function
-function setupSearch() {
-    // Create search container for users
-    const userSearchContainer = document.createElement('div');
-    userSearchContainer.className = 'search-container';
-    const userSearchInput = document.createElement('input');
-    userSearchInput.type = 'text';
-    userSearchInput.id = 'user-search';
-    userSearchInput.className = 'search-input';
-    userSearchInput.placeholder = 'Search users by name, email, or type...';
-    userSearchContainer.appendChild(userSearchInput);
-
-    // Create search container for rides
-    const rideSearchContainer = document.createElement('div');
-    rideSearchContainer.className = 'search-container';
-    const rideSearchInput = document.createElement('input');
-    rideSearchInput.type = 'text';
-    rideSearchInput.id = 'ride-search';
-    rideSearchInput.className = 'search-input';
-    rideSearchInput.placeholder = 'Search rides by location, status...';
-    rideSearchContainer.appendChild(rideSearchInput);
-
-    // Insert search inputs
-    const usersList = document.getElementById('users-list');
-    usersList.parentNode.insertBefore(userSearchContainer, usersList);
-
-    const ridesTable = document.getElementById('rides-table');
-    ridesTable.parentNode.insertBefore(rideSearchContainer, ridesTable);
-
-    // Add event listeners with debouncing
-    userSearchInput.addEventListener('input', debounce(function(e) {
-        fetchUsers(e.target.value);
-    }, 300));
-
-    rideSearchInput.addEventListener('input', debounce(function(e) {
-        fetchRides(e.target.value);
-    }, 300));
-}
-
-// Debounce function
+// Utility Functions
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -167,6 +132,7 @@ function debounce(func, wait) {
     };
 }
 
+// Data Fetching Functions
 function fetchRides(searchQuery = '') {
     const url = searchQuery 
         ? `/api/rides?search=${encodeURIComponent(searchQuery)}`
@@ -180,6 +146,8 @@ function fetchRides(searchQuery = '') {
         .then(data => {
             console.log('Received rides data:', data);
             const ridesList = document.getElementById('rides-list');
+            if (!ridesList) return;
+            
             ridesList.innerHTML = ''; 
 
             if (!data || data.length === 0) {
@@ -190,7 +158,6 @@ function fetchRides(searchQuery = '') {
                 return;
             }
 
-            // Filter rides 
             const filteredRides = searchQuery 
                 ? data.filter(ride => 
                     ride.ride_id.toString().includes(searchQuery) ||
@@ -231,30 +198,17 @@ function fetchRides(searchQuery = '') {
         .catch(error => {
             console.error('Error fetching rides:', error);
             const ridesList = document.getElementById('rides-list');
-            ridesList.innerHTML = `
-                <tr>
-                    <td colspan="8" class="error-message">
-                        Error loading rides. Please try again later.
-                    </td>
-                </tr>
-            `;
+            if (ridesList) {
+                ridesList.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="error-message">
+                            Error loading rides. Please try again later.
+                        </td>
+                    </tr>
+                `;
+            }
         });
 }
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Get the ride search input and add the event listener
-    const rideSearchInput = document.getElementById('ride-search');
-    if (rideSearchInput) {
-        rideSearchInput.addEventListener('input', (e) => {
-            const searchValue = e.target.value.trim();
-            fetchRides(searchValue);
-        });
-    }
-    
-    // Initial fetch of all rides
-    fetchRides();
-});
 
 function fetchUsers(searchQuery = '') {
     const url = searchQuery 
@@ -269,6 +223,8 @@ function fetchUsers(searchQuery = '') {
         .then(data => {
             console.log('Received users data:', data);
             const usersList = document.getElementById('users-list');
+            if (!usersList) return;
+            
             usersList.innerHTML = ''; 
 
             if (data.length === 0) {
@@ -276,7 +232,6 @@ function fetchUsers(searchQuery = '') {
                 return;
             }
 
-            // Filter users 
             const filteredUsers = searchQuery 
                 ? data.filter(user => 
                     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -295,52 +250,24 @@ function fetchUsers(searchQuery = '') {
                 userElement.className = 'user-item';
                 userElement.textContent = `${user.name} (${user.email}) - ${user.user_type}`;
                 userElement.setAttribute('data-user-id', user.user_id);
-                
-                // Add click event for modal
-                userElement.onclick = () => {
-                    showUserModal(user);
-                };
-                
+                userElement.onclick = () => showUserModal(user);
                 usersList.appendChild(userElement);
             });
         })
         .catch(error => {
             console.error('Error fetching users:', error);
             const usersList = document.getElementById('users-list');
-            usersList.innerHTML = '<div class="error-message">Error loading users. Please try again later.</div>';
+            if (usersList) {
+                usersList.innerHTML = '<div class="error-message">Error loading users. Please try again later.</div>';
+            }
         });
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Get the search input and add the event listener
-    const userSearchInput = document.getElementById('user-search');
-    if (userSearchInput) {
-        userSearchInput.addEventListener('input', (e) => {
-            const searchValue = e.target.value.trim();
-            fetchUsers(searchValue);
-        });
-    }
-    
-    // Initial fetch of all users
-    fetchUsers();
-});
-
-// Update your setupSearch function to ensure proper event handling
-function setupSearch() {
-    const userSearchInput = document.getElementById('user-search');
-    if (userSearchInput) {
-        userSearchInput.addEventListener('input', (e) => {
-            fetchUsers(e.target.value.trim());
-        });
-    }
-}
-
-// Your existing functions remain the same
+// Modal and User Management Functions
 function showUserModal(user) {
-    console.log('User object:', user);
     const userModal = document.getElementById('user-modal');
     const modalContent = document.getElementById('user-modal-content');
+    if (!userModal || !modalContent) return;
 
     modalContent.innerHTML = `
         <h2>User Details</h2>
@@ -358,7 +285,9 @@ function showUserModal(user) {
 
 function closeUserModal() {
     const userModal = document.getElementById('user-modal');
-    userModal.style.display = 'none';
+    if (userModal) {
+        userModal.style.display = 'none';
+    }
 }
 
 function removeRide(rideId) {
@@ -384,7 +313,7 @@ async function banUser(userId) {
         const data = await response.json();
         if (data.status === 'success') {
             alert('User successfully banned.');
-            fetchUsers(); // Refresh the user list
+            fetchUsers();
             closeUserModal();
         } else {
             alert(data.message || 'Failed to ban user.');

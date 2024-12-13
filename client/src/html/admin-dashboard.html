@@ -29,18 +29,10 @@
                 <!-- View Users Section -->
                 <div class="section small-section">
                     <h2>View Users</h2>
-                    <ul id="users-list">
-                        <!-- Users will be dynamically loaded here -->
-                    </ul>
-                </div>
-
-                <div class="section small-section">
-                    <h2>View Users</h2>
                     <div class="search-container">
                         <input type="text" id="user-search" class="search-input" placeholder="Search users by name, username, email...">
                     </div>
                     <ul id="users-list">
-                        <!-- Users will be dynamically loaded here -->
                     </ul>
                 </div>
     
@@ -107,6 +99,9 @@
             <!-- Bottom Full Width Section -->
             <div class="section full-width-section">
                 <h2>View Rides</h2>
+                <div class="search-container">
+                    <input type="text" id="ride-search" class="search-input" placeholder="Search rides by ID, location, status...">
+                </div>
                 <div class="table-container">
                     <table id="rides-table">
                         <thead>
@@ -130,38 +125,21 @@
         </div>
     </main>
     
-    <div class="section full-width-section">
-        <h2>View Rides</h2>
-        <div class="search-container">
-            <input type="text" id="ride-search" class="search-input" placeholder="Search rides by ID, location, status...">
-        </div>
-        <div class="table-container">
-            <!-- Rest of your table code -->
-        </div>
-    </div>
-    
-    <!-- User Modal -->
+    <!-- User Modal (Single) -->
     <div id="user-modal" class="modal">
-        <div id="user-modal-content" class="modal-content">
-            <!-- Content will be dynamically inserted here -->
+        <div class="modal-content">
+            <span class="close-btn" id="closeUserModal">&times;</span>
+            <h2>User Details</h2>
+            <div id="user-modal-content">
+                <p><strong>Username:</strong> <span id="modal-username"></span></p>
+                <p><strong>Name:</strong> <span id="modal-name"></span></p>
+                <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                <p><strong>Number:</strong> <span id="modal-number"></span></p>
+                <p><strong>ID Number:</strong> <span id="modal-id-number"></span></p>
+            </div>
+            <button id="banUserButton" class="modal-action-btn">Ban User</button>
         </div>
     </div>
-
-    <div id="userModal" class="modal">
-        <div class="modal-content">
-          <span class="close-btn" id="closeUserModal">&times;</span>
-          <h2>User Details</h2>
-          <div id="userDetails">
-            <p><strong>Username:</strong> <span id="modal-username"></span></p>
-            <p><strong>Name:</strong> <span id="modal-name"></span></p>
-            <p><strong>Password:</strong> <span id="modal-password"></span></p>
-            <p><strong>Email:</strong> <span id="modal-email"></span></p>
-            <p><strong>Number:</strong> <span id="modal-number"></span></p>
-            <p><strong>ID Number:</strong> <span id="modal-id-number"></span></p>
-          </div>
-          <button id="banUserButton" class="modal-action-btn">Ban User</button>
-        </div>
-      </div>
 
     <script src="../js/admin-dashboard.js"></script>
 </body>
