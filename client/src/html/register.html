@@ -18,7 +18,7 @@
                 <button class="login-btn"><strong>Login</strong></button>
             </a>
         </header>
-        
+
         <!-- Registration Form Section -->
         <div class="register-section">
             <form id="registrationForm" class="form-container">
@@ -52,12 +52,26 @@
 
                 <label for="user_type">User Type:</label>
                 <select id="user_type" name="user_type" required>
+                    <option value="" disabled selected>Select User type...</option>
                     <option value="Student">Student</option>
                     <option value="Faculty/Staff">Faculty/Staff</option>
-                    <option value="Driver">Driver</option>
                 </select>
 
-                <button type="submit" class="register-btn"><i class="fas fa-user-plus"></i> Confirm</button>
+                <input type="hidden" id="id_number" name="id_number" readonly>
+
+                <button type="submit" class="register-btn" id="registerButton" disabled><i class="fas fa-user-plus"></i> Confirm</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ID Number Modal -->
+    <div id="idModal" class="modal">
+        <div class="modal-content">
+            <span id="closeIdModal" class="close-btn">&times;</span>
+            <h2>Enter Your ID Number</h2>
+            <form id="idForm">
+                <input type="text" id="idNumber" name="idNumber" placeholder="Enter your ID Number" required>
+                <button type="submit" class="verify-btn">Verify</button>
             </form>
         </div>
     </div>

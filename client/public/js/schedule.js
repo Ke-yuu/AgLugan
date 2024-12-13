@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     filterButton.onclick = () => modal.style.display = "block";
-    
+
     if (closeButton) {
         closeButton.onclick = () => modal.style.display = "none";
     }
@@ -54,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Create table row for each ride
     function createRideRow(ride, currentStatus) {
         const tr = document.createElement('tr');
-        
-        // Format waiting time
+
         const formattedWaitingTime = ride.waiting_time ? ride.waiting_time.split(".")[0] : "N/A";
 
         tr.innerHTML = `
@@ -70,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </td>
         `;
 
-        // Add booking button functionality if ride is active
         if (currentStatus.toLowerCase() !== "inactive") {
             const bookButton = tr.querySelector('.booking-button');
             bookButton.onclick = () => {
@@ -122,8 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 data.forEach(ride => {
                     let currentStatus = ride.status;
-                    
-                    // Update ride status based on current time
+
                     const rideTimeRange = ride.time_range ? ride.time_range.split('-') : null;
                     if (rideTimeRange && rideTimeRange.length === 2) {
                         const [startHour, startMinute] = rideTimeRange[0].split(':').map(Number);
@@ -190,4 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show all rides initially
     filterRides();
+
+    // Refresh rides every 10 seconds
+    setInterval(filterRides, 10000);
 });

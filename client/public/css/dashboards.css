@@ -495,7 +495,16 @@ h1, p {
 }
 
 #profile-picture-input {
-  display: none;
+  background-color: #ff0000;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 38%; 
+  transition: background-color 0.3s ease;
 }
 
 /* Form Input Styling */
@@ -559,11 +568,6 @@ input:focus {
   width: 38%; 
   margin-left: 158px;
   transition: background-color 0.3s ease;
-}
-
-.save-btn:hover,
-.change-password-btn:hover {
-  background-color: #910b0b;
 }
 
 /* Styling for #detailsModal */
