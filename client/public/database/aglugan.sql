@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2024 at 06:14 AM
+-- Generation Time: Dec 13, 2024 at 12:31 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin_users`
@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
 
 INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
 (1, 'admin', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua'),
-(3, 'admin2', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua');
+(3, 'admin2', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua'),
+(4, 'admin3', 'admin123');
 
 -- --------------------------------------------------------
 

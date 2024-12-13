@@ -10,16 +10,6 @@ const dbConfig = {
     database: 'aglugan'
 };
 
-// Middleware to check if admin is logged in
-function isAdminLoggedIn(req, res, next) {
-    if (req.session && req.session.isAdmin) {
-        next();
-    } else {
-        res.status(401).json({ status: 'error', message: 'Unauthorized access' });
-    }
-}
-
-// Admin Login Route
 router.post('/admin-login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -32,15 +22,25 @@ router.post('/admin-login', async (req, res) => {
         const [rows] = await connection.execute('SELECT * FROM admin_users WHERE username = ?', [username]);
 
         if (rows.length === 0) {
+            console.error('Username not found:', username);
             return res.status(401).json({ status: 'error', message: 'Invalid username or password.' });
         }
 
         const admin = rows[0];
+        console.log('Admin data fetched from database:', admin);
+
+        // Compare password with hash
         const isPasswordMatch = await bcrypt.compare(password, admin.password);
+        console.log('Password match status:', isPasswordMatch);
 
         if (!isPasswordMatch) {
             return res.status(401).json({ status: 'error', message: 'Invalid username or password.' });
         }
+
+        // Set session
+        req.session.isAdmin = true;
+        req.session.adminId = admin.id;
+        console.log('Session created:', req.session);
 
         res.json({ status: 'success', message: 'Login successful', redirectUrl: '/admindashboard' });
     } catch (error) {
@@ -53,13 +53,13 @@ module.exports = router;
 
 
 // Admin logout route
-router.post('/admin-logout', isAdminLoggedIn, (req, res) => {
+router.post('/admin-logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            console.error('Logout error:', err);
+            console.error('Error destroying session:', err);
             return res.status(500).json({ status: 'error', message: 'Failed to log out' });
         }
-
+        res.clearCookie('connect.sid');
         res.json({ status: 'success', message: 'Logged out successfully' });
     });
 });

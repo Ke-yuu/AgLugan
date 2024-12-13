@@ -21,21 +21,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
-                credentials: 'include'
+                credentials: 'include', // Include cookies for session management
             });
 
             const data = await response.json();
 
             if (data.status === 'success') {
-                window.location.href = data.redirectUrl; 
-            } else {
+                console.log('Login successful. Redirecting to:', data.redirectUrl); // Debugging
+                window.location.href = data.redirectUrl; // Redirect to admin dashboard
+            } else if (data.status === 'error') {
+                console.error('Login error:', data.message); // Debugging
                 // Show error message
                 errorMessage.textContent = data.message || 'Login failed.';
                 errorMessage.style.display = 'block';
+            } else {
+                // Handle unexpected responses
+                console.error('Unexpected response from server:', data);
+                errorMessage.textContent = 'An unexpected error occurred. Please try again.';
+                errorMessage.style.display = 'block';
             }
         } catch (error) {
-            console.error('Login error:', error);
-            errorMessage.textContent = 'An error occurred. Please try again.';
+            console.error('Fetch error:', error); // Debugging
+            errorMessage.textContent = 'A network error occurred. Please check your connection.';
             errorMessage.style.display = 'block';
         } finally {
             // Re-enable the submit button

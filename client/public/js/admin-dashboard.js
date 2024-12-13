@@ -1,10 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    
-    window.onload = function () {
-        if (performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
-            window.location.reload();
-        }
-    };
+    // Check session status on page load
+    fetch('/api/check-session', { method: 'GET', credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status !== 'logged_in' || data.type !== 'admin') {
+                // If not logged in, redirect to the login page
+                alert('Your session has expired. Please log in again.');
+                window.location.href = '/adminlogin';
+            }
+        })
+        .catch(() => {
+            alert('Error verifying session. Redirecting to login.');
+            window.location.href = '/adminlogin';
+        });
+
+        window.onload = function () {
+            if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+                window.location.reload();
+            }
+        };    
 
     function setupSearch() {
         // Get existing search inputs

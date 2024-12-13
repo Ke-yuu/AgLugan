@@ -57,7 +57,10 @@ app.use(session({
         sameSite: 'lax',
     }
 }));
-
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+});
 // Static files middleware
 app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 app.use(express.static(path.join(__dirname, '..', 'client', 'src')));
@@ -81,6 +84,7 @@ app.use('/api', driverDashboardRoute);
 app.use('/api', adminLoginRoute);
 app.use('/api', getUsersRoute);
 app.use('/api', adminDashboardRoute);
+app.use('/api/admin-dashboard', adminDashboardRoute);
 
 // HTML Routes
 const htmlRoutes = {

@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const router = express.Router();
+const { isAdminLoggedIn } = require('../middleware/adminMiddleware');
+router.use(isAdminLoggedIn);
 
 const dbConfig = {
     host: 'localhost',
@@ -9,7 +11,6 @@ const dbConfig = {
     password: '',
     database: 'aglugan',
 };
-
 router.get('/rides', async (req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -55,7 +56,7 @@ router.get('/rides', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
+module.exports = router;
 
 router.get('/vusers', async (req, res) => {
     try {
@@ -86,7 +87,7 @@ router.get('/vusers', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
+module.exports = router;
 // Add Driver
 router.post('/add-driver', async (req, res) => {
     const { username, name, password, driverId, plateNumber, vehicleCapacity } = req.body;
