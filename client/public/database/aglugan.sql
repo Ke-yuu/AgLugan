@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2024 at 04:19 AM
+-- Generation Time: Dec 13, 2024 at 06:14 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -33,14 +33,15 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin_users`
 --
 
 INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
-(1, 'admin', '$2y$10$Qp46ZzA.w0b23e/Yc3dZaeF9A4DYa2glVK5xoB.RgLlm2c9rTkAi2');
+(1, 'admin', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua'),
+(3, 'admin2', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua');
 
 -- --------------------------------------------------------
 
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `id_numbers` (
   `faculty_id_num` varchar(50) DEFAULT NULL,
   `student_id_num` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `id_numbers`
@@ -65,7 +66,8 @@ INSERT INTO `id_numbers` (`id`, `faculty_id_num`, `student_id_num`) VALUES
 (2, NULL, '2222725'),
 (3, NULL, '2234223'),
 (4, NULL, '2222723'),
-(5, NULL, '22224982');
+(5, NULL, '22224982'),
+(6, '2978909', NULL);
 
 -- --------------------------------------------------------
 
@@ -179,15 +181,15 @@ INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_l
 (1023, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:00-17:30'),
 (1021, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:00-16:30'),
 (1019, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:00-15:30'),
-(1017, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:00-14:30'),
-(1015, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '13:00-13:30'),
+(1017, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '14:00-14:30'),
+(1015, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:00-13:30'),
 (1002, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '06:30-07:00'),
 (1058, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '14:30-15:00'),
-(1057, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '14:00-14:30'),
-(1056, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '13:30-14:00'),
-(1055, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '13:00-13:30'),
-(1054, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '12:30-13:00'),
-(1053, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Loading', 13.00, '00:20:00.000000', '12:00-12:30'),
+(1057, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Loading', 13.00, '00:20:00.000000', '14:00-14:30'),
+(1056, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '13:30-14:00'),
+(1055, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '13:00-13:30'),
+(1054, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '12:30-13:00'),
+(1053, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '12:00-12:30'),
 (1052, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '11:30-12:00'),
 (1051, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '11:00-11:30'),
 (1050, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '10:30-11:00'),
@@ -198,9 +200,9 @@ INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_l
 (1022, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:30-17:00'),
 (1020, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:30-16:00'),
 (1018, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:30-15:00'),
-(1016, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '13:30-14:00'),
-(1014, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '12:30-13:00'),
-(1013, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '12:00-12:30'),
+(1016, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:30-14:00'),
+(1014, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:30-13:00'),
+(1013, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:00-12:30'),
 (1012, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:30-12:00'),
 (1011, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:00-11:30'),
 (1010, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:30-11:00'),
@@ -231,11 +233,11 @@ INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_l
 (1090, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '10:30-11:00'),
 (1091, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '11:00-11:30'),
 (1092, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '11:30-12:00'),
-(1093, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Loading', 13.00, '00:20:00.000000', '12:00-12:30'),
-(1094, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '12:30-13:00'),
-(1095, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '13:00-13:30'),
-(1096, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '13:30-14:00'),
-(1097, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '14:00-14:30'),
+(1093, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '12:00-12:30'),
+(1094, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '12:30-13:00'),
+(1095, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '13:00-13:30'),
+(1096, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '13:30-14:00'),
+(1097, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Loading', 13.00, '00:20:00.000000', '14:00-14:30'),
 (1098, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '14:30-15:00'),
 (1099, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '15:00-15:30'),
 (1100, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '15:30-16:00'),
@@ -255,18 +257,17 @@ INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_l
 (1130, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:30-11:00'),
 (1131, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:00-11:30'),
 (1132, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:30-12:00'),
-(1133, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '12:00-12:30'),
-(1134, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '12:30-13:00'),
-(1135, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '13:00-13:30'),
-(1136, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '13:30-14:00'),
-(1137, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:00-14:30'),
+(1133, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:00-12:30'),
+(1134, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:30-13:00'),
+(1135, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:00-13:30'),
+(1136, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:30-14:00'),
+(1137, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '14:00-14:30'),
 (1138, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:30-15:00'),
 (1139, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:00-15:30'),
 (1140, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:30-16:00'),
 (1141, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:00-16:30'),
 (1142, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:30-17:00'),
-(1143, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:00-17:30'),
-(1144, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:30-18:00');
+(1143, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:00-17:30');
 
 -- --------------------------------------------------------
 
@@ -285,26 +286,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `driver_id` (`driver_id`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`, `id_number`) VALUES
-(27, 'Kennely Ray', 'Kennely', 'krbucang@gmail.com', '$2b$10$PKPD5XPXhnK26H2G4R6wBO55vrfYT7z27IdZUGPSYWO3FBme8N0X2', '9984276714', 'Student', '/uploads/profile_pictures/1733885279499-bot.png', NULL),
-(28, 'Aisea Marie Factor', 'Aisea', 'asieamarie@gmail.com', '$2b$10$8wSIRmu0rB8mecY6TsA/7uNTBaViMYvuVfaEteiRS5lakMOTyXJxu', '9183724988', 'Student', '/uploads/profile_pictures/1733847649371-4043260_avatar_male_man_portrait_icon.ico', NULL),
-(29, 'Bleu Cordon', 'Bleu', 'condonbleu@gmail.com', '$2b$10$9Iso7ZsSTKRBCxCLVhbq6eypX6LY4.Yw7Jso4hdY0na4kQ07x.KXG', '9324515486', 'Faculty/Staff', '/uploads/profile_pictures/1733852564901-IMG_2914.jpeg', NULL),
-(30, 'Martin Kapitan', 'Martin', 'kapitanmartin@gmail.com', '$2b$10$6p4PWt5901vHTalFLmlEdOTCiomaEYLk/zRvMtD8zB7RZiByL5u1y', '9234693982', 'Driver', NULL, NULL),
-(31, 'Kendal Bucang', 'Cappucinaur', 'kabucang@gmail.com', '$2b$10$KjIDiPiM0ml95OHqZbHlButHrBujwQ60QjWIfMUr68.yyiuhvw60u', '9496629168', 'Student', '/uploads/profile_pictures/1733985574681-DO_Start_DO_End_and_DO_Difference_1.png', NULL),
-(32, 'JM', 'Jm', 'jmpasngadan@gmail.com', '$2b$10$acETuiip13HihzXocAaU8OIXk8eBncywYjbKsBMFDjUvn9Pa1xQUu', '9299571186', 'Student', NULL, NULL),
-(35, 'Daniel Chuyat', 'Yagako', 'daniel@gmail.com', '$2b$10$2gpkQpYoq2Qv67iALJ3ZYuT9ynSZJB1R7PiQOo6eXRIGe5DsEr3zi', '9857463745', 'Student', NULL, '2222725'),
-(34, 'Ben Tennison', 'Ben10', 'benandben@gmail.com', '$2b$10$21PwUxE6brOIKFSBCxby0.AJwiphdFhJAIGBTH.anqaREG5lGGxGi', '9847563423', 'Student', NULL, '2234223'),
-(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Student', NULL, '2222723'),
-(37, 'Jermin Odcheo', 'Jermin', 'jermsodcheo@gmail.com', '$2b$10$HKgp2SpcCumUmbZY0FYUmu3jciVIV2hb5WZ5YQACIYbDoOfSIUQ.e', '9785674856', 'Student', '/uploads/profile_pictures/1734063456700-4043260_avatar_male_man_portrait_icon.ico', '22224982');
+INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`, `id_number`, `driver_id`) VALUES
+(28, 'Aisea Marie Factor', 'Aisea', 'asieamarie@gmail.com', '$2b$10$8wSIRmu0rB8mecY6TsA/7uNTBaViMYvuVfaEteiRS5lakMOTyXJxu', '9183724988', 'Student', '/uploads/profile_pictures/1733847649371-4043260_avatar_male_man_portrait_icon.ico', NULL, NULL),
+(30, 'Martin Kapitan', 'Martin', 'kapitanmartin@gmail.com', '$2b$10$6p4PWt5901vHTalFLmlEdOTCiomaEYLk/zRvMtD8zB7RZiByL5u1y', '9234693982', 'Driver', NULL, NULL, NULL),
+(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Student', NULL, '2222723', NULL),
+(38, 'Karding Kenkoy', 'Karding', '', '$2b$10$NvtxuNTJQ3nmPC1TBQzgtu5OZvM0Rdos9ZmbP7NjLeHuJ1nWsexHq', NULL, 'Driver', NULL, NULL, 103);
 
 -- --------------------------------------------------------
 
@@ -320,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vehicles`
@@ -328,7 +325,8 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
 
 INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
 (1, 101, 23, 'WEB 445'),
-(2, 102, 23, 'SAF 214');
+(2, 102, 23, 'SAF 214'),
+(3, 103, 23, 'AHL 725');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
