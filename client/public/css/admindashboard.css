@@ -513,3 +513,36 @@ input, select {
   }
 }
 
+/* Search input design*/
+.search-container {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #1b1b1b;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  color: #f8f8f8;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #444;
+  background-color: #1b1b1b;
+}
+
+.search-input::placeholder {
+  color: #666666;
+}
+
+#user-search, #ride-search {
+  background-color: #1b1b1b;
+  color: #f8f8f8;
+  border: 1px solid #333333;
+  margin-bottom: 15px;
+}

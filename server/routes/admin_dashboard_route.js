@@ -10,27 +10,82 @@ const dbConfig = {
     database: 'aglugan',
 };
 
-// Fetch Users
+router.get('/rides', async (req, res) => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const searchQuery = req.query.search ? `%${req.query.search}%` : null;
+
+        let query = `
+            SELECT 
+                r.ride_id,
+                r.start_location,
+                r.end_location,
+                r.status,
+                r.fare,
+                r.time_range,
+                v.plate_number
+            FROM rides r
+            LEFT JOIN vehicles v ON r.driver_id = v.driver_id
+            WHERE r.status != 'Inactive'
+        `;
+
+        let params = [];
+
+        if (searchQuery) {
+            query += ` AND (
+                r.ride_id LIKE ? OR
+                r.start_location LIKE ? OR
+                r.end_location LIKE ? OR
+                r.status LIKE ? OR
+                v.plate_number LIKE ?
+            )`;
+            params = [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery];
+        }
+
+        query += ' ORDER BY r.ride_id DESC';
+
+        const [rides] = await connection.execute(query, params);
+        console.log('Database rides response:', rides); 
+        
+        await connection.end();
+        res.json(rides);
+
+    } catch (error) {
+        console.error('Error fetching rides:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 router.get('/vusers', async (req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
+        const searchQuery = req.query.search ? `%${req.query.search}%` : null;
 
-        // Include phone_number and id_number in the query
-        const [users] = await connection.execute(
-            'SELECT user_id, name, username, email, user_type, phone_number, id_number FROM users'
-        );
+        let query = `
+            SELECT user_id, name, username, email, user_type, phone_number, id_number 
+            FROM users
+        `;
+        let params = [];
 
-        console.log('Fetched users:', users);
+        if (searchQuery) {
+            query += ` WHERE 
+                name LIKE ? OR 
+                email LIKE ? OR 
+                user_type LIKE ?
+            `;
+            params = [searchQuery, searchQuery, searchQuery];
+        }
+
+        const [users] = await connection.execute(query, params);
         await connection.end();
-
         res.json(users);
+
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
-module.exports = router;
 
 // Add Driver
 router.post('/add-driver', async (req, res) => {
