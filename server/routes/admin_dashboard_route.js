@@ -135,7 +135,7 @@ router.post('/add-driver', async (req, res) => {
             await connection.end();
             return res.status(409).json({ message: 'Username or Driver ID already exists.' });
         }
-
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await connection.execute(
@@ -156,10 +156,8 @@ router.post('/add-driver', async (req, res) => {
     }
 });
 
-// Add ID Number
 router.post('/add-id', async (req, res) => {
     const { idNumber, idType } = req.body;
-
     if (!idNumber || !idType) {
         return res.status(400).json({ message: 'ID number and user type are required.' });
     }
@@ -168,9 +166,25 @@ router.post('/add-id', async (req, res) => {
 
     try {
         const connection = await mysql.createConnection(dbConfig);
-        await connection.execute(`INSERT INTO id_numbers (${column}) VALUES (?)`, [idNumber]);
-        await connection.end();
+        
+        // Check if ID already exists
+        const [existingRows] = await connection.execute(
+            `SELECT * FROM id_numbers WHERE ${column} = ?`, 
+            [idNumber]
+        );
 
+        if (existingRows.length > 0) {
+            await connection.end();
+            return res.status(400).json({ message: 'ID Already Exists' });
+        }
+
+        // If ID doesn't exist, proceed with insertion
+        await connection.execute(
+            `INSERT INTO id_numbers (${column}) VALUES (?)`, 
+            [idNumber]
+        );
+        
+        await connection.end();
         res.json({ message: 'ID number added successfully.' });
     } catch (error) {
         console.error('Error adding ID number:', error);
