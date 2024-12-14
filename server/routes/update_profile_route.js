@@ -29,8 +29,8 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const timestamp = Date.now();
     const sanitizedFileName = file.originalname
-      .replace(/\s+/g, '_') // Replace spaces with underscores
-      .replace(/[^\w.-]/g, ''); // Remove invalid characters
+      .replace(/\s+/g, '_')
+      .replace(/[^\w.-]/g, ''); 
     cb(null, `${timestamp}-${sanitizedFileName}`);
   },
 });
