@@ -4,9 +4,15 @@ const session = require('express-session');
 const path = require('path');
 const { networkInterfaces } = require('os');
 const cors = require('cors');
-
+require('dotenv').config();
+console.log('Environment variables loaded:', {
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS ? '***exists***' : 'missing'
+});
 // Route imports
 const loginRoute = require('./routes/loginRoute');
+const resetPasswordRoute = require('./routes/reset_password_route');
+const forgotPasswordRoute = require('./routes/forgot_password_route');
 const checkSessionRoute = require('./routes/check_session_route');
 const passengerDashboardRoute = require('./routes/passenger_dashboard_route');
 const updateProfileRoute = require('./routes/update_profile_route');
@@ -23,6 +29,7 @@ const adminLoginRoute = require('./routes/admin_login_route');
 const getUsersRoute = require('./routes/get_users_route');
 const adminDashboardRoute = require('./routes/admin_dashboard_route');
 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -34,7 +41,7 @@ app.use((req, res, next) => {
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.1.2:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.0.119:3000', 'http://192.168.1.2:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -67,7 +74,14 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'src')));
 app.use('/media', express.static(path.join(__dirname, 'media')));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 // API Routes
+app.use('/api', forgotPasswordRoute);
+app.use('/api', resetPasswordRoute);
 app.use('/api', loginRoute);
 app.use('/api', logoutRoute);
 app.use('/api', checkSessionRoute);
@@ -86,6 +100,7 @@ app.use('/api', getUsersRoute);
 app.use('/api', adminDashboardRoute);
 app.use('/api/admin-dashboard', adminDashboardRoute);
 
+
 // HTML Routes
 const htmlRoutes = {
     '/': 'index.html',
@@ -100,7 +115,8 @@ const htmlRoutes = {
     '/passengerDashboard': 'passenger-dashboard.html',
     '/driverStats': 'driver-statistics.html',
     '/adminlogin': 'admin-login.html',
-    '/admindashboard': 'admin-dashboard.html'
+    '/admindashboard': 'admin-dashboard.html',
+    '/resetPassword' : 'reset_password.html'
 };
 
 // Set up HTML routes

@@ -50,18 +50,28 @@
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="modal">
-        <div class="modal-content">
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <img src="/media/logo.png" alt="AgLugan Logo" class="modal-logo">
             <span class="close">&times;</span>
-            <h2>Forgot Password</h2>
-            <form id="forgotPasswordForm">
-                <input type="email" id="forgotEmail" name="email" placeholder="Enter your email" required>
-                <button type="submit">Send Reset Link</button>
-            </form>
-            <div id="forgotPasswordMessage"></div>
         </div>
+        <h2>Forgot Password</h2>
+        <p class="modal-description">Enter your email address and we'll send you a link to reset your password.</p>
+        <form id="forgotPasswordForm">
+            <div class="input-container">
+                <label for="forgotEmail">Email Address</label>
+                <input type="email" id="forgotEmail" name="email" placeholder="Enter your email" required>
+            </div>
+            <div id="forgotPasswordMessage"></div>
+            <button type="submit" class="submit-btn">
+                <span class="btn-text">Send Reset Link</span>
+                <div class="loading-spinner" style="display: none;"></div>
+            </button>
+        </form>
     </div>
+</div>
 
     <!-- Include the external JS file -->
     <script src="../js/login.js"></script>

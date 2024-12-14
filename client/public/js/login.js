@@ -107,18 +107,20 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
-
-            const response = await fetch('/api/forgot-password', {
+        
+            const response = await fetch(`${BASE_URL}/api/forgot-password`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({
+                    email: email
+                }),
                 credentials: 'include'
             });
-
+        
             const data = await response.json();
+        
             forgotPasswordMessage.innerText = data.message;
             forgotPasswordMessage.style.color = data.status === 'success' ? 'green' : '#ff6666';
 
