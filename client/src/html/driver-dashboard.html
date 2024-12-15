@@ -27,42 +27,64 @@
         <h1>Welcome to the Driver Dashboard!</h1>
         <p>Manage your rides, queues, and performance effectively.</p>
         
-        <!-- Queue a Ride Section -->
-        <div class="section queue-ride-section" id="queue-ride-section">
+        <!-- Queue a Ride Table -->
+        <div class="section" id="queue-ride-section">
             <h2>Queue a Ride</h2>
             <button id="queueRideBtn" class="action-btn">Queue a Ride</button>
-            <ul id="queued-rides-list">
-                <!-- Queued rides from DB -->
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Ride Type</th>
+                        <th>Scheduled Time</th>
+                    </tr>
+                </thead>
+                <tbody id="queued-rides-list">
+                    <!-- Queued rides from DB -->
+                </tbody>
+            </table>
         </div>
 
-        <!-- Ongoing Queue Section -->
+        <!-- Ongoing Queue Table -->
         <div class="section" id="ongoing-queue">
             <h2>Ongoing Queue</h2>
-            <ul id="ongoing-queue-list">
-                <!-- Ongoing queued rides from DB -->
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ongoing-queue-list">
+                    <!-- Ongoing queued rides from DB -->
+                </tbody>
+            </table>
         </div>
 
-        <!-- Earnings Section -->
-        <!-- <div class="section" id="earnings">
-            <h2>Earnings Overview</h2>
-            <p>Total Earnings: <span id="total-earnings">₱0.00</span></p>
-            <ul id="completed-rides-list">
-  
-            </ul>
-        </div> -->
-
-        <!-- Performance Overview Section -->
+        <!-- Performance Overview Table -->
         <div class="section" id="performance-overview">
             <h2>Performance Overview</h2>
-            <p><strong>Total Rides:</strong> <span id="total-rides">0</span></p>
-            <p><strong>Completed Rides:</strong> <span id="completed-rides">0</span></p>
-            <p><strong>Cancelled Rides:</strong> <span id="cancelled-rides">0</span></p>
-            <!-- <p><strong>Total Earnings:</strong> <span id="earnings-overview">₱0.00</span></p> -->
-            <!-- <p><strong>Average Rating:</strong> <span id="average-rating">N/A</span></p> -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Total Rides</th>
+                        <th>Completed Rides</th>
+                        <th>Cancelled Rides</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="total-rides">0</td>
+                        <td id="completed-rides">0</td>
+                        <td id="cancelled-rides">0</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
 
         <!-- Help and Support Section -->
         <div class="section help-section">
@@ -94,10 +116,14 @@
                     <option value="scheduled">Scheduled</option>
                 </select>
     
-                <div id="schedule-time-section" style="display: none;">
-                    <label for="schedule-time">Schedule Time:</label>
-                    <input type="datetime-local" id="schedule-time" name="schedule-time">
+                <div id="schedule-time-container" style="display: none;">
+                    <label for="schedule-times">Schedule Time(s):</label>
+                    <div id="schedule-times-inputs">
+                        <!-- Dynamic inputs will be added here -->
+                    </div>
+                    <button type="button" id="add-schedule-time-btn">Add Another Time</button>
                 </div>
+                
     
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
             </form>

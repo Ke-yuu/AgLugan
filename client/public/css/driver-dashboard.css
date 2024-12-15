@@ -485,3 +485,37 @@ input[type="password"]::placeholder {
   font-weight: bold;
   color: #00c853;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+}
+table th, table td {
+  border: 1px solid #444;
+  padding: 12px;
+}
+table th {
+  background-color: #1b1b1b;
+  color: #ff0000;
+}
+table tr:nth-child(even) {
+  background-color: #252525;
+}
+table tr:hover {
+  background-color: #333;
+}
+.action-btn {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.action-btn:hover {
+  background-color: #910b0b;
+}
