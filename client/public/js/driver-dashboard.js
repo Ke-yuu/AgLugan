@@ -378,4 +378,29 @@ document.getElementById('ride-type').addEventListener('change', (event) => {
     }
 });
 
+function disableSameLocation() {
+    const startLocationSelect = document.getElementById('start-location');
+    const endLocationSelect = document.getElementById('end-location');
+
+    // Event listener for Start Location change
+    startLocationSelect.addEventListener('change', () => {
+        const selectedStart = startLocationSelect.value;
+
+        // Loop through End Location options
+        for (let option of endLocationSelect.options) {
+            if (option.value === selectedStart) {
+                option.disabled = true; // Disable the same location
+                option.style.color = 'gray'; // Visually gray it out
+            } else {
+                option.disabled = false; // Re-enable other options
+                option.style.color = ''; // Reset color
+            }
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    loadDriverData(); // Existing function
+    disableSameLocation(); // New feature
+});
+
 
