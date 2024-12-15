@@ -39,9 +39,7 @@ async function loadDriverData() {
         driverNameSpan.textContent = driverData.name;
         loadQueuedRides(driverData.queuedRides);
         loadOngoingQueue(driverData.ongoingQueue);
-        loadPerformanceOverview(driverData.performance);
-
-        loadScheduledRides();
+        loadScheduledRides(driverData.scheduledRides);
     } catch (error) {
         console.error('Error loading driver data:', error);
     }
@@ -281,39 +279,49 @@ function loadQueuedRides(rides) {
     }
 }
 
-async function loadScheduledRides() {
-    try {
-        // Fetch data from the backend
-        const response = await fetch('/api/driver-dashboard/getScheduledRides');
-        if (!response.ok) throw new Error('Failed to fetch scheduled rides.');
+function loadOngoingQueue(rides) {
+    const queuedRidesList = document.getElementById('ongoing-queue-list');
+    queuedRidesList.innerHTML = '';
 
-        const scheduledRides = await response.json();
-        const scheduledQueueList = document.getElementById('scheduled-queue-list');
-
-        // Clear previous data
-        scheduledQueueList.innerHTML = '';
-
-        // Populate table rows with scheduled rides
-        if (scheduledRides.length > 0) {
-            scheduledRides.forEach((ride) => {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${ride.vehicle_plate || 'N/A'}</td>
-                    <td>${ride.start_location}</td>
-                    <td>${ride.end_location}</td>
-                    <td>${ride.time_range || 'N/A'}</td>
-                `;
-
-                scheduledQueueList.appendChild(row);
-            });
-        } else {
+    if (rides.length > 0) {
+        rides.forEach(ride => {
             const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="4">No scheduled rides found</td>`;
-            scheduledQueueList.appendChild(row);
-        }
-    } catch (error) {
-        console.error('Error loading scheduled rides:', error);
+
+            row.innerHTML = `
+                <td>${ride.plate_number || 'N/A'}</td>
+                <td>${ride.start_location || 'N/A'}</td>
+                <td>${ride.end_location || 'N/A'}</td>
+                <td>${ride.status || 'N/A'}</td>
+                <td>${ride.time_range || 'N/A'}</td>
+            `;
+
+            queuedRidesList.appendChild(row);
+        });
+    } else {
+        queuedRidesList.innerHTML = '<tr><td colspan="5">No queued rides available</td></tr>';
+    }
+}
+
+function loadScheduledRides(rides) {
+    const queuedRidesList = document.getElementById('scheduled-queue-list');
+    queuedRidesList.innerHTML = '';
+
+    if (rides.length > 0) {
+        rides.forEach(ride => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${ride.plate_number || 'N/A'}</td>
+                <td>${ride.start_location || 'N/A'}</td>
+                <td>${ride.end_location || 'N/A'}</td>
+                <td>${ride.status || 'N/A'}</td>
+                <td>${ride.time_range || 'N/A'}</td>
+            `;
+
+            queuedRidesList.appendChild(row);
+        });
+    } else {
+        queuedRidesList.innerHTML = '<tr><td colspan="5">No queued rides available</td></tr>';
     }
 }
 

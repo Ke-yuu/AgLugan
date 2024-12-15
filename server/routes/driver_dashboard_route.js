@@ -25,19 +25,19 @@ router.get('/driver-dashboard', async (req, res) => {
 
         // Fetch queued rides (status = 'In Queue')
         const [queuedRides] = await db.query(
-            `SELECT * FROM rides WHERE driver_id = ? AND status = 'In Queue'`,
+            `SELECT * FROM rides WHERE driver_id = ? AND status IN ('In Queue', 'Scheduled')`,
             [driverId]
         );
 
         // Fetch ongoing rides (status = 'Scheduled')
         const [ongoingQueue] = await db.query(
-            `SELECT * FROM rides WHERE driver_id = ? AND status = 'Scheduled'`,
+            `SELECT * FROM rides WHERE status = 'In Queue'`,
             [driverId]
         );
 
         // Fetch completed rides (status = 'Inactive')
-        const [completedRides] = await db.query(
-            `SELECT * FROM rides WHERE driver_id = ? AND status = 'Inactive'`,
+        const [scheduledRides] = await db.query(
+            `SELECT * FROM rides WHERE status = 'Scheduled'`,
             [driverId]
         );
 
@@ -46,7 +46,7 @@ router.get('/driver-dashboard', async (req, res) => {
             name: driver[0].name,
             queuedRides,
             ongoingQueue,
-            completedRides,
+            scheduledRides,
         });
     } catch (error) {
         console.error('Error fetching driver dashboard data:', error);
@@ -186,20 +186,6 @@ router.post('/driver-dashboard/queue', async (req, res) => {
     }
 });
 
-router.get('/api/driver-dashboard/getQueuedRides', async (req, res) => {
-    try {
-        const [rides] = await db.query(
-            `SELECT r.ride_id, r.start_location, r.end_location, r.status, r.time_range 
-             FROM rides r
-             WHERE r.status IN ('In Queue', 'Scheduled')`
-        );
-
-        res.status(200).json(rides);
-    } catch (error) {
-        console.error('Error fetching queued rides:', error);
-        res.status(500).send('Error fetching queued rides.');
-    }
-});
 
 // Add a Vehicle
 router.post('/driver-dashboard/vehicles', async (req, res) => {
