@@ -23,9 +23,9 @@ router.get('/driver-dashboard', async (req, res) => {
             return res.status(404).json({ error: 'Driver not found' });
         }
 
-        // Fetch queued rides (status = 'Loading')
+        // Fetch queued rides (status = 'In Queue')
         const [queuedRides] = await db.query(
-            `SELECT * FROM rides WHERE driver_id = ? AND status = 'Loading'`,
+            `SELECT * FROM rides WHERE driver_id = ? AND status = 'In Queue'`,
             [driverId]
         );
 
@@ -77,12 +77,43 @@ router.get('/driver-dashboard/getCurrent', async (req, res) => {
     }
 });
 
+const getNextTimeRange = async () => {
+    // Fetch the latest queued ride with 'In Queue' or 'Scheduled' status
+    const [latestRide] = await db.query(
+        `SELECT time_range FROM rides WHERE status IN ('In Queue', 'Scheduled') ORDER BY time_range DESC LIMIT 1`
+    );
+
+    let nextStartTime;
+
+    if (latestRide.length > 0 && latestRide[0].time_range) {
+        // Extract the end time of the latest queued ride
+        const latestEndTime = latestRide[0].time_range.split('-')[1];
+        nextStartTime = new Date(`1970-01-01T${latestEndTime}`);
+    } else {
+        // If no existing rides, start from the current time rounded to the nearest 15 minutes
+        const now = new Date();
+        now.setSeconds(0, 0); // Reset seconds and milliseconds
+        now.setMinutes(Math.floor(now.getMinutes() / 15) * 15); // Round down to nearest 15 minutes
+        nextStartTime = now;
+    }
+
+    // Calculate the next 15-minute block
+    const start = new Date(nextStartTime);
+    const end = new Date(nextStartTime);
+    end.setMinutes(start.getMinutes() + 15); // Add 15 minutes to start time
+
+    // Format time range as "HH:MM-HH:MM"
+    const formattedStart = start.toTimeString().slice(0, 5);
+    const formattedEnd = end.toTimeString().slice(0, 5);
+
+    return `${formattedStart}-${formattedEnd}`;
+};
+
 // Queue a Ride
 router.post('/driver-dashboard/queue', async (req, res) => {
-    const { driver_id, vehicle_id, start_location, end_location, type, schedule_times, schedule_time } = req.body;
+    const { driver_id, vehicle_id, start_location, end_location, type, fare, schedule_times, schedule_time } = req.body;
 
     try {
-        // Fetch the plate_number from vehicles table
         const [vehicle] = await db.query(
             `SELECT plate_number FROM vehicles WHERE vehicle_id = ?`,
             [vehicle_id]
@@ -95,55 +126,58 @@ router.post('/driver-dashboard/queue', async (req, res) => {
         const plate_number = vehicle[0].plate_number;
 
         if (type === 'now') {
-            // Check if a "now" ride is already queued
+            // Check for existing "now" ride
             const [existingNowRides] = await db.query(
-                `SELECT * FROM rides WHERE driver_id = ? AND status = 'Loading'`,
+                `SELECT * FROM rides WHERE driver_id = ? AND status = 'In Queue'`,
                 [driver_id]
             );
+
             if (existingNowRides.length > 0) {
                 return res.status(400).send('You already have an active "now" ride.');
             }
-        
+
+            // Generate the time range
+            const timeRange = await getNextTimeRange();
+
             // Queue a single "now" ride
             await db.query(
-                `INSERT INTO rides (ride_id, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
-                 VALUES (?, ?, ?, ?, 'Loading', ?, ?, '')`,
+                `INSERT INTO rides (plate_number, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
+                 VALUES (?, ?, ?, ?, 'In Queue', ?, ?, ?)`,
                 [
-                    plate_number,    // ride_id
-                    driver_id,       // driver_id
-                    start_location,  // start_location
-                    end_location,    // end_location
-                    0,               // fare
-                    '00:00:00'       // waiting_time
+                    plate_number,
+                    driver_id,
+                    start_location,
+                    end_location,
+                    fare,              // Placeholder fare
+                    '00:15:00',     // Waiting time (15 minutes for now rides)
+                    timeRange       // Generated time range
                 ]
             );
-        
         } else if (type === 'scheduled') {
             if (!schedule_times && !schedule_time) {
                 return res.status(400).send('A schedule time is required for scheduled rides.');
             }
-        
-            // Convert single schedule_time to an array for consistency
+
             const times = schedule_times || [schedule_time];
-        
-            // Queue the scheduled rides
+
             const queries = times.map((time) =>
                 db.query(
-                    `INSERT INTO rides (ride_id, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
+                    `INSERT INTO rides (plate_number, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
                      VALUES (?, ?, ?, ?, 'Scheduled', ?, ?, ?)`,
                     [
-                        plate_number,    // ride_id
-                        driver_id,       // driver_id
-                        start_location,  // start_location
-                        end_location,    // end_location
-                        0,               // Placeholder fare for "scheduled" rides
-                        '00:20:00',      // Default waiting time
-                        time             // time_range
+                        plate_number,
+                        driver_id,
+                        start_location,
+                        end_location,
+                        fare,
+                        '00:15:00',
+                        `${time.slice(11, 16)}-${new Date(time).toTimeString().slice(0, 5)}`
                     ]
                 )
             );
+
             await Promise.all(queries);
-        }        
+        }
 
         res.status(201).send('Ride(s) queued successfully.');
     } catch (error) {
@@ -157,7 +191,7 @@ router.get('/api/driver-dashboard/getQueuedRides', async (req, res) => {
         const [rides] = await db.query(
             `SELECT r.ride_id, r.start_location, r.end_location, r.status, r.time_range 
              FROM rides r
-             WHERE r.status IN ('Loading', 'Scheduled')`
+             WHERE r.status IN ('In Queue', 'Scheduled')`
         );
 
         res.status(200).json(rides);
@@ -166,10 +200,6 @@ router.get('/api/driver-dashboard/getQueuedRides', async (req, res) => {
         res.status(500).send('Error fetching queued rides.');
     }
 });
-
-
-
-
 
 // Add a Vehicle
 router.post('/driver-dashboard/vehicles', async (req, res) => {

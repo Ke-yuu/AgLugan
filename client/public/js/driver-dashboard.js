@@ -78,53 +78,111 @@ async function populateVehicleDropdown() {
     }
 }
 
-// Submit Queue Ride Form
-// Submit Queue Ride Form
+function calculateFare(startLocation, endLocation) {
+    if (
+        startLocation === "Igorot Garden" &&
+        ["Barangay Hall", "Holy Family Parish Church"].includes(endLocation)
+    ) {
+        return 12;
+    }
+    if (
+        startLocation === "Igorot Garden" &&
+        ["SLU Mary Heights", "Phase 1", "Phase 2"].includes(endLocation)
+    ) {
+        return 13;
+    }
+    if (startLocation === "Igorot Garden" && endLocation === "Phase 3") {
+        return 14;
+    }
+
+    if (
+        startLocation === "Barangay Hall" &&
+        ["Igorot Garden", "SM Baguio", "Burnham Park"].includes(endLocation)
+    ) {
+        return 12;
+    }
+
+    if (startLocation === "SLU Mary Heights" && endLocation === "Barangay Hall") {
+        return 10;
+    }
+    if (
+        startLocation === "SLU Mary Heights" &&
+        ["SM Baguio", "Burnham Park", "Igorot Garden"].includes(endLocation)
+    ) {
+        return 13;
+    }
+
+    if (startLocation === "Phase 3" && ["SLU Mary Heights", "Barangay Hall"].includes(endLocation)) {
+        return 10;
+    }
+    if (
+        startLocation === "Phase 3" &&
+        ["SM Baguio", "Burnham Park", "Igorot Garden"].includes(endLocation)
+    ) {
+        return 14;
+    }
+
+    // Default fare if no match
+    return 0;
+}
+
 async function submitQueueRideForm(event) {
     event.preventDefault();
     const currentUser = await getCurrentUser();
     if (!currentUser?.user_id) {
-        alert('Unable to fetch user data. Please try again.');
+        alert("Unable to fetch user data. Please try again.");
         return;
     }
 
     const formData = new FormData(queueRideForm);
-    const rideType = formData.get('ride-type');
+    const startLocation = formData.get("start-location");
+    const endLocation = formData.get("end-location");
+
+    // Calculate fare dynamically
+    const fare = calculateFare(startLocation, endLocation);
+
+    if (fare === 0) {
+        alert("Invalid start or end location. Please try again.");
+        return;
+    }
+
     const payload = {
         driver_id: currentUser.user_id,
-        vehicle_id: formData.get('vehicle-id'), // Send vehicle ID
-        start_location: formData.get('start-location'),
-        end_location: formData.get('end-location'),
-        type: rideType,
+        vehicle_id: formData.get("vehicle-id"),
+        start_location: startLocation,
+        end_location: endLocation,
+        fare: fare, // Add fare to payload
+        type: formData.get("ride-type"),
     };
 
-    if (rideType === 'scheduled') {
-        const scheduleTime = formData.get('schedule-time');
+    if (payload.type === "scheduled") {
+        const scheduleTime = formData.get("schedule-time");
         if (!scheduleTime) {
-            alert('Please provide a valid schedule time for the ride.');
+            alert("Please provide a valid schedule time for the ride.");
             return;
         }
-        payload.schedule_time = scheduleTime; // Send single time
+        payload.schedule_time = scheduleTime;
     }
 
     try {
-        const response = await fetch('/api/driver-dashboard/queue', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/driver-dashboard/queue", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
         });
 
         if (response.ok) {
-            alert('Ride queued successfully!');
+            alert("Ride queued successfully!");
             loadDriverData();
             closeQueueRideModal();
         } else {
             alert(`Failed to queue ride: ${await response.text()}`);
         }
     } catch (error) {
-        console.error('Error submitting queue ride form:', error);
+        console.error("Error submitting queue ride form:", error);
     }
 }
+
 
 // Add Schedule Time Input
 function addScheduleTimeInput() {
@@ -209,7 +267,7 @@ function loadQueuedRides(rides) {
             const row = document.createElement('tr');
 
             row.innerHTML = `
-                <td>${ride.ride_id || 'N/A'}</td>
+                <td>${ride.plate_number || 'N/A'}</td>
                 <td>${ride.start_location || 'N/A'}</td>
                 <td>${ride.end_location || 'N/A'}</td>
                 <td>${ride.status || 'N/A'}</td>
