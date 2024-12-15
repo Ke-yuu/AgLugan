@@ -29,7 +29,7 @@
         
         <!-- Queue a Ride Table -->
         <div class="section" id="queue-ride-section">
-            <h2>Queue a Ride</h2>
+            <h2>My Queue</h2>
             <button id="queueRideBtn" class="action-btn">Queue a Ride</button>
             <table>
                 <thead>
@@ -37,7 +37,7 @@
                         <th>Vehicle</th>
                         <th>Start Location</th>
                         <th>End Location</th>
-                        <th>Ride Type</th>
+                        <th>Status</th>
                         <th>Scheduled Time</th>
                     </tr>
                 </thead>
@@ -57,6 +57,7 @@
                         <th>Start Location</th>
                         <th>End Location</th>
                         <th>Status</th>
+                        <th>Scheduled Time</th>
                     </tr>
                 </thead>
                 <tbody id="ongoing-queue-list">
@@ -74,6 +75,7 @@
                 <th>Vehicle</th>
                 <th>Start Location</th>
                 <th>End Location</th>
+                <th>Status</th>
                 <th>Scheduled Time</th>
             </tr>
         </thead>
@@ -82,28 +84,6 @@
         </tbody>
     </table>
 </div>
-
-
-        <!-- Performance Overview Table -->
-        <div class="section" id="performance-overview">
-            <h2>Performance Overview</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Total Rides</th>
-                        <th>Completed Rides</th>
-                        <th>Cancelled Rides</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="total-rides">0</td>
-                        <td id="completed-rides">0</td>
-                        <td id="cancelled-rides">0</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
         <!-- Help and Support Section -->
         <div class="section help-section">
@@ -155,7 +135,14 @@
     
                 <div id="schedule-time-container" style="display: none;">
                     <label for="schedule-time">Schedule Time:</label>
-                    <input type="datetime-local" id="schedule-time" name="schedule-time">
+                    <input
+                        type="datetime-local"
+                        id="schedule-time"
+                        name="schedule-time"
+                        min=""
+                        step="900"
+                        required
+                    />
                 </div>                
             
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
