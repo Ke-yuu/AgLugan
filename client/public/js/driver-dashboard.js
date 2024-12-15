@@ -40,6 +40,8 @@ async function loadDriverData() {
         loadQueuedRides(driverData.queuedRides);
         loadOngoingQueue(driverData.ongoingQueue);
         loadPerformanceOverview(driverData.performance);
+
+        loadScheduledRides();
     } catch (error) {
         console.error('Error loading driver data:', error);
     }
@@ -77,6 +79,7 @@ async function populateVehicleDropdown() {
 }
 
 // Submit Queue Ride Form
+// Submit Queue Ride Form
 async function submitQueueRideForm(event) {
     event.preventDefault();
     const currentUser = await getCurrentUser();
@@ -89,22 +92,19 @@ async function submitQueueRideForm(event) {
     const rideType = formData.get('ride-type');
     const payload = {
         driver_id: currentUser.user_id,
-        vehicle_id: formData.get('vehicle-id'),
+        vehicle_id: formData.get('vehicle-id'), // Send vehicle ID
         start_location: formData.get('start-location'),
         end_location: formData.get('end-location'),
         type: rideType,
     };
 
     if (rideType === 'scheduled') {
-        const scheduleTimes = [];
-        document.querySelectorAll('.schedule-time-input').forEach(input => {
-            if (input.value) scheduleTimes.push(input.value);
-        });
-        if (scheduleTimes.length === 0) {
-            alert('Please provide at least one schedule time for scheduled rides.');
+        const scheduleTime = formData.get('schedule-time');
+        if (!scheduleTime) {
+            alert('Please provide a valid schedule time for the ride.');
             return;
         }
-        payload.schedule_times = scheduleTimes;
+        payload.schedule_time = scheduleTime; // Send single time
     }
 
     try {
@@ -200,6 +200,66 @@ async function submitAddVehicleForm(event) {
     }
 }
 
+function loadQueuedRides(rides) {
+    const queuedRidesList = document.getElementById('queued-rides-list');
+    queuedRidesList.innerHTML = '';
+
+    if (rides.length > 0) {
+        rides.forEach(ride => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${ride.ride_id || 'N/A'}</td>
+                <td>${ride.start_location || 'N/A'}</td>
+                <td>${ride.end_location || 'N/A'}</td>
+                <td>${ride.status || 'N/A'}</td>
+                <td>${ride.time_range || 'N/A'}</td>
+            `;
+
+            queuedRidesList.appendChild(row);
+        });
+    } else {
+        queuedRidesList.innerHTML = '<tr><td colspan="5">No queued rides available</td></tr>';
+    }
+}
+
+async function loadScheduledRides() {
+    try {
+        // Fetch data from the backend
+        const response = await fetch('/api/driver-dashboard/getScheduledRides');
+        if (!response.ok) throw new Error('Failed to fetch scheduled rides.');
+
+        const scheduledRides = await response.json();
+        const scheduledQueueList = document.getElementById('scheduled-queue-list');
+
+        // Clear previous data
+        scheduledQueueList.innerHTML = '';
+
+        // Populate table rows with scheduled rides
+        if (scheduledRides.length > 0) {
+            scheduledRides.forEach((ride) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${ride.vehicle_plate || 'N/A'}</td>
+                    <td>${ride.start_location}</td>
+                    <td>${ride.end_location}</td>
+                    <td>${ride.time_range || 'N/A'}</td>
+                `;
+
+                scheduledQueueList.appendChild(row);
+            });
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="4">No scheduled rides found</td>`;
+            scheduledQueueList.appendChild(row);
+        }
+    } catch (error) {
+        console.error('Error loading scheduled rides:', error);
+    }
+}
+
+
 // Logout Function
 async function handleLogout() {
     try {
@@ -244,11 +304,12 @@ document.getElementById('ride-type').addEventListener('change', (event) => {
         return;
     }
 
+    // Show or hide the date-time picker based on the selected ride type
     if (event.target.value === 'scheduled') {
-        scheduleContainer.style.display = 'block';
+        scheduleContainer.style.display = 'block'; // Show the date-time picker
     } else {
-        scheduleContainer.style.display = 'none';
-        scheduleContainer.innerHTML = ''; // Clear inputs if switching back to "Now"
+        scheduleContainer.style.display = 'none'; // Hide the date-time picker
     }
 });
+
 

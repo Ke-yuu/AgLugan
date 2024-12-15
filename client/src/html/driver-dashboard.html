@@ -65,6 +65,25 @@
             </table>
         </div>
 
+        <!-- Scheduled Queue Section -->
+<div class="section" id="scheduled-queue">
+    <h2>Scheduled Queue</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle</th>
+                <th>Start Location</th>
+                <th>End Location</th>
+                <th>Scheduled Time</th>
+            </tr>
+        </thead>
+        <tbody id="scheduled-queue-list">
+            <!-- Scheduled rides from DB -->
+        </tbody>
+    </table>
+</div>
+
+
         <!-- Performance Overview Table -->
         <div class="section" id="performance-overview">
             <h2>Performance Overview</h2>
@@ -117,14 +136,10 @@
                 </select>
     
                 <div id="schedule-time-container" style="display: none;">
-                    <label for="schedule-times">Schedule Time(s):</label>
-                    <div id="schedule-times-inputs">
-                        <!-- Dynamic inputs will be added here -->
-                    </div>
-                    <button type="button" id="add-schedule-time-btn">Add Another Time</button>
-                </div>
-                
-    
+                    <label for="schedule-time">Schedule Time:</label>
+                    <input type="datetime-local" id="schedule-time" name="schedule-time">
+                </div>                
+            
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
             </form>
         </div>
