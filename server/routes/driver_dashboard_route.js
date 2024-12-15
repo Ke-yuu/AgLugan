@@ -109,6 +109,8 @@ const getNextTimeRange = async () => {
     return `${formattedStart}-${formattedEnd}`;
 };
 
+
+
 // Queue a Ride
 router.post('/driver-dashboard/queue', async (req, res) => {
     const { driver_id, vehicle_id, start_location, end_location, type, fare, schedule_times, schedule_time } = req.body;
@@ -171,7 +173,7 @@ router.post('/driver-dashboard/queue', async (req, res) => {
                         end_location,
                         fare,
                         '00:15:00',
-                        `${time.slice(11, 16)}-${new Date(time).toTimeString().slice(0, 5)}`
+                        `${time.slice(0, 16)}-${new Date(time).toISOString().slice(0, 16).replace(' ', ' ')}`
                     ]
                 )
             );

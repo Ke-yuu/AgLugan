@@ -124,6 +124,51 @@ function calculateFare(startLocation, endLocation) {
     return 0;
 }
 
+function setupDateTimePicker() {
+    const scheduleTimeInput = document.getElementById('schedule-time');
+    const now = new Date();
+
+    // Round up to the nearest future 15-minute interval
+    now.setSeconds(0, 0);
+    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
+
+    // Set the minimum time (now) and step attribute (15 minutes)
+    scheduleTimeInput.min = formatLocalDateTime(now);
+    scheduleTimeInput.step = 900; // 15 minutes in seconds
+
+    // Automatically adjust invalid inputs
+    scheduleTimeInput.addEventListener('input', () => {
+        const selectedTime = new Date(scheduleTimeInput.value);
+        const roundedTime = roundToNearest15Minutes(selectedTime);
+
+        // Update input field with rounded time
+        scheduleTimeInput.value = formatLocalDateTime(roundedTime);
+    });
+}
+
+// Helper function to round to the nearest 15 minutes
+function roundToNearest15Minutes(date) {
+    const rounded = new Date(date);
+    rounded.setSeconds(0, 0);
+    rounded.setMinutes(Math.round(rounded.getMinutes() / 15) * 15);
+    return rounded;
+}
+
+// Helper function to format a Date object as local "YYYY-MM-DDTHH:MM"
+function formatLocalDateTime(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', setupDateTimePicker);
+
+
 async function submitQueueRideForm(event) {
     event.preventDefault();
     const currentUser = await getCurrentUser();
@@ -135,9 +180,10 @@ async function submitQueueRideForm(event) {
     const formData = new FormData(queueRideForm);
     const startLocation = formData.get("start-location");
     const endLocation = formData.get("end-location");
-
-    // Calculate fare dynamically
     const fare = calculateFare(startLocation, endLocation);
+    const scheduleTimeInput = document.getElementById('schedule-time');
+    const selectedTime = new Date(scheduleTimeInput.value);
+    const now = new Date();
 
     if (fare === 0) {
         alert("Invalid start or end location. Please try again.");
@@ -152,6 +198,18 @@ async function submitQueueRideForm(event) {
         fare: fare, // Add fare to payload
         type: formData.get("ride-type"),
     };
+
+        // Check if selected time is in the past
+        if (selectedTime < now) {
+            alert('Selected time is in the past. Please pick a valid time.');
+            return;
+        }
+    
+        // Additional logic for checking 15-minute intervals
+        if (selectedTime.getMinutes() % 15 !== 0) {
+            alert('Please select a time that aligns with 15-minute intervals (e.g., 10:00, 10:15).');
+            return;
+        }
 
     if (payload.type === "scheduled") {
         const scheduleTime = formData.get("schedule-time");

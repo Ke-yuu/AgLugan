@@ -135,7 +135,14 @@
     
                 <div id="schedule-time-container" style="display: none;">
                     <label for="schedule-time">Schedule Time:</label>
-                    <input type="datetime-local" id="schedule-time" name="schedule-time">
+                    <input
+                        type="datetime-local"
+                        id="schedule-time"
+                        name="schedule-time"
+                        min=""
+                        step="900"
+                        required
+                    />
                 </div>                
             
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
