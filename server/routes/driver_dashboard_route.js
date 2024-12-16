@@ -113,12 +113,17 @@ const getNextTimeRange = async () => {
 
 // Queue a Ride
 router.post('/driver-dashboard/queue', async (req, res) => {
-    const { driver_id, vehicle_id, start_location, end_location, type, fare, schedule_times, schedule_time } = req.body;
+    const { vehicle_id, start_location, end_location, type, fare, schedule_times, schedule_time } = req.body;
 
+    if (!req.session || !req.session.user_id) {
+        return res.status(401).send('Not logged in.');
+    }
+    const driver_id = req.session.user_id;
     try {
+        // Validate the vehicle belongs to the driver
         const [vehicle] = await db.query(
-            `SELECT plate_number FROM vehicles WHERE vehicle_id = ?`,
-            [vehicle_id]
+            `SELECT plate_number FROM vehicles WHERE vehicle_id = ? AND driver_id = ?`,
+            [vehicle_id, driver_id]
         );
 
         if (!vehicle || vehicle.length === 0) {
@@ -191,18 +196,32 @@ router.post('/driver-dashboard/queue', async (req, res) => {
 
 // Add a Vehicle
 router.post('/driver-dashboard/vehicles', async (req, res) => {
-    const { driver_id, capacity, plate_number } = req.body;
+    const { capacity, plate_number } = req.body;
 
-    if (!driver_id || !capacity || !plate_number) {
+    if (!req.session || !req.session.user_id) {
+        return res.status(401).send('Not logged in.');
+    }
+
+    const driver_id = req.session.user_id;
+
+    if (!capacity || !plate_number) {
         return res.status(400).send('All fields are required.');
     }
 
     try {
+        // Check if the plate number already exists for this driver
+        const [existingVehicle] = await db.query(
+            `SELECT * FROM vehicles WHERE driver_id = ? AND plate_number = ?`,
+            [driver_id, plate_number]
+        );
+
+        if (existingVehicle.length > 0) {
+            return res.status(400).send('This plate number is already registered to your account.');
+        }
+
+        // Add the vehicle if it's unique
         await db.query(
-            `
-            INSERT INTO vehicles (driver_id, capacity, plate_number)
-            VALUES (?, ?, ?)
-            `,
+            `INSERT INTO vehicles (driver_id, capacity, plate_number) VALUES (?, ?, ?)`,
             [driver_id, capacity, plate_number]
         );
 
