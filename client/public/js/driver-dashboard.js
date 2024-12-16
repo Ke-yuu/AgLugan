@@ -334,7 +334,7 @@ async function handleRideCancel(event) {
 
     try {
         const response = await fetch(`/api/driver-dashboard/rides/${rideId}/cancel`, {
-            method: 'DELETE',
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -396,12 +396,35 @@ function disableSameLocation() {
     });
 }
 
+async function pollRideStatusUpdates() {
+    try {
+        const response = await fetch('/api/driver-dashboard/updateRideStatuses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Updated rides:', data.updatedRides);
+
+            // Refresh the driver data to reflect changes
+            await loadDriverData();
+        } else {
+            console.error('Failed to update ride statuses');
+        }
+    } catch (error) {
+        console.error('Error polling ride status updates:', error);
+    }
+}
+
+
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     setupDateTimePicker();
     loadDriverData();
     disableSameLocation();
-
+    setInterval(pollRideStatusUpdates, 60000); // Poll every 60 seconds
     // Add event listeners with null checks
     logoutBtn?.addEventListener('click', handleLogout);
     
