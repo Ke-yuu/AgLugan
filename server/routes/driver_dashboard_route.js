@@ -193,6 +193,58 @@ router.post('/driver-dashboard/queue', async (req, res) => {
     }
 });
 
+// Mark Ride as Done
+router.patch('/driver-dashboard/rides/:id/done', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+        return res.status(400).send('Invalid ride ID.');
+    }
+
+    try {
+        // Ensure the ride is in the correct status
+        const [ride] = await db.query(`SELECT * FROM rides WHERE ride_id = ? AND status = 'In Queue'`, [id]);
+
+        if (!ride || ride.length === 0) {
+            return res.status(404).send('Ride not found or already completed.');
+        }
+
+        // Update ride status to 'Completed'
+        await db.query(`UPDATE rides SET status = 'Completed' WHERE ride_id = ?`, [id]);
+        res.status(200).send('Ride marked as done successfully.');
+    } catch (error) {
+        console.error('Error marking ride as done:', error);
+        res.status(500).send('An internal server error occurred while updating the ride status.');
+    }
+});
+
+
+// Cancel Ride
+router.delete('/driver-dashboard/rides/:id/cancel', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+        return res.status(400).send('Invalid ride ID.');
+    }
+
+    try {
+        // Ensure the ride is in a cancellable status
+        const [ride] = await db.query(`SELECT * FROM rides WHERE ride_id = ? AND status IN ('In Queue', 'Scheduled')`, [id]);
+
+        if (!ride || ride.length === 0) {
+            return res.status(404).send('Ride not found or cannot be canceled.');
+        }
+
+        // Delete the ride
+        await db.query(`DELETE FROM rides WHERE ride_id = ?`, [id]);
+        res.status(200).send('Ride canceled successfully.');
+    } catch (error) {
+        console.error('Error canceling ride:', error);
+        res.status(500).send('An internal server error occurred while canceling the ride.');
+    }
+});
+
+
 
 // Add a Vehicle
 router.post('/driver-dashboard/vehicles', async (req, res) => {

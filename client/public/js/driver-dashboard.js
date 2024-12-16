@@ -139,8 +139,15 @@ function roundToNearest15Minutes(date) {
     return rounded;
 }
 
+// Helper function to format a Date object as local "YYYY-MM-DDTHH:MM"
 function formatLocalDateTime(date) {
-    return date.toISOString().slice(0, 16);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
 // Form Submission Handlers
@@ -248,7 +255,7 @@ async function submitAddVehicleForm(event) {
 
 // Table Update Functions
 function loadQueuedRides(rides) {
-    updateRidesTable(queuedRidesList, rides);
+    updateRidesTable(queuedRidesList, rides, true);
 }
 
 function loadOngoingQueue(rides) {
@@ -259,7 +266,7 @@ function loadScheduledRides(rides) {
     updateRidesTable(scheduledQueueList, rides);
 }
 
-function updateRidesTable(tableBody, rides) {
+function updateRidesTable(tableBody, rides, showButtons = false) {
     if (!tableBody) return;
 
     tableBody.innerHTML = '';
@@ -273,13 +280,75 @@ function updateRidesTable(tableBody, rides) {
                 <td>${ride.end_location || 'N/A'}</td>
                 <td>${ride.status || 'N/A'}</td>
                 <td>${ride.time_range || 'N/A'}</td>
+                ${
+                    showButtons
+                        ? `
+                    <td>
+                        <button class="done-btn" data-ride-id="${ride.ride_id}">Done</button>
+                        <button class="cancel-btn" data-ride-id="${ride.ride_id}">Cancel</button>
+                    </td>
+                `
+                        : ''
+                }
             `;
             tableBody.appendChild(row);
         });
+
+        // Attach button event listeners if buttons are shown
+        if (showButtons) {
+            tableBody.querySelectorAll('.done-btn').forEach(button => {
+                button.addEventListener('click', handleRideDone);
+            });
+
+            tableBody.querySelectorAll('.cancel-btn').forEach(button => {
+                button.addEventListener('click', handleRideCancel);
+            });
+        }
     } else {
-        tableBody.innerHTML = '<tr><td colspan="5">No rides available</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="6">No rides available</td></tr>';
     }
 }
+
+async function handleRideDone(event) {
+    const rideId = event.target.dataset.rideId;
+
+    try {
+        const response = await fetch(`/api/driver-dashboard/rides/${rideId}/done`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            alert('Ride marked as done!');
+            loadDriverData(); // Refresh the queue data
+        } else {
+            alert(`Failed to mark ride as done: ${await response.text()}`);
+        }
+    } catch (error) {
+        console.error('Error marking ride as done:', error);
+    }
+}
+
+async function handleRideCancel(event) {
+    const rideId = event.target.dataset.rideId;
+
+    try {
+        const response = await fetch(`/api/driver-dashboard/rides/${rideId}/cancel`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            alert('Ride canceled successfully!');
+            loadDriverData(); // Refresh the queue data
+        } else {
+            alert(`Failed to cancel ride: ${await response.text()}`);
+        }
+    } catch (error) {
+        console.error('Error canceling ride:', error);
+    }
+}
+
 
 // Auth Functions
 async function getCurrentUser() {
@@ -356,12 +425,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("#addVehicleForm")?.addEventListener("submit", submitAddVehicleForm);
 
     const rideTypeSelect = document.getElementById('ride-type');
-    if (rideTypeSelect) {
-        rideTypeSelect.addEventListener('change', (event) => {
-            const scheduleContainer = document.getElementById('schedule-time-container');
-            if (scheduleContainer) {
-                scheduleContainer.style.display = 
-                    event.target.value === 'scheduled' ? 'block' : 'none';
+    const scheduleTimeContainer = document.getElementById('schedule-time-container');
+    const scheduleTimeInput = document.getElementById('schedule-time');
+
+    if (rideTypeSelect && scheduleTimeContainer && scheduleTimeInput) {
+        rideTypeSelect.addEventListener('change', () => {
+            if (rideTypeSelect.value === 'scheduled') {
+                scheduleTimeContainer.style.display = 'block'; // Show the schedule time input
+                scheduleTimeInput.setAttribute('required', 'true'); // Add `required`
+            } else {
+                scheduleTimeContainer.style.display = 'none'; // Hide the schedule time input
+                scheduleTimeInput.removeAttribute('required'); // Remove `required`
+                scheduleTimeInput.value = ''; // Clear any value
             }
         });
     }
