@@ -1,10 +1,11 @@
-/* General Styling for Dashboard */
+/* General Styling */
 body {
   background-color: #333333;
   color: #f8f8f8;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 /* Navigation Bar */
@@ -12,600 +13,273 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   background-color: #1b1b1b;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .logo {
   width: 50px;
+  transition: transform 0.3s ease;
 }
 
 .logo:hover {
-  width: 50px;
-  cursor: pointer;
   transform: scale(1.1);
 }
 
 .profile-content {
-  align-items: center;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  margin-left: -1300px;
+  flex-grow: 1;
+  margin-left: 2rem;
 }
 
-/* Navigation Buttons */
-ul {
-  list-style-type: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.profile-content h2 {
+  font-size: 1.2rem;
   margin: 0;
 }
 
-li a {
-  text-decoration: none;
-  color: #f8f8f8;
-  padding: 11px 13px;
-  background-color: #ff0000;
-  border-radius: 8px;
-  transition: background-color 0.3s;
-  font-weight: bold;
-  display: inline-block;
-}
-li a:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-}
-
-#logoutBtn {
-  text-decoration: none;
-  color: #f8f8f8;
-  padding: 10px 12px;
-  background-color: #ff0000;
-  border-radius: 8px;
-  transition: background-color 0.3s;
-  font-weight: bold;
-  display: inline-block;
-}
-
-ul li a:hover,
-#logoutBtn:hover,
-.icon-button:hover {
-  background-color: #910b0b;
-  cursor: pointer;
-  transform: scale(1.1);
-}
-
-.icon-button {
-  background-color: #ff0000;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+/* Navigation Buttons */
+nav ul {
+  list-style-type: none;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.action-btn {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.icon-button i {
-  color: #f8f8f8;
-  font-size: 1.2rem;
+.action-btn:hover {
+  background-color: #910b0b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
 }
 
-/* Welcome Banner */
-h1, p {
-  text-align: center;
+/* Main Content */
+.main-content {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
 }
 
-/* Dashboard Sections */
-.dashboard-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  padding: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1000px;
-}
-
+/* Sections */
 .section {
   background-color: #1b1b1b;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-5px);
 }
 
 .section h2 {
   color: #ff0000;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ff0000;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+th {
+  background-color: #252525;
+  color: #ff0000;
+  font-weight: 600;
+}
+
+tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+tbody tr:hover {
+  background-color: #252525;
+}
+
+/* Status Indicators */
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
   text-align: center;
-  margin-bottom: 20px;
+  display: inline-block;
 }
 
-/* Available Rides Section */
-#available-rides-section ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 auto; 
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px; 
-  max-width: 1000px; 
-  overflow-y: auto;
+.status-active {
+  background-color: rgba(0, 255, 0, 0.1);
+  color: #00ff00;
 }
 
-#rides-list li {
-  background: linear-gradient(145deg, #3e3e3e, #343434);
-  padding: 20px;
-  border-radius: 15px;
-  color: #f8f8f8;
-  font-size: 1rem;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), -4px -4px 10px rgba(60, 60, 60, 0.2);
-  cursor: pointer;
-  transition: transform 0.3s, background 0.3s;
-  height: auto; 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.status-scheduled {
+  background-color: rgba(255, 166, 0, 0.1);
+  color: #ffa600;
+}
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #1b1b1b;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  margin: 5% auto;
   position: relative;
 }
 
-#rides-list li:hover {
-  background: linear-gradient(145deg, #484848, #3a3a3a);
-}
-
-.ride-info-header {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #6e6e6d;
-}
-
-.ride-details {
-  font-size: 1rem;
-  line-height: 1.5;
-  flex-grow: 1;
-}
-
-.ride-details strong {
-  color: #ff7b00;
-}
-
-
-
-.ride-details div {
-  margin-bottom: 5px;
-}
-
-.ride-status {
-  font-weight: bold;
-}
-
-.no-available-rides {
-  text-align: center;
-  padding: 20px;
-  border-radius: 15px;
-  color: #f8f8f8;
-  font-size: 1rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: #3a3a3a;
-}
-
-.book-ride-btn {
-  background-color: #e00206;
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
   color: #fff;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  width: fit-content;
-  align-self: center;
-  margin-top: 15px;
+  transition: color 0.3s ease;
 }
 
-.book-ride-btn:hover {
-  background-color: #a70306;
-  transform: scale(1.05);
-}
-
-.ride-info-header {
-  font-size: 1.1rem;
-  font-weight: bold;
+.close-btn:hover {
   color: #ff0000;
 }
 
-.ride-info {
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #252525;
-  margin-top: 5px;
-}
-
-/* Payment History Section */
-#ride-history-section ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+/* Forms */
+form {
   display: grid;
-  gap: 15px;
-  max-height: 180px; 
-  overflow-y: auto; 
+  gap: 1.5rem;
 }
 
-#ride-history li {
-  background-color: #3a3a3a;
-  padding: 15px;
-  border-radius: 8px;
-  color: #f8f8f8;
-  font-size: 1rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+input, select {
+  background-color: #252525;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 6px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: #ff0000;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+input::placeholder {
+  color: #888;
+}
+
+button[type="submit"] {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #910b0b;
+  transform: translateY(-2px);
 }
 
 /* Help Section */
 .help-section p {
   text-align: center;
-  font-size: 1.1rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Modal Styling */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.modal-content {
-  background-color: #1b1b1b;
-  margin: 10% auto;
-  padding: 30px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 10px;
-  color: #f8f8f8;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
-}
-
-.close-btn {
-  color: #f8f8f8;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-btn:hover,
-.close-btn:focus {
+.help-section strong {
   color: #ff0000;
 }
 
-label {
-  font-weight: bold;
-  margin-top: 15px;
-  display: inline-block;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 80%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid #555;
-  background-color: #ffffff;
-  color: #f8f8f8;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  outline: none;
-  border: 1px solid #ff0000;
-  box-shadow: 0px 0px 5px #ff0000;
-}
-
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder {
-  color: #a0a0a0;
-
-}
-  /* Styles for the book ride button */
-  .book-ride-btn {
-    background-color: #e00206;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 15px;
-    margin-left: 180px;
-  }
-  
-  /* Hover effect for book ride button */
-  .book-ride-btn:hover {
-    background-color: #a70306;
-    transform: scale(1.1);
-  }
-  
-  /* Focus and active states for better accessibility */
-  .book-ride-btn:focus,
-  .book-ride-btn:active {
-    outline: none;
-    background-color: #da0408;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+      padding: 0 1rem;
   }
 
-.available-ride-item {
-  position: relative;
-  cursor: pointer;
+  table {
+      display: block;
+      overflow-x: auto;
+  }
+
+  .profile-content {
+      margin-left: 1rem;
+  }
+
+  .modal-content {
+      width: 95%;
+      margin: 10% auto;
+  }
+
+  nav {
+      padding: 1rem;
+  }
+
+  .action-btn {
+      padding: 0.5rem 1rem;
+  }
 }
 
-.available-ride-item:hover {
-  background-color: #f3f0f0;
-  color: #910b0b;
-}
+@media (max-width: 480px) {
+  .section {
+      padding: 1rem;
+  }
 
-.available-ride-item:hover::after {
-  display: block;
-}
-
-/* Buttons Styling */
-.save-btn,
-.change-btn {
-  background-color: #ff0000;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.save-btn:hover,
-.change-btn:hover {
-  background-color: #910b0b;
-}
-
-.save-btn:active,
-.change-btn:active {
-  transform: scale(0.98);
-}
-.queue-ride-section {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.queue-ride-btn {
-  display: inline-block;
-  background-color: #ff0000;
-  color: #fff;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.queue-ride-btn:hover {
-  background-color: #910b0b;
-  transform: scale(1.1);
-}
-
-/* Styling for Route Icon */
-.ride-item .fas.fa-route {
-  font-size: 1.5rem;
-  color: #ff0000;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-/* Modal Button */
-#schedulePageButton {
-  background-color: #ff0000;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 15px;
-}
-
-#schedulePageButton:hover {
-  background-color: #a70306;
-  transform: scale(1.1);
-}
-
-/* Ride Item with Icon */
-.ride-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
-  border: 1px solid #444;
-  background-color: #1b1b1b;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.ride-item:hover {
-  background-color: #252525;
-  transform: scale(1.02);
-}
-
-/* Map/Route Icon */
-.map-icon {
-  font-size: 2rem;
-  color: #ff0000;
-  margin-right: 15px;
-}
-
-/* Ride Details Content */
-.ride-details-content {
-  flex: 1;
-  text-align: left;
-}
-
-.ride-details-content strong {
-  color: #ff7b00;
-  font-weight: bold;
-}
-
-.ride-status {
-  font-weight: bold;
-  color: #00c853;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 16px;
-  text-align: left;
-}
-table th, table td {
-  border: 1px solid #444;
-  padding: 12px;
-}
-table th {
-  background-color: #1b1b1b;
-  color: #ff0000;
-}
-table tr:nth-child(even) {
-  background-color: #252525;
-}
-table tr:hover {
-  background-color: #333;
-}
-.action-btn {
-  background-color: #ff0000;
-  color: #fff;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.action-btn:hover {
-  background-color: #910b0b;
-}
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay */
-  z-index: 1000;
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #222; /* Dark background */
-  color: white; /* White text */
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 5px;
-  width: 400px; /* Modal width */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  position: relative;
-}
-
-/* Close Button */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: red;
-}
-
-/* Form Styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Adds space between form elements */
-}
-
-label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-select, input {
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: white;
-  color: #222;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: red;
-  box-shadow: 0 0 5px red;
-}
-
-/* Schedule Time Container */
-#schedule-time-container {
-  margin-top: 10px;
-}
-
-/* Submit Button */
-button[type="submit"] {
-  background-color: red;
-  color: white;
-  font-weight: bold;
-  text-transform: uppercase;
-  border: none;
-  padding: 10px 0;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-  background-color: darkred;
+  .profile-content h2 {
+      font-size: 1rem;
+  }
 }
