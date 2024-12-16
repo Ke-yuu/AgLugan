@@ -3,6 +3,8 @@ const driverNameSpan = document.getElementById('driver-name');
 const queuedRidesList = document.getElementById('queued-rides-list');
 const ongoingQueueList = document.getElementById('ongoing-queue-list');
 const scheduledQueueList = document.getElementById('scheduled-queue-list');
+const doneQueueList = document.getElementById('Done-Rides-List')
+const cancelledQueueList = document.getElementById('Cancelled-Rides-List')
 const queueRideModal = document.getElementById('queueRideModal');
 const queueRideBtn = document.getElementById('queueRideBtn');
 const closeQueueRideModalBtn = document.getElementById('closeQueueRideModalBtn');
@@ -41,6 +43,7 @@ async function loadDriverData() {
         loadQueuedRides(driverData.queuedRides);
         loadOngoingQueue(driverData.ongoingQueue);
         loadScheduledRides(driverData.scheduledRides);
+        loadRidesHistory([...driverData.doneRides, ...driverData.cancelledRides]);
     } catch (error) {
         console.error('Error loading driver data:', error);
     }
@@ -265,6 +268,15 @@ function loadOngoingQueue(rides) {
 function loadScheduledRides(rides) {
     updateRidesTable(scheduledQueueList, rides);
 }
+
+function loadRidesHistory(rides) {
+    const doneRides = rides.filter(ride => ride.status === 'Done');
+    const cancelledRides = rides.filter(ride => ride.status === 'Cancelled');
+
+    updateRidesTable(doneQueueList, doneRides);
+    updateRidesTable(cancelledQueueList, cancelledRides);
+}
+
 
 function updateRidesTable(tableBody, rides, showButtons = false) {
     if (!tableBody) return;

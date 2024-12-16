@@ -44,12 +44,23 @@ router.get('/driver-dashboard', async (req, res) => {
             [driverId]
         );
 
+        const [ridesHistory] = await db.query(
+            `SELECT * FROM rides WHERE driver_id = ? AND status IN ('Done', 'Cancelled')
+            ORDER BY time_range ASC`,
+            [driverId]
+        );
+
+        const doneRides = ridesHistory.filter(ride => ride.status === 'Done');
+        const cancelledRides = ridesHistory.filter(ride => ride.status === 'Cancelled');
+
         // Return response
         res.json({
             name: driver[0].name,
             queuedRides,
             ongoingQueue,
             scheduledRides,
+            doneRides,
+            cancelledRides,
         });
     } catch (error) {
         console.error('Error fetching driver dashboard data:', error);
@@ -182,7 +193,7 @@ router.post('/driver-dashboard/queue', async (req, res) => {
                 // Check for conflicts with the same time range
                 const [conflict] = await db.query(
                     `SELECT * FROM rides 
-                     WHERE driver_id = ? AND status = 'Scheduled' AND time_range = ?`,
+                     WHERE driver_id = ? AND status IN ('Scheduled', 'In Queue')  AND time_range = ?`,
                     [driver_id, timeRange]
                 );
 
