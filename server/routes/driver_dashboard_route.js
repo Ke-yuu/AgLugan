@@ -25,19 +25,22 @@ router.get('/driver-dashboard', async (req, res) => {
 
         // Fetch queued rides (status = 'In Queue')
         const [queuedRides] = await db.query(
-            `SELECT * FROM rides WHERE driver_id = ? AND status IN ('In Queue', 'Scheduled')`,
+            `SELECT * FROM rides WHERE driver_id = ? AND status IN ('In Queue', 'Scheduled')
+            ORDER BY time_range ASC`,
             [driverId]
         );
 
         // Fetch ongoing rides (status = 'Scheduled')
         const [ongoingQueue] = await db.query(
-            `SELECT * FROM rides WHERE status = 'In Queue'`,
+            `SELECT * FROM rides WHERE status = 'In Queue'
+            ORDER BY time_range ASC`,
             [driverId]
         );
 
         // Fetch completed rides (status = 'Inactive')
         const [scheduledRides] = await db.query(
-            `SELECT * FROM rides WHERE status = 'Scheduled'`,
+            `SELECT * FROM rides WHERE status = 'Scheduled'
+            ORDER BY time_range ASC`,
             [driverId]
         );
 
@@ -78,22 +81,38 @@ router.get('/driver-dashboard/getCurrent', async (req, res) => {
 });
 
 const getNextTimeRange = async () => {
-    // Fetch the latest queued ride with 'In Queue' or 'Scheduled' status
+    const now = new Date(); // Get the current date and time
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; // Format date as YYYY-MM-DD
+
+    // Fetch the latest queued ride with 'In Queue' status and scheduled time >= today
     const [latestRide] = await db.query(
-        `SELECT time_range FROM rides WHERE status IN ('In Queue', 'Scheduled') ORDER BY time_range DESC LIMIT 1`
+        `SELECT time_range FROM rides 
+         WHERE status = 'In Queue' 
+         AND LEFT(time_range, 10) >= ? 
+         ORDER BY time_range DESC LIMIT 1`,
+        [today]
     );
 
     let nextStartTime;
 
     if (latestRide.length > 0 && latestRide[0].time_range) {
         // Extract the end time of the latest queued ride
-        const latestEndTime = latestRide[0].time_range.split('-')[1];
-        nextStartTime = new Date(`1970-01-01T${latestEndTime}`);
+        const [latestDate, latestTimeRange] = latestRide[0].time_range.split(' ');
+        const latestEndTime = latestTimeRange.split('-')[1];
+        nextStartTime = new Date(`${latestDate}T${latestEndTime}`);
     } else {
         // If no existing rides, start from the current time rounded to the nearest 15 minutes
-        const now = new Date();
         now.setSeconds(0, 0); // Reset seconds and milliseconds
-        now.setMinutes(Math.floor(now.getMinutes() / 15) * 15); // Round down to nearest 15 minutes
+        const minutes = now.getMinutes();
+        const remainder = minutes % 15;
+
+        if (remainder < 7.5) {
+            // Round down
+            now.setMinutes(minutes - remainder);
+        } else {
+            // Round up
+            now.setMinutes(minutes + (15 - remainder));
+        }
         nextStartTime = now;
     }
 
@@ -102,12 +121,15 @@ const getNextTimeRange = async () => {
     const end = new Date(nextStartTime);
     end.setMinutes(start.getMinutes() + 15); // Add 15 minutes to start time
 
-    // Format time range as "HH:MM-HH:MM"
-    const formattedStart = start.toTimeString().slice(0, 5);
-    const formattedEnd = end.toTimeString().slice(0, 5);
+    // Format date and time range as "YYYY-MM-DD HH:MM-HH:MM"
+    const formattedDate = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}`; // YYYY-MM-DD
+    const formattedStart = `${String(start.getHours()).padStart(2, '0')}:${String(start.getMinutes()).padStart(2, '0')}`; // HH:MM
+    const formattedEnd = `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`; // HH:MM
 
-    return `${formattedStart}-${formattedEnd}`;
+    return `${formattedDate} ${formattedStart}-${formattedEnd}`;
 };
+
+
 
 
 
@@ -318,6 +340,41 @@ router.get('/driver-dashboard/getVehicles', auth, async (req, res) => {
     } catch (error) {
         console.error('Error fetching vehicles:', error);
         res.status(500).send('Error fetching vehicles.');
+    }
+});
+
+// Update Rides Status Automatically
+router.post('/driver-dashboard/updateRideStatuses', async (req, res) => {
+    try {
+        const now = new Date();
+
+        // Fetch rides with "In Queue" or "Scheduled" status
+        const [rides] = await db.query(
+            `SELECT ride_id, time_range, status FROM rides WHERE status IN ('In Queue', 'Scheduled')`
+        );
+
+        const updatedRides = [];
+
+        for (const ride of rides) {
+            // Split the time_range into date and time parts
+            const [rideDate, timeRange] = ride.time_range.split(' ');
+            const [startTime, endTime] = timeRange.split('-');
+
+            // Parse the end datetime
+            const [endHour, endMinutes] = endTime.split(':');
+            const endDate = new Date(`${rideDate}T${endHour}:${endMinutes}:00`);
+
+            if (endDate <= now) {
+                // Update the status to 'Done' if the end date is in the past
+                await db.query(`UPDATE rides SET status = 'Done' WHERE ride_id = ?`, [ride.ride_id]);
+                updatedRides.push(ride.ride_id);
+            }
+        }
+
+        res.status(200).json({ message: 'Statuses updated', updatedRides });
+    } catch (error) {
+        console.error('Error updating ride statuses:', error);
+        res.status(500).json({ error: 'Failed to update ride statuses' });
     }
 });
 
