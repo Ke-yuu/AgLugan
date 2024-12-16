@@ -179,7 +179,7 @@ INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `
 (2, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Cancelled', 12.00, '00:15:00', '2024-12-17 10:15-10:30'),
 (3, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Done', 13.00, '00:15:00', '2024-12-17 14:00-14:15'),
 (4, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Cancelled', 12.00, '00:15:00', '2024-12-17 11:00-11:15'),
-(5, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-1999 15:00-15:15'),
+(5, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-19 15:00-15:15'),
 (6, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Scheduled', 12.00, '00:15:00', '2024-12-17 12:00-12:15'),
 (7, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00', '2024-12-18 13:00-13:15'),
 (8, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-21 10:00-10:15'),
