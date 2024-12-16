@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 16, 2024 at 12:04 PM
+-- Generation Time: Dec 16, 2024 at 08:20 PM
 -- Server version: 8.2.0
 -- PHP Version: 8.3.0
 
@@ -156,40 +156,18 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 DROP TABLE IF EXISTS `rides`;
 CREATE TABLE IF NOT EXISTS `rides` (
   `ride_id` int NOT NULL AUTO_INCREMENT,
-  `plate_number` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `plate_number` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `driver_id` int DEFAULT NULL,
   `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` enum('In Queue','Scheduled','Inactive','Done','Cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
-  `time_range` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time_range` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`plate_number`),
   KEY `driver_id` (`driver_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10065 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `rides`
---
-
-INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
-(1231, 'web124', 30, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:30-18:45'),
-(10059, 'web 123', 29, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:15-18:30'),
-(1232, 'web125', 28, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:45-19:00'),
-(1233, 'web126', 27, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:00-19:15'),
-(1234, 'web127', 26, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:15-19:30'),
-(1235, 'web128', 25, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:30-19:45'),
-(1236, 'web129', 24, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '19:45-20:00'),
-(1237, 'web130', 23, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:00-20:15'),
-(1238, 'web131', 22, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:15-20:30'),
-(1239, 'web132', 21, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:30-20:45'),
-(1241, 'web133', 30, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:45-21:00'),
-(10060, 'web 123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '22:30-22:30'),
-(10061, 'web 123', 30, 'Igorot Garden', 'Phase 2', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-17T19:00-202'),
-(10062, 'web 123', 30, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-17T19:00-202'),
-(10063, 'web 123', 30, 'Igorot Garden', 'Barangay Hall', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-17T22:00-2024-12-17T14:00'),
-(10064, 'web 123', 30, 'Igorot Garden', 'Phase 2', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-15T22:45-2024-12-15T14:45');
 
 -- --------------------------------------------------------
 
@@ -222,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`, `id_number`, `driver_id`) VALUES
 (28, 'Aisea Marie Factor', 'Aisea', 'asieamarie@gmail.com', '$2b$10$8wSIRmu0rB8mecY6TsA/7uNTBaViMYvuVfaEteiRS5lakMOTyXJxu', '9183724988', 'Student', '/uploads/profile_pictures/1733847649371-4043260_avatar_male_man_portrait_icon.ico', NULL, NULL),
 (30, 'Martin Kapitan', 'Martin', 'kapitanmartin@gmail.com', '$2b$10$6p4PWt5901vHTalFLmlEdOTCiomaEYLk/zRvMtD8zB7RZiByL5u1y', '9234693982', 'Driver', NULL, NULL, NULL),
-(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Student', NULL, '2222723', NULL),
+(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Driver', NULL, '2222723', NULL),
 (38, 'Karding Kenkoy', 'Karding', '', '$2b$10$NvtxuNTJQ3nmPC1TBQzgtu5OZvM0Rdos9ZmbP7NjLeHuJ1nWsexHq', NULL, 'Driver', NULL, NULL, 103);
 
 -- --------------------------------------------------------
@@ -239,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vehicles`
@@ -249,7 +227,9 @@ INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) V
 (1, 101, 23, 'WEB 445'),
 (2, 102, 23, 'SAF 214'),
 (3, 103, 23, 'AHL 725'),
-(4, 30, 23, 'web 123');
+(4, 30, 23, 'web 123'),
+(5, 30, 23, 'yaa 5656'),
+(6, 36, 23, 'yaa 9876');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

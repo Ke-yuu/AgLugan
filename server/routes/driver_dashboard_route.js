@@ -130,9 +130,6 @@ const getNextTimeRange = async () => {
 };
 
 
-
-
-
 // Queue a Ride
 router.post('/driver-dashboard/queue', async (req, res) => {
     const { vehicle_id, start_location, end_location, type, fare, schedule_times, schedule_time } = req.body;
@@ -164,15 +161,22 @@ router.post('/driver-dashboard/queue', async (req, res) => {
             const times = schedule_times || [schedule_time];
 
             for (const time of times) {
-                // Calculate start and end times with a 15-minute interval
+                // Parse the provided time
                 const startTime = new Date(time);
-                const endTime = new Date(startTime);
-                endTime.setMinutes(startTime.getMinutes() + 15); // Add 15 minutes
+
+                if (isNaN(startTime.getTime())) {
+                    return res.status(400).send('Invalid schedule time format.');
+                }
+
+                // Calculate local start and end times with a 15-minute interval
+                const localStartTime = new Date(startTime.toLocaleString()); // Local time
+                const localEndTime = new Date(localStartTime);
+                localEndTime.setMinutes(localStartTime.getMinutes() + 15); // Add 15 minutes
 
                 // Format the time range as 'YYYY-MM-DD HH:MM-HH:MM'
-                const formattedDate = startTime.toISOString().split('T')[0];
-                const startFormatted = startTime.toTimeString().slice(0, 5); // HH:MM
-                const endFormatted = endTime.toTimeString().slice(0, 5);     // HH:MM
+                const formattedDate = localStartTime.toLocaleDateString('en-CA'); // Local YYYY-MM-DD
+                const startFormatted = localStartTime.toTimeString().slice(0, 5); // HH:MM
+                const endFormatted = localEndTime.toTimeString().slice(0, 5);     // HH:MM
                 const timeRange = `${formattedDate} ${startFormatted}-${endFormatted}`;
 
                 // Check for conflicts with the same time range
@@ -230,7 +234,6 @@ router.post('/driver-dashboard/queue', async (req, res) => {
         res.status(500).send('Error queuing the ride.');
     }
 });
-
 
 
 // Mark Ride as Done
