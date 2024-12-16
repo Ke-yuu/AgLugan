@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `driver_id` int DEFAULT NULL,
   `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('In Queue','Scheduled','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('In Queue','Scheduled','Inactive','Done','Cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
   `time_range` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

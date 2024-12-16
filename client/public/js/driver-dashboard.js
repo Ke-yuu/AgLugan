@@ -334,7 +334,7 @@ async function handleRideCancel(event) {
 
     try {
         const response = await fetch(`/api/driver-dashboard/rides/${rideId}/cancel`, {
-            method: 'DELETE',
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' }
         });
 
