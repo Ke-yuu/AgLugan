@@ -3,14 +3,19 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2024 at 12:31 PM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
+-- Generation Time: Dec 16, 2024 at 12:04 PM
+-- Server version: 8.2.0
+-- PHP Version: 8.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `aglugan`
@@ -74,8 +79,8 @@ INSERT INTO `id_numbers` (`id`, `faculty_id_num`, `student_id_num`) VALUES
 DROP TABLE IF EXISTS `passenger_statistics`;
 CREATE TABLE IF NOT EXISTS `passenger_statistics` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time_slot` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time_slot` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookings_count` int DEFAULT '0',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -151,119 +156,40 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 DROP TABLE IF EXISTS `rides`;
 CREATE TABLE IF NOT EXISTS `rides` (
   `ride_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `plate_number` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `driver_id` int DEFAULT NULL,
   `start_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('Loading','Scheduled','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('In Queue','Scheduled','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
-  `time_range` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time_range` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ride_id`),
-  KEY `passenger_id` (`user_id`),
+  KEY `passenger_id` (`plate_number`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10054 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10065 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rides`
 --
 
-INSERT INTO `rides` (`ride_id`, `user_id`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
-(1059, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '15:00-15:30'),
-(1044, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '07:30-08:00'),
-(1043, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '07:00-07:30'),
-(1042, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '06:30-07:00'),
-(1041, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '06:00-06:30'),
-(1023, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:00-17:30'),
-(1021, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:00-16:30'),
-(1019, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:00-15:30'),
-(1017, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '14:00-14:30'),
-(1015, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:00-13:30'),
-(1002, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '06:30-07:00'),
-(1058, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '14:30-15:00'),
-(1057, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Loading', 13.00, '00:20:00.000000', '14:00-14:30'),
-(1056, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '13:30-14:00'),
-(1055, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '13:00-13:30'),
-(1054, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '12:30-13:00'),
-(1053, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '12:00-12:30'),
-(1052, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '11:30-12:00'),
-(1051, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '11:00-11:30'),
-(1050, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '10:30-11:00'),
-(1049, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '10:00-10:30'),
-(1048, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '09:30-10:00'),
-(1045, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '08:00-08:30'),
-(1024, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:30-18:00'),
-(1022, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:30-17:00'),
-(1020, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:30-16:00'),
-(1018, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:30-15:00'),
-(1016, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:30-14:00'),
-(1014, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:30-13:00'),
-(1013, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:00-12:30'),
-(1012, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:30-12:00'),
-(1011, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:00-11:30'),
-(1010, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:30-11:00'),
-(1009, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:00-10:30'),
-(1008, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '09:30-10:00'),
-(1007, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '09:00-09:30'),
-(1006, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '08:30-09:00'),
-(1005, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '08:00-08:30'),
-(1004, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '07:30-08:00'),
-(1003, NULL, 101, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '07:00-07:30'),
-(1001, NULL, 102, 'SLU Mary Heights', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '06:00-06:30'),
-(1047, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '09:00-09:30'),
-(1046, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Inactive', 13.00, '00:20:00.000000', '08:30-09:00'),
-(1060, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '15:30-16:00'),
-(1061, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '16:00-16:30'),
-(1062, NULL, 102, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '16:30-17:00'),
-(1063, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '17:00-17:30'),
-(1064, NULL, 101, 'SLU Mary Heights', 'Igorot Garden', 'Scheduled', 13.00, '00:20:00.000000', '17:30-18:00'),
-(1081, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '06:00-06:30'),
-(1082, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '06:30-07:00'),
-(1083, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '07:00-07:30'),
-(1084, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '07:30-08:00'),
-(1085, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '08:00-08:30'),
-(1086, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '08:30-09:00'),
-(1087, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '09:00-09:30'),
-(1088, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '09:30-10:00'),
-(1089, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '10:00-10:30'),
-(1090, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '10:30-11:00'),
-(1091, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '11:00-11:30'),
-(1092, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '11:30-12:00'),
-(1093, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '12:00-12:30'),
-(1094, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '12:30-13:00'),
-(1095, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '13:00-13:30'),
-(1096, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Inactive', 13.00, '00:20:00.000000', '13:30-14:00'),
-(1097, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Loading', 13.00, '00:20:00.000000', '14:00-14:30'),
-(1098, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '14:30-15:00'),
-(1099, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '15:00-15:30'),
-(1100, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '15:30-16:00'),
-(1101, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '16:00-16:30'),
-(1102, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '16:30-17:00'),
-(1103, NULL, 102, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '17:00-17:30'),
-(1104, NULL, 101, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:20:00.000000', '17:30-18:00'),
-(1121, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '06:00-06:30'),
-(1122, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '06:30-07:00'),
-(1123, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '07:00-07:30'),
-(1124, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '07:30-08:00'),
-(1125, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '08:00-08:30'),
-(1126, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '08:30-09:00'),
-(1127, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '09:00-09:30'),
-(1128, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '09:30-10:00'),
-(1129, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:00-10:30'),
-(1130, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '10:30-11:00'),
-(1131, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:00-11:30'),
-(1132, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '11:30-12:00'),
-(1133, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:00-12:30'),
-(1134, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '12:30-13:00'),
-(1135, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:00-13:30'),
-(1136, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Inactive', 11.00, '00:20:00.000000', '13:30-14:00'),
-(1137, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Loading', 11.00, '00:20:00.000000', '14:00-14:30'),
-(1138, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '14:30-15:00'),
-(1139, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:00-15:30'),
-(1140, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '15:30-16:00'),
-(1141, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:00-16:30'),
-(1142, NULL, 102, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '16:30-17:00'),
-(1143, NULL, 101, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 11.00, '00:20:00.000000', '17:00-17:30');
+INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
+(1231, 'web124', 30, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:30-18:45'),
+(10059, 'web 123', 29, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:15-18:30'),
+(1232, 'web125', 28, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '18:45-19:00'),
+(1233, 'web126', 27, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:00-19:15'),
+(1234, 'web127', 26, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:15-19:30'),
+(1235, 'web128', 25, 'Igorot Garden', 'Phase 3', 'In Queue', 14.00, '00:15:00.000000', '19:30-19:45'),
+(1236, 'web129', 24, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '19:45-20:00'),
+(1237, 'web130', 23, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:00-20:15'),
+(1238, 'web131', 22, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:15-20:30'),
+(1239, 'web132', 21, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:30-20:45'),
+(1241, 'web133', 30, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '20:45-21:00'),
+(10060, 'web 123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '22:30-22:30'),
+(10061, 'web 123', 30, 'Igorot Garden', 'Phase 2', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-17T19:00-202'),
+(10062, 'web 123', 30, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-17T19:00-202'),
+(10063, 'web 123', 30, 'Igorot Garden', 'Barangay Hall', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-17T22:00-2024-12-17T14:00'),
+(10064, 'web 123', 30, 'Igorot Garden', 'Phase 2', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-15T22:45-2024-12-15T14:45');
 
 -- --------------------------------------------------------
 
@@ -280,8 +206,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_type` enum('Student','Faculty/Staff','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `id_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `driver_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
@@ -313,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vehicles`
@@ -322,6 +248,10 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
 INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
 (1, 101, 23, 'WEB 445'),
 (2, 102, 23, 'SAF 214'),
-(3, 103, 23, 'AHL 725');
+(3, 103, 23, 'AHL 725'),
+(4, 30, 23, 'web 123');
 COMMIT;
 
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
