@@ -7,6 +7,8 @@ router.get('/check-session', (req, res) => {
         res.json({ status: 'logged_in', type: 'admin', adminId: req.session.adminId });
     } else if (req.session && req.session.user_id) {
         res.json({ status: 'logged_in', type: 'user', userId: req.session.user_id });
+    } else if (req.session && req.session.user_id) {
+        res.json({ status: 'logged_in', type: 'driver', userId: req.session.user_id });
     } else {
         res.json({ status: 'logged_out' });
     }

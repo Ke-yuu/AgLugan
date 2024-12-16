@@ -14,20 +14,16 @@
                 <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
             <div class="profile-content">    
-                <h2>Welcome, <span id="driver-name">Master Yi</span>!</h2>
+                <h2>Welcome, <span id="driver-name">Driver Name</span>!</h2>
             </div>
             <ul>
-                <li><a href="#addVehicleModal"><i class="fas fa-car"></i></a></li>
-                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
+                <li><a href="#addVehicleModal" class="action-btn"><i class="fas fa-car"></i></a></li>
+                <button id="logoutBtn" class="action-btn"><i class="fas fa-sign-out-alt"></i></button>
             </ul>
         </nav>
     </header>
 
     <main class="main-content">
-        <h1>Welcome to the Driver Dashboard!</h1>
-        <p>Manage your rides, queues, and performance effectively.</p>
-        
-        <!-- Queue a Ride Table -->
         <div class="section" id="queue-ride-section">
             <h2>My Queue</h2>
             <button id="queueRideBtn" class="action-btn">Queue a Ride</button>
@@ -42,12 +38,11 @@
                     </tr>
                 </thead>
                 <tbody id="queued-rides-list">
-                    <!-- Queued rides from DB -->
+                    <!-- Queued rides will be populated here -->
                 </tbody>
             </table>
         </div>
 
-        <!-- Ongoing Queue Table -->
         <div class="section" id="ongoing-queue">
             <h2>Ongoing Queue</h2>
             <table>
@@ -61,31 +56,29 @@
                     </tr>
                 </thead>
                 <tbody id="ongoing-queue-list">
-                    <!-- Ongoing queued rides from DB -->
+                    <!-- Ongoing queued rides will be populated here -->
                 </tbody>
             </table>
         </div>
 
-        <!-- Scheduled Queue Section -->
-<div class="section" id="scheduled-queue">
-    <h2>Scheduled Queue</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Vehicle</th>
-                <th>Start Location</th>
-                <th>End Location</th>
-                <th>Status</th>
-                <th>Scheduled Time</th>
-            </tr>
-        </thead>
-        <tbody id="scheduled-queue-list">
-            <!-- Scheduled rides from DB -->
-        </tbody>
-    </table>
-</div>
+        <div class="section" id="scheduled-queue">
+            <h2>Scheduled Queue</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Status</th>
+                        <th>Scheduled Time</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduled-queue-list">
+                    <!-- Scheduled rides will be populated here -->
+                </tbody>
+            </table>
+        </div>
 
-        <!-- Help and Support Section -->
         <div class="section help-section">
             <h2>Help and Support</h2>
             <p>Contact us at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
@@ -100,7 +93,7 @@
             <form id="queueRideForm">
                 <label for="vehicle-id">Vehicle:</label>
                 <select id="vehicle-id" name="vehicle-id" required>
-                    <!-- Populate with driver's vehicles from DB -->
+                    <!-- Vehicle options will be populated here -->
                 </select>
     
                 <label for="start-location">Start Location:</label>
@@ -109,7 +102,6 @@
                     <option value="Barangay Hall">Barangay Hall</option>
                     <option value="SLU Mary Heights">SLU Mary Heights</option>
                     <option value="Phase 3">Phase 3</option>
-                    
                 </select>
 
                 <label for="end-location">End Location:</label>
@@ -123,17 +115,15 @@
                     <option value="Phase 1">Phase 1</option>
                     <option value="Phase 2">Phase 2</option>
                     <option value="Phase 3">Phase 3</option>
-
                 </select>
 
-    
                 <label for="ride-type">Ride Type:</label>
                 <select id="ride-type" name="ride-type" required>
                     <option value="now">Now</option>
                     <option value="scheduled">Schedule</option>
                 </select>
     
-                <div id="schedule-time-container" style="display: none;">
+                <div id="schedule-time-container">
                     <label for="schedule-time">Schedule Time:</label>
                     <input
                         type="datetime-local"
@@ -143,31 +133,29 @@
                         step="900"
                         required
                     />
-                </div>                
-            
+                </div>
+                
                 <button type="submit" id="queueRideSubmit">Add to Queue</button>
             </form>
         </div>
     </div>
-    
 
     <!-- Modal for Adding/Editing a Vehicle -->
-<div id="addVehicleModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeAddVehicleModalBtn">&times;</span>
-        <h2>Add or Edit Vehicle</h2>
-        <form id="addVehicleForm">
-            <label for="capacity">Capacity:</label>
-            <input type="number" id="capacity" name="capacity" required min="1" placeholder="Enter vehicle capacity">
+    <div id="addVehicleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeAddVehicleModalBtn">&times;</span>
+            <h2>Add Vehicle</h2>
+            <form id="addVehicleForm">
+                <label for="capacity">Capacity:</label>
+                <input type="number" id="capacity" name="capacity" required min="1" placeholder="Enter vehicle capacity">
 
-            <label for="plate-number">Plate Number:</label>
-            <input type="text" id="plate-number" name="plate-number" required placeholder="Enter plate number">
+                <label for="plate-number">Plate Number:</label>
+                <input type="text" id="plate-number" name="plate-number" required placeholder="Enter plate number">
 
-            <button type="submit" id="addVehicleSubmit">Save Vehicle</button>
-        </form>
+                <button type="submit" id="addVehicleSubmit">Save Vehicle</button>
+            </form>
+        </div>
     </div>
-</div>
-
 
     <script src="../js/driver-dashboard.js"></script>
 </body>

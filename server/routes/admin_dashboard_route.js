@@ -193,23 +193,23 @@ router.post('/add-id', async (req, res) => {
 });
 
 // Update ride status
-router.put('/update-ride-status', async function(req, res) {
+router.put('/update-ride-status', async function (req, res) {
     try {
         console.log('Update ride status route hit');
         const connection = await mysql.createConnection(dbConfig);
-        
-        const currentTime = new Date().toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
+
+        const currentTime = new Date().toLocaleTimeString('en-US', {
+            hour: 'numeric',
             minute: '2-digit',
             hour12: true,
             timeZone: 'Asia/Manila'
         });
-        
+
         console.log('Current time:', currentTime);
-        
+
         const [rides] = await connection.execute(`
             SELECT ride_id, time_range
-            FROM rides 
+            FROM rides
             WHERE status != 'Inactive'
         `);
 
@@ -217,14 +217,23 @@ router.put('/update-ride-status', async function(req, res) {
 
         for (const ride of rides) {
             try {
-                const [startTime, endTime] = ride.time_range.split(' - ');
-                const isInTimeRange = isTimeInRange(currentTime, startTime.trim(), endTime.trim());
-                
-                console.log(`Updating ride ${ride.ride_id}: ${isInTimeRange ? 'Loading' : 'Standby'}`);
-                
+                if (!ride.time_range || !ride.time_range.includes('-')) {
+                    console.warn(`Skipping ride ${ride.ride_id} due to invalid time_range format.`);
+                    continue;
+                }
+
+                const [startTimeRaw, endTimeRaw] = ride.time_range.split('-');
+                const startTime = startTimeRaw.trim();
+                const endTime = endTimeRaw.trim();
+
+                // Call your isTimeInRange helper with trimmed times
+                const isInTimeRange = isTimeInRange(currentTime, startTime, endTime);
+
+                console.log(`Updating ride ${ride.ride_id}: ${isInTimeRange ? 'Loading' : 'Scheduled'}`);
+
                 await connection.execute(
                     'UPDATE rides SET status = ? WHERE ride_id = ?',
-                    [isInTimeRange ? 'Loading' : 'Standby', ride.ride_id]
+                    [isInTimeRange ? 'Loading' : 'Scheduled', ride.ride_id]
                 );
             } catch (error) {
                 console.error(`Error updating ride ${ride.ride_id}:`, error);
@@ -246,7 +255,7 @@ router.put('/update-ride-status', async function(req, res) {
             WHERE r.status != 'Inactive'
             ORDER BY r.ride_id DESC
         `);
-        
+
         await connection.end();
         res.json(updatedRides);
 
