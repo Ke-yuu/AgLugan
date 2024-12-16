@@ -360,14 +360,28 @@ router.post('/driver-dashboard/updateRideStatuses', async (req, res) => {
             const [rideDate, timeRange] = ride.time_range.split(' ');
             const [startTime, endTime] = timeRange.split('-');
 
+            // Parse the start datetime
+            const [startHour, startMinutes] = startTime.split(':');
+            const startDate = new Date(`${rideDate}T${startHour}:${startMinutes}:00`);
+
             // Parse the end datetime
             const [endHour, endMinutes] = endTime.split(':');
             const endDate = new Date(`${rideDate}T${endHour}:${endMinutes}:00`);
 
-            if (endDate <= now) {
+            // Check for transitioning 'Scheduled' to 'In Queue'
+            if (
+                ride.status === 'Scheduled' &&
+                (startDate <= now || startDate - now <= 5 * 60 * 1000)
+            ) {
+                // Update the status to 'In Queue'
+                await db.query(`UPDATE rides SET status = 'In Queue' WHERE ride_id = ?`, [ride.ride_id]);
+                updatedRides.push({ ride_id: ride.ride_id, newStatus: 'In Queue' });
+            } 
+            // Check for transitioning 'In Queue' or 'Scheduled' to 'Done'
+            else if (ride.status !== 'Done' && endDate <= now) {
                 // Update the status to 'Done' if the end date is in the past
                 await db.query(`UPDATE rides SET status = 'Done' WHERE ride_id = ?`, [ride.ride_id]);
-                updatedRides.push(ride.ride_id);
+                updatedRides.push({ ride_id: ride.ride_id, newStatus: 'Done' });
             }
         }
 
@@ -377,6 +391,8 @@ router.post('/driver-dashboard/updateRideStatuses', async (req, res) => {
         res.status(500).json({ error: 'Failed to update ride statuses' });
     }
 });
+
+
 
 
 
