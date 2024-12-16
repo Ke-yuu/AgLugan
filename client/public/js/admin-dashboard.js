@@ -84,37 +84,48 @@ document.addEventListener('DOMContentLoaded', function () {
     const addDriverForm = document.getElementById('add-driver-form');
     const addIdForm = document.getElementById('add-id-form');
 
-    // Add Driver form handler
-    addDriverForm?.addEventListener('submit', async function (e) {
-        e.preventDefault();
+// Add Driver form handler
+addDriverForm?.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-        const username = document.getElementById('driver-username').value.trim();
-        const name = document.getElementById('driver-name').value.trim();
-        const password = document.getElementById('driver-password').value.trim();
-        const driverId = document.getElementById('driver-id').value.trim();
-        const plateNumber = document.getElementById('plate-number').value.trim();
-        const vehicleCapacity = document.getElementById('vehicle-capacity').value.trim();
+    const username = document.getElementById('driver-username').value.trim();
+    const name = document.getElementById('driver-name').value.trim();
+    const password = document.getElementById('driver-password').value.trim();
+    const driverId = document.getElementById('driver-id').value.trim();
+    const plateNumber = document.getElementById('plate-number').value.trim();
+    const vehicleCapacity = document.getElementById('vehicle-capacity').value.trim();
 
-        if (password.length < 8) {
-            alert('Password must be at least 8 characters long.');
-            return;
-        }
+    if (!username || !name || !password || !driverId || !plateNumber || !vehicleCapacity) {
+        alert('All fields are required.');
+        return;
+    }
 
-        try {
-            const response = await fetch('/api/add-driver', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, name, password, driverId, plateNumber, vehicleCapacity }),
-            });
+    if (password.length < 8) {
+        alert('Password must be at least 8 characters long.');
+        return;
+    }
 
-            const data = await response.json();
-            alert(data.message || 'Driver added successfully.');
+    try {
+        const response = await fetch('/api/add-driver', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, name, password, driverId, plateNumber, vehicleCapacity }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message || 'Driver and vehicle added successfully.');
             fetchUsers();
-        } catch (error) {
-            console.error('Error adding driver:', error);
-            alert('Failed to add driver.');
+            addDriverForm.reset();
+        } else {
+            alert(data.message || 'Failed to add driver.');
         }
-    });
+    } catch (error) {
+        console.error('Error adding driver:', error);
+        alert('An unexpected error occurred while adding the driver.');
+    }
+});
 
     // Add ID Number form handler
     addIdForm?.addEventListener('submit', async function (e) {
@@ -132,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const data = await response.json();
             alert(data.message || 'ID number added successfully.');
+            addIdForm.reset();
         } catch (error) {
             console.error('Error adding ID number:', error);
             alert('Failed to add ID number.');

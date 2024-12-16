@@ -57,7 +57,9 @@ router.get('/rides', async (req, res) => {
             WHERE r.status != 'Inactive'
         `;
 
-        let params = [];
+        const params = searchQuery
+            ? [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery]
+            : [];
 
         if (searchQuery) {
             query += ` AND (
@@ -67,17 +69,14 @@ router.get('/rides', async (req, res) => {
                 r.status LIKE ? OR
                 v.plate_number LIKE ?
             )`;
-            params = [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery];
         }
 
         query += ' ORDER BY r.ride_id DESC';
 
         const [rides] = await connection.execute(query, params);
-        console.log('Database rides response:', rides);
-
         await connection.end();
-        res.json(rides);
 
+        res.json(rides);
     } catch (error) {
         console.error('Error fetching rides:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -126,26 +125,47 @@ router.post('/add-driver', async (req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
 
-        const [existing] = await connection.execute(
-            'SELECT * FROM users WHERE username = ? OR driver_id = ?',
-            [username, driverId]
+        // Check if username exists in the 'users' table
+        const [existingUser] = await connection.execute(
+            'SELECT * FROM users WHERE username = ?',
+            [username]
         );
 
-        if (existing.length > 0) {
+        if (existingUser.length > 0) {
             await connection.end();
-            return res.status(409).json({ message: 'Username or Driver ID already exists.' });
+            return res.status(409).json({ message: 'Username already exists.' });
         }
-        
+
+        // Check if driver_id exists in the 'vehicles' table
+        const [existingDriverId] = await connection.execute(
+            'SELECT * FROM vehicles WHERE driver_id = ?',
+            [driverId]
+        );
+
+        if (existingDriverId.length > 0) {
+            await connection.end();
+            return res.status(409).json({ message: 'Driver ID already exists in vehicles table.' });
+        }
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await connection.execute(
-            'INSERT INTO users (username, name, password_hash, user_type, driver_id) VALUES (?, ?, ?, ?, ?)',
-            [username, name, hashedPassword, 'Driver', driverId]
+        // Use placeholder email if not provided
+        const placeholderEmail = `${username}@drivermail.com`;
+
+        // Insert into 'users' table
+        const [userResult] = await connection.execute(
+            'INSERT INTO users (username, name, email, password_hash, user_type) VALUES (?, ?, ?, ?, ?)',
+            [username, name, placeholderEmail, hashedPassword, 'Driver']
         );
 
+        // Get the last inserted user ID
+        const userId = userResult.insertId;
+
+        // Insert into 'vehicles' table with the user_id as driver_id
         await connection.execute(
             'INSERT INTO vehicles (driver_id, plate_number, capacity) VALUES (?, ?, ?)',
-            [driverId, plateNumber, vehicleCapacity]
+            [userId, plateNumber, vehicleCapacity]
         );
 
         await connection.end();
@@ -155,6 +175,8 @@ router.post('/add-driver', async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 });
+
+
 
 router.post('/add-id', async (req, res) => {
     const { idNumber, idType } = req.body;
@@ -304,5 +326,6 @@ router.delete('/delete-user/:userId', async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
 });
+
 
 module.exports = router;
