@@ -23,12 +23,53 @@ function getTodayDate() {
 
 async function fetchData(route) {
     try {
-        const response = await fetch(route);
+        const response = await fetch(route, {
+            credentials: 'include',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         if (!response.ok) throw new Error(`Error fetching data: ${response.statusText}`);
         return await response.json();
     } catch (error) {
         console.error('Error fetching data:', error);
+        throw error;
     }
+}
+
+// Location Selection Handler
+function disableLocationSelection() {
+    const startLocationSelect = document.getElementById('start-location');
+    const endLocationSelect = document.getElementById('end-location');
+
+    if (!startLocationSelect || !endLocationSelect) {
+        console.warn('Location select elements not found');
+        return;
+    }
+
+    startLocationSelect.addEventListener('change', () => {
+        const selectedStart = startLocationSelect.value;
+        
+        // Re-enable all options first
+        Array.from(endLocationSelect.options).forEach(option => {
+            option.disabled = false;
+            option.style.color = '';
+        });
+        
+        // Disable matching option in end location
+        Array.from(endLocationSelect.options).forEach(option => {
+            if (option.value === selectedStart) {
+                option.disabled = true;
+                option.style.color = 'gray';
+            }
+        });
+
+        // If currently selected end location matches start, reset it
+        if (endLocationSelect.value === selectedStart) {
+            endLocationSelect.value = '';
+        }
+    });
 }
 
 // Load Driver Data
@@ -139,7 +180,6 @@ function roundToNearest15Minutes(date) {
     return rounded;
 }
 
-// Helper function to format a Date object as local "YYYY-MM-DDTHH:MM"
 function formatLocalDateTime(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -170,7 +210,6 @@ async function submitQueueRideForm(event) {
     }
 
     const payload = {
-        driver_id: currentUser.user_id,
         vehicle_id: formData.get("vehicle-id"),
         start_location: startLocation,
         end_location: endLocation,
@@ -180,13 +219,13 @@ async function submitQueueRideForm(event) {
 
     if (payload.type === "scheduled") {
         const scheduleTime = formData.get("schedule-time");
-        const selectedTime = new Date(scheduleTime);
-        const now = new Date();
-
         if (!scheduleTime) {
             alert("Please provide a valid schedule time for the ride.");
             return;
         }
+
+        const selectedTime = new Date(scheduleTime);
+        const now = new Date();
 
         if (selectedTime < now) {
             alert('Selected time is in the past. Please pick a valid time.');
@@ -204,7 +243,12 @@ async function submitQueueRideForm(event) {
     try {
         const response = await fetch("/api/driver-dashboard/queue", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            credentials: 'include',
             body: JSON.stringify(payload)
         });
 
@@ -213,10 +257,12 @@ async function submitQueueRideForm(event) {
             loadDriverData();
             closeQueueRideModal();
         } else {
-            alert(`Failed to queue ride: ${await response.text()}`);
+            const errorText = await response.text();
+            alert(`Failed to queue ride: ${errorText}`);
         }
     } catch (error) {
         console.error("Error submitting queue ride form:", error);
+        alert("An error occurred while queuing the ride. Please try again.");
     }
 }
 
@@ -230,14 +276,18 @@ async function submitAddVehicleForm(event) {
 
     const payload = {
         capacity: document.getElementById('capacity').value,
-        plate_number: document.getElementById('plate-number').value,
-        driver_id: currentUser.user_id
+        plate_number: document.getElementById('plate-number').value
     };
 
     try {
         const response = await fetch('/api/driver-dashboard/vehicles', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            credentials: 'include',
             body: JSON.stringify(payload)
         });
 
@@ -246,10 +296,12 @@ async function submitAddVehicleForm(event) {
             addVehicleModal.style.display = 'none';
             populateVehicleDropdown();
         } else {
-            alert(`Failed to add vehicle: ${await response.text()}`);
+            const errorText = await response.text();
+            alert(`Failed to add vehicle: ${errorText}`);
         }
     } catch (error) {
         console.error('Error adding vehicle:', error);
+        alert('An error occurred while adding the vehicle. Please try again.');
     }
 }
 
@@ -294,7 +346,6 @@ function updateRidesTable(tableBody, rides, showButtons = false) {
             tableBody.appendChild(row);
         });
 
-        // Attach button event listeners if buttons are shown
         if (showButtons) {
             tableBody.querySelectorAll('.done-btn').forEach(button => {
                 button.addEventListener('click', handleRideDone);
@@ -315,17 +366,24 @@ async function handleRideDone(event) {
     try {
         const response = await fetch(`/api/driver-dashboard/rides/${rideId}/done`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            credentials: 'include'
         });
 
         if (response.ok) {
             alert('Ride marked as done!');
-            loadDriverData(); // Refresh the queue data
+            loadDriverData();
         } else {
-            alert(`Failed to mark ride as done: ${await response.text()}`);
+            const errorText = await response.text();
+            alert(`Failed to mark ride as done: ${errorText}`);
         }
     } catch (error) {
         console.error('Error marking ride as done:', error);
+        alert('An error occurred while marking the ride as done. Please try again.');
     }
 }
 
@@ -335,40 +393,58 @@ async function handleRideCancel(event) {
     try {
         const response = await fetch(`/api/driver-dashboard/rides/${rideId}/cancel`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            credentials: 'include'
         });
 
         if (response.ok) {
             alert('Ride canceled successfully!');
-            loadDriverData(); // Refresh the queue data
+            loadDriverData();
         } else {
-            alert(`Failed to cancel ride: ${await response.text()}`);
+            const errorText = await response.text();
+            alert(`Failed to cancel ride: ${errorText}`);
         }
     } catch (error) {
         console.error('Error canceling ride:', error);
+        alert('An error occurred while canceling the ride. Please try again.');
     }
 }
-
 
 // Auth Functions
 async function getCurrentUser() {
     try {
         const response = await fetch('/api/driver-dashboard/getCurrent', {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
             credentials: 'include'
         });
         if (response.ok) return await response.json();
         console.error('Failed to fetch user data');
+        return null;
     } catch (error) {
         console.error('Error fetching user data:', error);
+        return null;
     }
-    return null;
 }
 
 async function handleLogout() {
     try {
-        const response = await fetch('/api/logout', { method: 'POST' });
+        const response = await fetch('/api/logout', { 
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         if (response.ok) {
             window.location.href = '/login';
         } else {
@@ -380,40 +456,63 @@ async function handleLogout() {
     }
 }
 
-// Location Selection Handler
-function disableSameLocation() {
-    const startLocationSelect = document.getElementById('start-location');
-    const endLocationSelect = document.getElementById('end-location');
-
-    if (!startLocationSelect || !endLocationSelect) return;
-
-    startLocationSelect.addEventListener('change', () => {
-        const selectedStart = startLocationSelect.value;
-        Array.from(endLocationSelect.options).forEach(option => {
-            option.disabled = option.value === selectedStart;
-            option.style.color = option.disabled ? 'gray' : '';
-        });
-    });
-}
-
+// Polling Functions
 async function pollRideStatusUpdates() {
     try {
+        const currentUser = await getCurrentUser();
+        if (!currentUser?.user_id) {
+            console.warn('User not authenticated, skipping ride status poll');
+            return;
+        }
+
+        // Add driver_id to request body
         const response = await fetch('/api/driver-dashboard/updateRideStatuses', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ driver_id: currentUser.user_id }) // Add driver_id
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Updated rides:', data.updatedRides);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        }
 
-            // Refresh the driver data to reflect changes
+        const data = await response.json();
+        
+        if (data.updatedRides?.length > 0) {
+            console.log('Updated rides:', data.updatedRides);
             await loadDriverData();
-        } else {
-            console.error('Failed to update ride statuses');
         }
     } catch (error) {
         console.error('Error polling ride status updates:', error);
+        // Don't rethrow - we want the polling to continue
+    }
+}
+
+let pollInterval = null;
+
+function startPolling() {
+    // Clear any existing interval
+    if (pollInterval) {
+        clearInterval(pollInterval);
+    }
+    
+    // Initial poll
+    pollRideStatusUpdates();
+    
+    // Set up new interval - poll every 60 seconds
+    pollInterval = setInterval(pollRideStatusUpdates, 60000);
+}
+
+function stopPolling() {
+    if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
     }
 }
 
@@ -423,19 +522,32 @@ async function pollRideStatusUpdates() {
 document.addEventListener('DOMContentLoaded', () => {
     setupDateTimePicker();
     loadDriverData();
-    disableSameLocation();
-    setInterval(pollRideStatusUpdates, 60000); // Poll every 60 seconds
-    // Add event listeners with null checks
-    logoutBtn?.addEventListener('click', handleLogout);
+    disableLocationSelection();
+    startPolling();
     
+    // Add window visibility handling
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopPolling();
+        } else {
+            startPolling();
+        }
+    });
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+        stopPolling();
+    });
+
+    // Existing event listeners...
+    logoutBtn?.addEventListener('click', handleLogout);
     queueRideBtn?.addEventListener('click', async () => {
         await populateVehicleDropdown();
         openQueueRideModal();
     });
-
     closeQueueRideModalBtn?.addEventListener('click', closeQueueRideModal);
     queueRideForm?.addEventListener('submit', submitQueueRideForm);
-
+    
     addVehicleLink?.addEventListener('click', (event) => {
         event.preventDefault();
         if (addVehicleModal) addVehicleModal.style.display = 'block';
@@ -454,12 +566,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rideTypeSelect && scheduleTimeContainer && scheduleTimeInput) {
         rideTypeSelect.addEventListener('change', () => {
             if (rideTypeSelect.value === 'scheduled') {
-                scheduleTimeContainer.style.display = 'block'; // Show the schedule time input
-                scheduleTimeInput.setAttribute('required', 'true'); // Add `required`
+                scheduleTimeContainer.style.display = 'block';
+                scheduleTimeInput.setAttribute('required', 'true');
             } else {
-                scheduleTimeContainer.style.display = 'none'; // Hide the schedule time input
-                scheduleTimeInput.removeAttribute('required'); // Remove `required`
-                scheduleTimeInput.value = ''; // Clear any value
+                scheduleTimeContainer.style.display = 'none';
+                scheduleTimeInput.removeAttribute('required');
+                scheduleTimeInput.value = '';
             }
         });
     }

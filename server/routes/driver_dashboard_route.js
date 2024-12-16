@@ -343,41 +343,64 @@ router.get('/driver-dashboard/getVehicles', auth, async (req, res) => {
     }
 });
 
-// Update Rides Status Automatically
+// Update Rides Status
 router.post('/driver-dashboard/updateRideStatuses', async (req, res) => {
     try {
-        const now = new Date();
+        if (!req.session || !req.session.user_id) {
+            return res.status(401).json({ error: 'Not authenticated' });
+        }
 
-        // Fetch rides with "In Queue" or "Scheduled" status
+        const driver_id = req.session.user_id;
+        const now = new Date();
+        const currentTime = now.toTimeString().slice(0, 5); 
+        console.log('Current time:', currentTime);
+
+        // Fetch rides for the driver
         const [rides] = await db.query(
-            `SELECT ride_id, time_range, status FROM rides WHERE status IN ('In Queue', 'Scheduled')`
+            `SELECT ride_id, time_range, status 
+             FROM rides 
+             WHERE driver_id = ? 
+             AND status IN ('In Queue', 'Scheduled')`,
+            [driver_id]
         );
 
+        console.log(`Fetched ${rides.length} rides for driver ID: ${driver_id}`);
         const updatedRides = [];
 
         for (const ride of rides) {
-            // Split the time_range into date and time parts
-            const [rideDate, timeRange] = ride.time_range.split(' ');
-            const [startTime, endTime] = timeRange.split('-');
+            try {
+                if (!ride.time_range || !ride.time_range.includes('-')) {
+                    console.warn(`Skipping invalid time_range for ride: ${ride.ride_id}`);
+                    continue;
+                }
 
-            // Parse the end datetime
-            const [endHour, endMinutes] = endTime.split(':');
-            const endDate = new Date(`${rideDate}T${endHour}:${endMinutes}:00`);
-
-            if (endDate <= now) {
-                // Update the status to 'Done' if the end date is in the past
-                await db.query(`UPDATE rides SET status = 'Done' WHERE ride_id = ?`, [ride.ride_id]);
-                updatedRides.push(ride.ride_id);
+                const [startTime, endTime] = ride.time_range.split('-');
+                if (currentTime >= endTime) {
+                    await db.query(
+                        'UPDATE rides SET status = ? WHERE ride_id = ?',
+                        ['Done', ride.ride_id]
+                    );
+                    updatedRides.push(ride.ride_id);
+                    console.log(`Updated ride ${ride.ride_id} to Done`);
+                }
+            } catch (error) {
+                console.error(`Error processing ride ${ride.ride_id}:`, error);
             }
         }
 
-        res.status(200).json({ message: 'Statuses updated', updatedRides });
+        return res.json({
+            success: true,
+            message: 'Ride statuses updated',
+            updatedRides,
+            timestamp: now.toISOString(),
+        });
     } catch (error) {
-        console.error('Error updating ride statuses:', error);
-        res.status(500).json({ error: 'Failed to update ride statuses' });
+        console.error('Error in updateRideStatuses:', error);
+        return res.status(500).json({
+            error: 'Failed to update ride statuses',
+            details: error.message,
+        });
     }
 });
-
-
 
 module.exports = router;
