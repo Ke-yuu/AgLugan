@@ -444,6 +444,18 @@ select, .view-button {
   color: #fff;
 }
 
+.status-cancelled {
+  background-color: #ff4d4d; 
+  color: #fff;             
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  display: inline-block;
+  text-align: center;
+}
+
 /* Colors for different statuses */
 .status-done {
   background-color: #007bff; 
@@ -456,6 +468,9 @@ select, .view-button {
 
 .status-scheduled {
   background-color: #ffc107; 
+}
+.status-default {
+  background-color: #777777; 
 }
 
 /* Responsive Table */
