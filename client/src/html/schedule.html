@@ -31,9 +31,9 @@
   
         <!-- Checkbox to Show Inactive Rides -->
         <div class="checkbox-container">
-          <input type="checkbox" id="hideInactiveCheckbox">
-          <label for="hideInactiveCheckbox" class="checkbox-label">Show Inactive Rides</label>
-        </div>
+          <input type="checkbox" id="hideDoneCheckbox">
+          <label for="hideDoneCheckbox" class="checkbox-label">Show Finished Rides</label>
+      </div>
   
         <!-- Filter Modal -->
         <div id="filter-modal" class="modal">
@@ -54,7 +54,7 @@
               <select id="status-filter">
                 <option value="">All Statuses</option>
                 <option value="scheduled">Scheduled</option>
-                <option value="loading">Loading</option>
+                <option value="in queue">In Queue</option>
               </select>
   
               <label for="time-filter">Select Time (Hourly):</label>

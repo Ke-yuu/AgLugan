@@ -646,18 +646,29 @@ input:focus {
   text-align: right;
 }
 
+/* Base badge styling */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px; 
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+}
 
-/* Responsive Design */
-@media (max-width: 480px) {
-  .modal-content {
-    width: 90%;
-    padding: 15px;
-  }
+/* Colors for different statuses */
+.status-done {
+  background-color: #28a745; 
+}
 
-  .profile-picture-container img {
-    width: 100px;
-    height: 100px;
-  }
+.status-inqueue {
+  background-color: #ffc107; 
+  color: #000; 
+}
+
+.status-scheduled {
+  background-color: #007bff; 
 }
 
   /* Styles for the book ride button */

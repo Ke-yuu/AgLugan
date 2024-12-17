@@ -139,25 +139,12 @@ function displayPassengerInfo(data) {
 // Display available rides
 function displayAvailableRidesList(data) {
   const ridesList = document.getElementById('rides-list');
-  const currentTime = new Date();
 
   ridesList.innerHTML = ''; // Clear existing rides list
 
   if (data.rides && data.rides.length > 0) {
-    const availableRides = data.rides.filter((ride) => {
-      const rideTimeParts = ride.time_range.split('-');
-      const [startHour, startMinute] = rideTimeParts[0].split(':').map(Number);
-      const [endHour, endMinute] = rideTimeParts[1].split(':').map(Number);
-
-      // Create Date objects for start and end times
-      const rideStartTime = new Date();
-      rideStartTime.setHours(startHour, startMinute, 0, 0);
-      const rideEndTime = new Date();
-      rideEndTime.setHours(endHour, endMinute, 0, 0);
-
-      // Check if the current time falls within the ride's time range
-      return currentTime >= rideStartTime && currentTime <= rideEndTime;
-    });
+    // Filter rides to only include those with status "In Queue"
+    const availableRides = data.rides.filter((ride) => ride.status === 'In Queue');
 
     if (availableRides.length > 0) {
       availableRides.forEach((ride) => {
@@ -166,7 +153,7 @@ function displayAvailableRidesList(data) {
 
         // Add an event listener to open the modal when the card is clicked
         listItem.addEventListener('click', () => {
-          showRouteModal(ride); // Open modal with ride details
+          showRouteModal(ride); 
         });
 
         // Populate the list item with ride data and icon
@@ -197,6 +184,7 @@ function displayAvailableRidesList(data) {
     ridesList.appendChild(noDataItem);
   }
 }
+
 
 // Show ride details modal
 function showDetailsModal(rideId) {

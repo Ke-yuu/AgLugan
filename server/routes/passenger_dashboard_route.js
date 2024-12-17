@@ -10,6 +10,7 @@ const dbConfig = {
     database: 'aglugan',
 };
 
+// Passenger Dashboard Route
 router.get('/passenger-dashboard', auth, async (req, res) => {
     const userId = req.session.user_id;
 
@@ -40,23 +41,23 @@ router.get('/passenger-dashboard', auth, async (req, res) => {
             const email = userData.email || 'Not provided';
             const profile_picture_url = userData.profile_picture
                 ? `${userData.profile_picture}`
-                : '/default-profile.png';
+                : './media/default-profile.png';
 
             // Fetch available rides
             const [rideRows] = await connection.execute(
                 `SELECT ride_id, start_location, end_location, status, time_range, waiting_time 
                  FROM rides 
-                 WHERE status IN ('scheduled', 'loading')`
-                );
+                 WHERE status IN ('Scheduled', 'In Queue')`
+            );
 
-                // Fetch payment history
-                const [paymentRows] = await connection.execute(
-                    `SELECT ride_id, amount, payment_method, status, payment_date
-                     FROM payments 
-                     WHERE user_id = ? 
-                     ORDER BY payment_date DESC`,
-                    [userId]
-                );
+            // Fetch payment history
+            const [paymentRows] = await connection.execute(
+                `SELECT ride_id, amount, payment_method, status, payment_date
+                 FROM payments 
+                 WHERE user_id = ? 
+                 ORDER BY payment_date DESC`,
+                [userId]
+            );
 
             // Send combined data
             res.json({
@@ -74,8 +75,7 @@ router.get('/passenger-dashboard', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
-
+// Ride Details Route
 router.get('/ride-details', auth, async (req, res) => {
     const { ride_id } = req.query;
 
@@ -92,7 +92,8 @@ router.get('/ride-details', auth, async (req, res) => {
                     r.ride_id, 
                     CONCAT(r.start_location, ' - ', r.end_location) AS route, 
                     r.time_range AS schedule, 
-                    v.plate_number
+                    v.plate_number,
+                    r.status
                  FROM rides r
                  LEFT JOIN vehicles v ON r.driver_id = v.driver_id
                  WHERE r.ride_id = ?`,
