@@ -63,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
           <td><span class="status-badge status-${ride.status.toLowerCase().replace(' ', '')}">${ride.status}</span></td>
           <td>${formattedWaitingTime}</td>
           <td>
-            ${ride.status.toLowerCase() === "done" ? 
-              '<span class="status-badge status-done">Done</span>' : 
+            ${ride.status.toLowerCase() === "done" || ride.status.toLowerCase() === "cancelled" ? 
+              `<span class="status-badge status-${ride.status.toLowerCase()}">${ride.status}</span>` : 
               `<button class="booking-button">Book Ride</button>`}
           </td>
         `;
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Fetching rides with filters");
     
         // Get checkbox state and filter parameters
-        const showDone = document.getElementById("hideDoneCheckbox") && document.getElementById("hideDoneCheckbox").checked;
+        const showDone = showDoneCheckbox && showDoneCheckbox.checked;
         const route = document.getElementById("route-filter").value.trim();
         const status = document.getElementById("status-filter").value.trim();
         const time = document.getElementById("time-filter").value.trim();
@@ -120,18 +120,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         } else {
                             currentStatus = "Scheduled";
                         }
-    
+
                         if (currentStatus !== ride.status) {
                             updateRideStatus(ride.ride_id, currentStatus);
                         }
                     }
-    
-                    // Hide "Done" rides if checkbox is unchecked
-                    if (!showDone && currentStatus === "Done") {
+
+                    // Hide "Done" and "Cancelled" rides if checkbox is unchecked
+                    if (!showDone && (currentStatus === "Done" || currentStatus === "Cancelled")) {
                         return; // Skip adding to the table
                     }
-    
-                    const rideRow = createRideRow(ride, currentStatus);
+
+                    const rideRow = createRideRow({ ...ride, status: currentStatus });
                     ridesList.appendChild(rideRow);
                 });
             })
