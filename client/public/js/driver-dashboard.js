@@ -96,9 +96,15 @@ function calculateFare(startLocation, endLocation) {
         'Barangay Hall': {
             'Igorot Garden': 12,
             'SM Baguio': 12,
-            'Burnham Park': 12
+            'Burnham Park': 12,
+            'SLU Mary Heights': 13,
+            'Phase 1': 13,
+            'Phase 2': 13,
+            'Phase 3': 14
+
         },
         'SLU Mary Heights': {
+            'Holy Family Parish Church': 12,
             'Barangay Hall': 10,
             'SM Baguio': 13,
             'Burnham Park': 13,
@@ -106,6 +112,7 @@ function calculateFare(startLocation, endLocation) {
         },
         'Phase 3': {
             'SLU Mary Heights': 10,
+            'Holy Family Parish Church': 12,
             'Barangay Hall': 10,
             'SM Baguio': 14,
             'Burnham Park': 14,

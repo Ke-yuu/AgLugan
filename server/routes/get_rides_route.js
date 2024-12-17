@@ -17,9 +17,9 @@ router.get('/rides', async (req, res) => {
         const connection = await mysql.createConnection(dbConfig);
 
         let sql = `
-            SELECT rides.ride_id, rides.start_location, rides.end_location, rides.status, rides.fare, rides.waiting_time, rides.time_range, vehicles.plate_number
+            SELECT rides.ride_id, rides.start_location, rides.end_location, rides.status, 
+                rides.fare, rides.waiting_time, rides.time_range, rides.plate_number
             FROM rides
-            LEFT JOIN vehicles ON rides.driver_id = vehicles.driver_id
             WHERE 1=1
         `;
 
