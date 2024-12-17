@@ -104,6 +104,11 @@ addDriverForm?.addEventListener('submit', async function (e) {
         alert('Password must be at least 8 characters long.');
         return;
     }
+    const plateNumberRegex = /^[A-Z]{3} \d{3,4}$/;
+    if (!plateNumberRegex.test(plateNumber)) {
+        alert('Plate number must be in the format "ABC 123" or "ABC 1234".');
+        return;
+    }
 
     try {
         const response = await fetch('/api/add-driver', {

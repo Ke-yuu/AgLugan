@@ -62,7 +62,9 @@
     
                         <div class="form-group">
                             <label for="plate-number">Plate Number:</label>
-                            <input type="text" id="plate-number" required>
+                            <input type="text" id="plate-number" required
+                            pattern="^[A-Z]{3} [0-9]{3,4}$" 
+                            title="Plate number must be in the format ABC 123 or ABC 1234">
                         </div>
     
                         <div class="form-group">

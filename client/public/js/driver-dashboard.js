@@ -230,6 +230,16 @@ async function submitAddVehicleForm(event) {
         alert('Unable to fetch user data. Please try again.');
         return;
     }
+    // Fetch input values
+    const plateNumber = document.getElementById('plate-number').value.trim();
+    const capacity = document.getElementById('capacity').value;
+
+    // Plate number validation
+    const plateNumberPattern = /^[A-Z]{3} \d{3,4}$/; // Regular expression for ABC 123 or ABC 1234
+    if (!plateNumberPattern.test(plateNumber)) {
+        alert("Invalid plate number format. Please use 'ABC 123' or 'ABC 1234'.");
+        return;
+    }
 
     const payload = {
         capacity: document.getElementById('capacity').value,
