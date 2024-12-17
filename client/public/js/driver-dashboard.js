@@ -305,6 +305,7 @@ function updateRidesTable(tableBody, rides, showButtons = false) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${ride.plate_number || 'N/A'}</td>
+                <td>${ride.seat_status || 'N/A'}</td> <!-- Display 0/capacity here -->
                 <td>${ride.start_location || 'N/A'}</td>
                 <td>${ride.end_location || 'N/A'}</td>
                 <td>${ride.status || 'N/A'}</td>
@@ -334,9 +335,11 @@ function updateRidesTable(tableBody, rides, showButtons = false) {
             });
         }
     } else {
-        tableBody.innerHTML = '<tr><td colspan="6">No rides available</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7">No rides available</td></tr>'; // Adjust for new column
     }
 }
+
+
 
 async function handleRideDone(event) {
     const rideId = event.target.dataset.rideId;
