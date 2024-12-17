@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 16, 2024 at 08:20 PM
+-- Generation Time: Dec 17, 2024 at 07:35 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.3.0
 
@@ -164,32 +164,40 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
   `time_range` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seat_status` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`plate_number`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10065 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
+) ENGINE=MyISAM AUTO_INCREMENT=10076 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rides`
 --
 
-INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`) VALUES
-(1, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Done', 12.00, '00:15:00', '2024-12-17 10:00-10:15'),
-(2, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Cancelled', 12.00, '00:15:00', '2024-12-17 10:15-10:30'),
-(3, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Done', 13.00, '00:15:00', '2024-12-17 14:00-14:15'),
-(4, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Cancelled', 12.00, '00:15:00', '2024-12-17 11:00-11:15'),
-(5, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-19 15:00-15:15'),
-(6, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Scheduled', 12.00, '00:15:00', '2024-12-17 12:00-12:15'),
-(7, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00', '2024-12-18 13:00-13:15'),
-(8, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-21 10:00-10:15'),
-(9, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Scheduled', 12.00, '00:15:00', '2024-12-21 10:15-10:30'),
-(10, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Scheduled', 13.00, '00:15:00', '2024-12-21 14:00-14:15'),
-(11, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Scheduled', 12.00, '00:15:00', '2024-12-21 11:00-11:15'),
-(12, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00', '2024-12-20 15:00-15:15'),
-(13, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Scheduled', 12.00, '00:15:00', '2024-12-21 12:00-12:15'),
-(14, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00', '2024-12-19 13:00-13:15');
-
+INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`, `seat_status`) VALUES
+(1, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Done', 12.00, '00:15:00.000000', '2024-12-17 10:00-10:15', '0/23'),
+(2, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 10:15-10:30', '0/23'),
+(3, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Done', 13.00, '00:15:00.000000', '2024-12-17 14:00-14:15', '0/23'),
+(4, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 11:00-11:15', '0/23'),
+(5, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-19 15:00-15:15', '0/23'),
+(6, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Done', 12.00, '00:15:00.000000', '2024-12-17 12:00-12:15', '0/23'),
+(7, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-18 13:00-13:15', '0/23'),
+(8, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 10:00-10:15', '0/23'),
+(9, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 10:15-10:30', '0/23'),
+(10, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-21 14:00-14:15', '0/23'),
+(11, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 11:00-11:15', '0/23'),
+(12, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-20 15:00-15:15', '0/23'),
+(13, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 12:00-12:15', '0/23'),
+(14, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-19 13:00-13:15', '0/23'),
+(10065, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Done', 14.00, '00:15:00.000000', '2024-12-17 14:30-14:45', '0/23'),
+(10066, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Done', 14.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
+(10067, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Cancelled', 14.00, '00:15:00.000000', '2024-12-17 14:45-15:00', '0/23'),
+(10068, 'YAA 4321', 30, 'Barangay Hall', 'Burnham Park', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 15:15-15:30', '0/23'),
+(10073, 'web 123', 30, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '2024-12-17 15:45-16:00', '0/23'),
+(10072, 'web 123', 30, 'Phase 3', 'Barangay Hall', 'Scheduled', 10.00, '00:15:00.000000', '2024-12-17 20:30-20:45', '0/23'),
+(10071, 'web 123', 30, 'Phase 3', 'Barangay Hall', 'Done', 10.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
+(10074, 'web 123', 30, 'Igorot Garden', 'Phase 3', 'Done', 14.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
+(10075, 'web 123', 30, 'Igorot Garden', 'Phase 1', 'In Queue', 13.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23');
 
 -- --------------------------------------------------------
 
@@ -239,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vehicles`
@@ -251,7 +259,8 @@ INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) V
 (3, 103, 23, 'AHL 725'),
 (4, 30, 23, 'web 123'),
 (5, 30, 23, 'yaa 5656'),
-(6, 36, 23, 'yaa 9876');
+(6, 36, 23, 'yaa 9876'),
+(7, 30, 23, 'YAA 4321');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

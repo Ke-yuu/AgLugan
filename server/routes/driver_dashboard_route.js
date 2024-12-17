@@ -152,8 +152,9 @@ router.post('/driver-dashboard/queue', async (req, res) => {
 
     try {
         // Validate the vehicle belongs to the driver
+       // Fetch vehicle seat_status before queuing the ride
         const [vehicle] = await db.query(
-            `SELECT plate_number FROM vehicles WHERE vehicle_id = ? AND driver_id = ?`,
+            `SELECT plate_number, capacity FROM vehicles WHERE vehicle_id = ? AND driver_id = ?`,
             [vehicle_id, driver_id]
         );
 
@@ -162,6 +163,10 @@ router.post('/driver-dashboard/queue', async (req, res) => {
         }
 
         const plate_number = vehicle[0].plate_number;
+        const capacity = vehicle[0].capacity;
+
+        // Set seat_status as "0/{capacity}"
+        const seat_status = `0/${capacity}`;
 
         if (type === 'scheduled') {
             if (!schedule_times && !schedule_time) {
@@ -174,59 +179,86 @@ router.post('/driver-dashboard/queue', async (req, res) => {
             for (const time of times) {
                 // Parse the provided time
                 const startTime = new Date(time);
-
+            
                 if (isNaN(startTime.getTime())) {
                     return res.status(400).send('Invalid schedule time format.');
                 }
-
+            
                 // Calculate local start and end times with a 15-minute interval
-                const localStartTime = new Date(startTime.toLocaleString()); // Local time
+                const localStartTime = new Date(startTime);
                 const localEndTime = new Date(localStartTime);
                 localEndTime.setMinutes(localStartTime.getMinutes() + 15); // Add 15 minutes
-
+            
                 // Format the time range as 'YYYY-MM-DD HH:MM-HH:MM'
-                const formattedDate = localStartTime.toLocaleDateString('en-CA'); // Local YYYY-MM-DD
+                const formattedDate = localStartTime.toISOString().split('T')[0]; // YYYY-MM-DD
                 const startFormatted = localStartTime.toTimeString().slice(0, 5); // HH:MM
-                const endFormatted = localEndTime.toTimeString().slice(0, 5);     // HH:MM
-                const timeRange = `${formattedDate} ${startFormatted}-${endFormatted}`;
-
-                // Check for conflicts with the same time range
+                const endFormatted = localEndTime.toTimeString().slice(0, 5); // HH:MM
+                const timeRange = `${formattedDate} ${startFormatted}-${endFormatted}`; // Define `timeRange` here
+            
+                // Calculate 1 hour before and after
+                const oneHourBefore = new Date(localStartTime.getTime() - 60 * 60 * 1000);
+                const oneHourAfter = new Date(localEndTime.getTime() + 60 * 60 * 1000);
+            
+                // Check for conflicts in the 1-hour window
                 const [conflict] = await db.query(
                     `SELECT * FROM rides 
-                     WHERE driver_id = ? AND status IN ('Scheduled', 'In Queue')  AND time_range = ?`,
-                    [driver_id, timeRange]
+                     WHERE driver_id = ? 
+                     AND status IN ('Scheduled', 'In Queue') 
+                     AND (
+                         (time_range BETWEEN ? AND ?) OR
+                         (time_range BETWEEN ? AND ?)
+                     )`,
+                    [driver_id, oneHourBefore, oneHourAfter, oneHourBefore, oneHourAfter]
                 );
-
+            
                 if (conflict.length > 0) {
-                    return res.status(400).send(`A ride already exists at the scheduled time: ${timeRange}`);
+                    return res.status(400).send(`A ride already exists in the conflicting time window: ${timeRange}`);
                 }
-
+            
                 // Insert the ride if no conflicts
                 await db.query(
-                    `INSERT INTO rides (plate_number, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
-                     VALUES (?, ?, ?, ?, 'Scheduled', ?, ?, ?)`,
-                    [plate_number, driver_id, start_location, end_location, fare, '00:15:00', timeRange]
+                    `INSERT INTO rides (plate_number, seat_status, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
+                     VALUES (?, ?, ?, ?, ?, 'Scheduled', ?, ?, ?)`,
+                    [plate_number, seat_status, driver_id, start_location, end_location, fare, '00:15:00', timeRange]
                 );
             }
+            
         } else if (type === 'now') {
-            // Prevent duplicate "now" rides
-            const [existingNowRides] = await db.query(
-                `SELECT * FROM rides WHERE driver_id = ? AND status = 'In Queue'`,
-                [driver_id]
-            );
-
-            if (existingNowRides.length > 0) {
-                return res.status(400).send('You already have an active "now" ride.');
-            }
-
             // Generate time range for "now" rides
             const timeRange = await getNextTimeRange();
-
+        
+            // Check for conflicts with scheduled rides at the same time
+            const [conflict] = await db.query(
+                `SELECT * FROM rides 
+                 WHERE driver_id = ? 
+                 AND status = 'Scheduled'
+                 AND time_range = ?`,
+                [driver_id, timeRange]
+            );
+        
+            if (conflict.length > 0) {
+                return res.status(400).send('You already have a scheduled ride at this time.'); // Use return
+            }
+        
+            // Prevent duplicate "now" rides
+            const [existingNowRides] = await db.query(
+                `SELECT * FROM rides 
+                 WHERE driver_id = ? 
+                 AND status = 'In Queue'`,
+                [driver_id]
+            );
+        
+            if (existingNowRides.length > 0) {
+                return res.status(400).send('You already have an active "now" ride.'); // Use return
+            }
+        
+            // Insert the "now" ride if no conflicts
             await db.query(
-                `INSERT INTO rides (plate_number, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
-                 VALUES (?, ?, ?, ?, 'In Queue', ?, ?, ?)`,
+                `INSERT INTO rides (plate_number, seat_status, driver_id, start_location, end_location, status, fare, waiting_time, time_range) 
+                 VALUES (?, ?, ?, ?, ?, 'In Queue', ?, ?, ?)`,
                 [
                     plate_number,
+                    seat_status,
                     driver_id,
                     start_location,
                     end_location,
@@ -235,9 +267,10 @@ router.post('/driver-dashboard/queue', async (req, res) => {
                     timeRange
                 ]
             );
-        } else {
-            return res.status(400).send('Invalid ride type specified.');
+        
+            return res.status(201).send('Ride queued successfully.'); // Use return here as well
         }
+        
 
         res.status(201).send('Ride(s) queued successfully.');
     } catch (error) {
