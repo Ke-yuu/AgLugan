@@ -28,6 +28,8 @@ const driverDashboardRoute = require('./routes/driver_dashboard_route');
 const adminLoginRoute = require('./routes/admin_login_route');
 const getUsersRoute = require('./routes/get_users_route');
 const adminDashboardRoute = require('./routes/admin_dashboard_route');
+const bookRideRouter = require('./routes/book_ride_route');
+const scheduleMiddleware = require('./middleware/scheduleMiddleware');
 
 
 const app = express();
@@ -68,6 +70,7 @@ app.use((req, res, next) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     next();
 });
+
 // Static files middleware
 app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 app.use(express.static(path.join(__dirname, '..', 'client', 'src')));
@@ -99,6 +102,7 @@ app.use('/api', adminLoginRoute);
 app.use('/api', getUsersRoute);
 app.use('/api', adminDashboardRoute);
 app.use('/api/admin-dashboard', adminDashboardRoute);
+app.use('/api', bookRideRouter);
 
 
 // HTML Routes
