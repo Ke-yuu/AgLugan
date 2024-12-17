@@ -232,8 +232,12 @@
 
                     <div class="form-group">
                         <label for="plate-number">Plate Number</label>
-                        <input type="text" id="plate-number" name="plate-number" required placeholder="Enter plate number">
+                        <input type="text" id="plate-number" name="plate-number" 
+                               required placeholder="Enter plate number" 
+                               pattern="^[A-Z]{3} [0-9]{3,4}$" 
+                               title="Plate number must be in the format ABC 123 or ABC 1234">
                     </div>
+                    
 
                     <div class="form-actions">
                         <button type="submit" id="addVehicleSubmit" class="btn primary">Save Vehicle</button>
