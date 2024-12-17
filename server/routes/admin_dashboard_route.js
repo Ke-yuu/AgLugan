@@ -217,53 +217,11 @@ router.post('/add-id', async (req, res) => {
 // Update ride status
 router.put('/update-ride-status', async function (req, res) {
     try {
-        console.log('Update ride status route hit');
+        console.log('Refresh ride status route hit');
         const connection = await mysql.createConnection(dbConfig);
 
-        const currentTime = new Date().toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-            timeZone: 'Asia/Manila'
-        });
-
-        console.log('Current time:', currentTime);
-
+        // Fetch current ride statuses from the database
         const [rides] = await connection.execute(`
-            SELECT ride_id, time_range
-            FROM rides
-            WHERE status != 'Inactive'
-        `);
-
-        console.log('Fetched rides:', rides);
-
-        for (const ride of rides) {
-            try {
-                if (!ride.time_range || !ride.time_range.includes('-')) {
-                    console.warn(`Skipping ride ${ride.ride_id} due to invalid time_range format.`);
-                    continue;
-                }
-
-                const [startTimeRaw, endTimeRaw] = ride.time_range.split('-');
-                const startTime = startTimeRaw.trim();
-                const endTime = endTimeRaw.trim();
-
-                // Call your isTimeInRange helper with trimmed times
-                const isInTimeRange = isTimeInRange(currentTime, startTime, endTime);
-
-                console.log(`Updating ride ${ride.ride_id}: ${isInTimeRange ? 'Loading' : 'Scheduled'}`);
-
-                await connection.execute(
-                    'UPDATE rides SET status = ? WHERE ride_id = ?',
-                    [isInTimeRange ? 'Loading' : 'Scheduled', ride.ride_id]
-                );
-            } catch (error) {
-                console.error(`Error updating ride ${ride.ride_id}:`, error);
-                continue;
-            }
-        }
-
-        const [updatedRides] = await connection.execute(`
             SELECT 
                 r.ride_id,
                 r.start_location,
@@ -279,13 +237,18 @@ router.put('/update-ride-status', async function (req, res) {
         `);
 
         await connection.end();
-        res.json(updatedRides);
+
+        console.log('Fetched ride statuses:', rides);
+
+        // Send the fetched rides back to the frontend
+        res.json(rides);
 
     } catch (error) {
-        console.error('Error updating ride statuses:', error);
+        console.error('Error fetching ride statuses:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 // Delete Ride
 router.delete('/delete-ride/:rideId', async (req, res) => {

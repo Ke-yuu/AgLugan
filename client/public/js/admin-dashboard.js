@@ -196,31 +196,16 @@ function fetchRides(searchQuery = '') {
                 return;
             }
 
-            const filteredRides = searchQuery 
-                ? data.filter(ride => 
-                    ride.ride_id.toString().includes(searchQuery) ||
-                    ride.start_location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    ride.end_location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    ride.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    (ride.plate_number && ride.plate_number.toLowerCase().includes(searchQuery.toLowerCase()))
-                  )
-                : data;
-
-            if (filteredRides.length === 0) {
-                ridesList.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="no-rides">No matching rides found</td>
-                    </tr>`;
-                return;
-            }
-
-            filteredRides.forEach(ride => {
+            data.forEach(ride => {
+                const statusClass = getStatusClass(ride.status);
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${ride.ride_id}</td>
                     <td>${ride.start_location}</td>
                     <td>${ride.end_location}</td>
-                    <td style="color: ${ride.status === 'Loading' ? '#00FF00' : '#FFD700'}">${ride.status}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${ride.status}</span>
+                    </td>
                     <td>${ride.plate_number || 'N/A'}</td>
                     <td>₱${parseFloat(ride.fare).toFixed(2)}</td>
                     <td>${ride.time_range}</td>
@@ -247,6 +232,17 @@ function fetchRides(searchQuery = '') {
             }
         });
 }
+
+// Utility function to map status to CSS class
+function getStatusClass(status) {
+    switch (status.toLowerCase()) {
+        case 'scheduled': return 'status-scheduled'; // Yellow
+        case 'in queue': return 'status-in-queue'; // Orange
+        case 'done': return 'status-done'; // Green
+        default: return 'status-default'; // Gray
+    }
+}
+
 
 function fetchUsers(searchQuery = '') {
     const url = searchQuery 
@@ -431,28 +427,32 @@ function setupRefreshButton() {
     headerContainer.style.justifyContent = 'space-between';
     headerContainer.style.marginBottom = '1rem';
 
-    // Move the existing h2 into the container
+    // Replace the existing h2 element and move it into the container
     existingHeader.parentNode.replaceChild(headerContainer, existingHeader);
     headerContainer.appendChild(existingHeader);
 
-    // Create refresh button
+    // Create the refresh button
     const refreshButton = document.createElement('button');
     refreshButton.id = 'refreshRidesButton';
     refreshButton.className = 'refresh-btn';
     refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
-    
-    // Add styles
-    refreshButton.style.backgroundColor = '#4CAF50';
-    refreshButton.style.color = 'white';
-    refreshButton.style.padding = '8px 16px';
-    refreshButton.style.border = 'none';
-    refreshButton.style.borderRadius = '4px';
-    refreshButton.style.cursor = 'pointer';
-    refreshButton.style.display = 'inline-flex';
-    refreshButton.style.alignItems = 'center';
-    refreshButton.style.gap = '8px';
 
-    // Add hover effect
+    // Add button styles dynamically
+    Object.assign(refreshButton.style, {
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        padding: '8px 16px',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '1rem',
+        transition: 'background-color 0.3s ease'
+    });
+
+    // Hover effects
     refreshButton.addEventListener('mouseover', () => {
         refreshButton.style.backgroundColor = '#45a049';
     });
@@ -460,12 +460,28 @@ function setupRefreshButton() {
         refreshButton.style.backgroundColor = '#4CAF50';
     });
 
-    
-    refreshButton.addEventListener('click', refreshRideStatus);
+    // Button click behavior: Fetch updated ride data
+    refreshButton.addEventListener('click', async () => {
+        try {
+            refreshButton.disabled = true;
+            refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
 
-    
+            console.log('Fetching updated ride statuses...');
+            await fetchRides(); // Refresh the ride list on the frontend
+
+            refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+        } catch (error) {
+            console.error('Error refreshing ride statuses:', error);
+            alert('Failed to refresh ride statuses. Please try again.');
+        } finally {
+            refreshButton.disabled = false;
+        }
+    });
+
+    // Append the refresh button to the header container
     headerContainer.appendChild(refreshButton);
 }
+
 
 async function refreshRideStatus() {
     console.log('Refresh status function called'); 
@@ -499,7 +515,7 @@ async function refreshRideStatus() {
         const data = await response.json();
         console.log('Response data:', data); 
 
-        await fetchRides();
+        await fetchRides(); // Fetch updated rides and refresh table
 
         refreshButton.disabled = false;
         refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';

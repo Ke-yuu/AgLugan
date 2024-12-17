@@ -286,18 +286,37 @@ input:focus, select:focus {
   font-size: 0.95rem;
 }
 
-/* Status Colors */
+/* Badge Styles */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 20px;
+  color: #fff;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+/* Specific Badge Colors */
 .status-scheduled {
-  color: #ffd700;
+  background-color: #ffa600; 
+  color: #333;
 }
 
-.status-loading {
-  color: #00ff00;
+.status-in-queue {
+  background-color: #4CAF50; 
 }
 
-.status-completed {
-  color: #4169e1;
+.status-done {
+  background-color: rgb(39, 137, 202); 
 }
+
+.status-default {
+  background-color: #777777; 
+}
+
+
 
 /* Action Buttons */
 .action-buttons {
