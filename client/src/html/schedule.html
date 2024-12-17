@@ -29,11 +29,11 @@
       <div style="text-align: center; margin-bottom: 20px;">
         <button id="filter-button" class="view-button">Filter Rides</button>
   
-        <!-- Checkbox to Show Inactive Rides -->
+        <!-- Checkbox to Show Finished Rides -->
         <div class="checkbox-container">
           <input type="checkbox" id="hideDoneCheckbox">
           <label for="hideDoneCheckbox" class="checkbox-label">Show Finished Rides</label>
-      </div>
+        </div>
   
         <!-- Filter Modal -->
         <div id="filter-modal" class="modal">
@@ -72,18 +72,6 @@
                 <option value="10:30-11:00">10:30 - 11:00</option>
                 <option value="11:00-11:30">11:00 - 11:30</option>
                 <option value="11:30-12:00">11:30 - 12:00</option>
-                <option value="12:00-12:30">12:00 - 12:30</option>
-                <option value="12:30-13:00">12:30 - 13:00</option>
-                <option value="13:00-13:30">13:00 - 13:30</option>
-                <option value="13:30-14:00">13:30 - 14:00</option>
-                <option value="14:00-14:30">14:00 - 14:30</option>
-                <option value="14:30-15:00">14:30 - 15:00</option>
-                <option value="15:00-15:30">15:00 - 15:30</option>
-                <option value="15:30-16:00">15:30 - 16:00</option>
-                <option value="16:00-16:30">16:00 - 16:30</option>
-                <option value="16:30-17:00">16:30 - 17:00</option>
-                <option value="17:00-17:30">17:00 - 17:30</option>
-                <option value="17:30-18:00">17:30 - 18:00</option>
               </select>
   
               <div style="text-align: center; margin-top: 20px;">
@@ -117,6 +105,37 @@
     </div>
   </main>
 
+  <!-- Redesigned Booking Modal -->
+  <div id="advance-booking-modal" class="modal" style="display: none;">
+    <div class="modal-content new-modal">
+        <button class="close-button" id="close-advance-booking">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+            <h2>Confirm Your Booking</h2>
+            <p class="sub-text">Secure your seat now with a small additional fee.</p>
+        </div>
+        <div class="modal-body">
+            <p id="booking-details" class="booking-details-text"></p>
+            <div class="booking-summary">
+                <div class="icon-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="start-location" class="booking-location">Start Location</span>
+                </div>
+                <div class="icon-box">
+                    <i class="fas fa-flag-checkered"></i>
+                    <span id="end-location" class="booking-location">End Location</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="continue-to-book" class="primary-button">
+                Proceed to Payment
+            </button>
+        </div>
+    </div>
+  </div>
+  
   <script src="../js/schedule.js"></script>
   <script src="../js/page-transition.js"></script>
 </body>

@@ -1,27 +1,52 @@
 const express = require('express');
-const db = require('../../public/database/db'); // Database connection
+const mysql = require('mysql2');
 const router = express.Router();
 
+// Direct database configuration
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'aglugan',
+});
+
+// Connect to the database
+db.connect((err) => {
+    if (err) {
+        console.error('Database connection failed:', err.message);
+    } else {
+        console.log('Connected to the MySQL database.');
+    }
+});
+
+router.get('/session-check', (req, res) => {
+    if (req.session && req.session.user_id) {
+        res.json({ success: true, message: 'Session active', user: req.session.username });
+    } else {
+        res.status(401).json({ success: false, message: 'Session expired' });
+    }
+});
+
 router.post('/book-ride', async (req, res) => {
-    // Check if the user is logged in
-    const userId = req.session.user_id;
-    if (!userId) {
-        return res.status(401).json({ success: false, message: 'User not logged in.' });
+    console.log('Session on book-ride:', req.session); // Log session for debugging
+
+    if (!req.session || !req.session.user_id) {
+        console.log('Unauthorized access - session not found.');
+        return res.status(401).json({ status: 'error', message: 'Unauthorized access' });
     }
 
     const { ride_id } = req.body;
 
     if (!ride_id) {
-        return res.status(400).json({ success: false, message: 'Ride ID is required.' });
+        return res.status(400).json({ status: 'error', message: 'Ride ID is required.' });
     }
 
     try {
-        // Update the ride status to "Booked" and link it to the user
         const [result] = await db.promise().query(
             `UPDATE rides 
              SET user_id = ?, booking_status = 'Booked' 
              WHERE ride_id = ? AND booking_status = 'Available'`,
-            [userId, ride_id]
+            [req.session.user_id, ride_id]
         );
 
         if (result.affectedRows === 1) {
@@ -29,12 +54,12 @@ router.post('/book-ride', async (req, res) => {
         } else {
             res.status(400).json({
                 success: false,
-                message: 'Failed to book ride. The ride may already be booked or unavailable.',
+                message: 'Ride is no longer available or already booked.',
             });
         }
     } catch (error) {
         console.error('Error booking ride:', error);
-        res.status(500).json({ success: false, message: 'Internal server error.' });
+        res.status(500).json({ status: 'error', message: 'Internal server error.' });
     }
 });
 

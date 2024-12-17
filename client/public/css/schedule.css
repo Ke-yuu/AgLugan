@@ -30,12 +30,6 @@ header nav {
   transform: scale(1.1);
 }
 
-.brand-name {
-  font-size: 1.5rem;
-  color: #f8f8f8;
-  font-weight: bold;
-}
-
 ul {
   list-style-type: none;
   display: flex;
@@ -49,11 +43,12 @@ ul li a {
   padding: 8px 16px;
   background-color: #ff0000;
   border-radius: 10px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 ul li a:hover {
   background-color: #910b0b;
+  transform: scale(1.05);
 }
 
 .nav-links li a.active {
@@ -88,7 +83,7 @@ h1, h2 {
 label {
   display: block;
   margin-bottom: 8px;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 select, .view-button {
@@ -116,275 +111,119 @@ select, .view-button {
   transform: scale(1.1);
 }
 
-/* Ride List Styles */
-.ride-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  overflow-y: auto;
-  max-height: 700px;
-  width: 100%;
-}
-
-.ride-item {
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  padding: 15px;
-  margin-bottom: 15px;
-  background-color: #1b1b1b;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  word-wrap: break-word;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  color: #fff;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.ride-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-}
-
-.ride-banner {
-  font-weight: bold;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.banner-full {
-  background-color: #ff0000;
-}
-
-.banner-few {
-  background-color: #ffcc00;
-  color: #333;
-}
-
-.book-button {
-  background-color: #252121;
-  color: #fff;
-  border: none;
-  max-width: 20%;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  margin-top: 7px;
-  transition: background-color 0.3s ease; 
-}
-
-.banner-available {
-  background-color: #28a745;
-}
-
-.ride-details {
-  flex-grow: 1;
-  width: auto;
-}
-
-.ride-id, .driver-id, .status, .waiting-time {
-  margin: 0 10px 10px 0;
-  word-wrap: break-word;
-  font-size: 14px;
-}
-
-.payment-button {
-  padding: 7px 15px;
-  background-color: #ff0000;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  align-self: center;
-  margin-left: 20px;
-}
-
-.payment-button:hover {
-  background-color: #cc0000;
-}
-
-/* No Available Rides Message */
-#rides-list li {
-  padding: 15px;
-  background-color: #5a5a5a;
-  border: 1px solid #272727;
-  border-radius: 8px;
-  color: #fffefe;
-  width: 98%;
-}
-
-.status {
-  color: gold;
-}
-
-/* Checkbox Styles */
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  gap: 5px;
-}
-
-.checkbox-label {
-  font-size: 14px;
-  color: #f8f8f8;
-  cursor: pointer;
-  padding-top: 6px;
-}
-
-#hideInactiveCheckbox {
-  width: 14px;
-  height: 14px;
-  accent-color: #ff0000; 
-  cursor: pointer;
-  margin-top: -4px;
-}
-
-.checkbox-label:hover,
-#hideInactiveCheckbox:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
-}
-
-/* Modal Styles */
+/* Redesigned Modal */
 .modal {
   display: none;
-  position: fixed; 
-  z-index: 1; 
-  left: 0;
+  position: fixed;
+  z-index: 10;
   top: 0;
-  width: 100%;
-  height: 100%; 
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8); 
-}
-
-#route-filter {
-  border-radius: 10px;
-}
-#status-filter {
-  border-radius: 10px;
-}
-#time-filter {
-  border-radius: 10px;
-}
-
-
-.modal-content {
-  background-color: #1b1b1b;
-  margin: 15% auto; 
-  padding: 20px;
-  border: 1px solid #888;
-  width: 35%; 
-  color: #f8f8f8;
-  border-radius: 10px;
-}
-
-.close-button {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-  color: #ff0000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.ride-info {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-}
-
-/* Modal Styles */
-.modal {
-  display: none;
-  position: fixed; 
-  z-index: 1; 
   left: 0;
-  top: 0;
   width: 100%;
-  height: 100%; 
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8); 
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Modal Content */
-.modal-content {
-  background-color: #242424;
-  margin: 10% auto; 
-  padding: 30px;
-  border: 1px solid #ccc9c9;
-  width: 30%;
-  color: #f8f8f8;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  text-align: center;
-}
-
-.close-button {
-  color: #ff0000;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.close-button:hover,
-.close-button:focus {
+.new-modal {
+  background-color: #1e1e1e;
+  border-radius: 12px;
   color: #ffffff;
-  text-decoration: none;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  animation: fadeInModal 0.5s ease;
+  max-width: 400px;
+  margin: 10% auto;
 }
 
-/* Modal Heading */
-.modal-content h2 {
-  color: #ff0000;
-  font-size: 24px;
-  margin-bottom: 20px;
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Modal Paragraph */
-.modal-content p {
-  font-size: 18px;
-  margin-bottom: 30px;
-  color: #f8f8f8;
+.modal-header h2 {
+  color: #ff4d4d;
+  font-size: 1.8rem;
+  margin: 0;
 }
 
-/* Booking Button Styles */
-.booking-button {
-  padding: 10px 20px;
-  background-color: #ff0000;
-  color: #fff;
+.sub-text {
+  color: #d0d0d0;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.booking-details-text {
+  font-size: 1rem;
+  color: #f2f2f2;
+  margin: 20px 0;
+}
+
+.booking-summary {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.icon-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  color: #f2f2f2;
+}
+
+.icon-box i {
+  font-size: 1.5rem;
+  color: #ff4d4d;
+}
+
+.primary-button {
+  background-color: #ff4d4d;
   border: none;
-  border-radius: 5px;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  align-self: center;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.booking-button:hover {
+.primary-button:hover {
   background-color: #cc0000;
   transform: scale(1.05);
 }
 
-/* Table Styles */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #ffffff;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .new-modal {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .booking-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* Ride List Table */
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
@@ -410,85 +249,24 @@ select, .view-button {
   border-bottom: 1px solid #333;
 }
 
-.schedule-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
 .schedule-table tbody tr:hover {
   background-color: #252525;
   transform: translateY(-2px);
 }
 
-.schedule-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-
-/* Table Container */
-.table-container {
-  margin-top: 20px;
-  overflow-x: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-
-/* Base badge styling */
 .status-badge {
   display: inline-block;
   padding: 5px 10px;
-  border-radius: 8px; 
+  border-radius: 8px;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #fff;
 }
 
-.status-cancelled {
-  background-color: #ff4d4d; 
-  color: #fff;             
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  text-transform: capitalize;
-  display: inline-block;
-  text-align: center;
-}
-
-/* Colors for different statuses */
-.status-done {
-  background-color: #007bff; 
-}
-
-.status-inqueue {
-  background-color: #28a745; 
-  color: #ffff; 
-}
-
-.status-scheduled {
-  background-color: #ffc107; 
-}
-.status-default {
-  background-color: #777777; 
-}
-
-/* Responsive Table */
-@media (max-width: 768px) {
-  .schedule-table {
-    font-size: 14px;
-  }
-  
-  .schedule-table th,
-  .schedule-table td {
-    padding: 10px;
-  }
-  
-  .status-badge {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-}
+.status-inqueue { background-color: #28a745; color: #fff; }
+.status-scheduled { background-color: #ffc107; color: #333; }
+.status-done { background-color: #007bff; color: #fff; }
+.status-cancelled { background-color: #ff4d4d; color: #fff; }
 
 /* Responsive Design */
 @media (max-width: 600px) {
@@ -499,11 +277,6 @@ select, .view-button {
   .ride-info {
     font-size: 14px;
     flex-direction: column;
-  }
-
-  .ride-item {
-    padding: 10px;
-    max-width: 100%;
   }
 
   .payment-button {
