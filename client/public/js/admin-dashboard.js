@@ -175,7 +175,6 @@ function handleEscapeKey(event) {
     }
 }
 
-// Data Fetching Functions
 function fetchRides(searchQuery = '') {
     const url = searchQuery 
         ? `/api/rides?search=${encodeURIComponent(searchQuery)}`
@@ -196,7 +195,7 @@ function fetchRides(searchQuery = '') {
             if (!data || data.length === 0) {
                 ridesList.innerHTML = `
                     <tr>
-                        <td colspan="8" class="no-rides">No rides found</td>
+                        <td colspan="9" class="no-rides">No rides found</td>
                     </tr>`;
                 return;
             }
@@ -214,6 +213,7 @@ function fetchRides(searchQuery = '') {
                     <td>${ride.plate_number || 'N/A'}</td>
                     <td>₱${parseFloat(ride.fare).toFixed(2)}</td>
                     <td>${ride.time_range}</td>
+                    <td>${ride.seat_status || '0/23'}</td>
                     <td>
                         <button class="remove-ride-btn" onclick="removeRide(${ride.ride_id})">
                             <i class="fas fa-trash"></i>
@@ -229,7 +229,7 @@ function fetchRides(searchQuery = '') {
             if (ridesList) {
                 ridesList.innerHTML = `
                     <tr>
-                        <td colspan="8" class="error-message">
+                        <td colspan="9" class="error-message">
                             Error loading rides. Please try again later.
                         </td>
                     </tr>

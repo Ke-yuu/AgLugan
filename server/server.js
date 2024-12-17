@@ -31,7 +31,7 @@ const adminDashboardRoute = require('./routes/admin_dashboard_route');
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;~
 
 // Logging middleware (placed first to catch all requests)
 app.use((req, res, next) => {
