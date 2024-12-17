@@ -230,7 +230,7 @@ select, .view-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   gap: 5px;
 }
 
@@ -238,6 +238,7 @@ select, .view-button {
   font-size: 14px;
   color: #f8f8f8;
   cursor: pointer;
+  padding-top: 6px;
 }
 
 #hideInactiveCheckbox {
@@ -422,30 +423,6 @@ select, .view-button {
   border-bottom: none;
 }
 
-/* Status Badge Styles */
-.status-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-  display: inline-block;
-}
-
-.status-scheduled {
-  background-color: #f5bf0c;
-  color: rgb(10, 10, 10);
-}
-
-.status-loading {
-  background-color: #00c410;
-  color: #ffffff;
-}
-
-.status-inactive {
-  background-color: #dc3545;
-  color: white;
-}
 
 /* Table Container */
 .table-container {
@@ -453,6 +430,32 @@ select, .view-button {
   overflow-x: auto;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Base badge styling */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px; 
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* Colors for different statuses */
+.status-done {
+  background-color: #007bff; 
+}
+
+.status-inqueue {
+  background-color: #28a745; 
+  color: #ffff; 
+}
+
+.status-scheduled {
+  background-color: #ffc107; 
 }
 
 /* Responsive Table */
