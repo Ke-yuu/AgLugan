@@ -44,6 +44,39 @@ INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
 (3, 'admin2', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua'),
 (4, 'admin3', 'admin123');
 
+
+--
+-- Table structure for table `bookings`
+--
+
+DROP TABLE IF EXISTS `bookings`;
+CREATE TABLE IF NOT EXISTS `bookings` (
+  `booking_id` int NOT NULL AUTO_INCREMENT,
+  `ride_id` int NOT NULL,
+  `booking_status` varchar(20) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`booking_id`),
+  KEY `ride_id` (`ride_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`booking_id`, `ride_id`, `booking_status`, `created_at`) VALUES
+(1, 10077, 'BOOKED', '2024-12-18 17:54:33'),
+(2, 10078, 'BOOKED', '2024-12-18 18:01:14'),
+(3, 10079, 'BOOKED', '2024-12-18 18:43:05'),
+(4, 10079, 'BOOKED', '2024-12-18 18:47:48');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
 -- --------------------------------------------------------
 
 --
