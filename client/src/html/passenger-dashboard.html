@@ -13,149 +13,196 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo-container">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
                 <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
-            <div class="profile-content">    
-                <h2>Welcome, <span id="passenger-name">Passenger Name</span>!</h2>
-            </div>
-            <ul>
-                <li><a href="/schedule"><i class="fas fa-calendar-alt"></i></a></li>
-                <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
-                <button id="profileBtn" class="icon-button"><i class="fas fa-user"></i></button>
-            </ul>
-        </nav>
-    </header>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/schedule" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule</span>
+                </a>
+                <a href="#" class="nav-item" id="profileBtn">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <button id="logoutBtn" class="nav-item logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </nav>
+        </aside>
 
-    <main class="main-content">
-        <div class="profile-dashboard-container">
-            <div class="profile-picture-container">
-                <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
-            </div>
-            <div class="dashboard-text">
-                <h1>Welcome to the Passenger Dashboard!</h1>
-                <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
-            </div>
-        </div>
-        
-        <div class="dashboard-sections">
-            <!-- Section 1: Available Rides -->
-            <div class="section" id="available-rides-section">
-                <h2>Available Rides</h2>
-                <ul id="rides-list"></ul>
-            </div>
-
-            <!-- Section 2: Payment History -->
-            <div class="section" id="ride-history-section">
-                <h2>Payment History</h2>
-                <table id="payment-history-table" class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>Ride ID</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-<!-- Profile Modal -->
-<div id="profileModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModalBtn">&times;</span>
-        <h2 class="modal-title">Profile Settings</h2>
-        
-        <div class="profile-grid">
-            <!-- Left Column -->
-            <div class="profile-info">
-                <div class="profile-picture-container">
-                    <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
-                    <label for="profile-picture-input" class="camera-icon">
-                        <i class="fas fa-camera"></i>
-                        <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" hidden>
-                    </label>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Header -->
+            <header class="content-header">
+                <div class="header-content">
+                    <div class="user-welcome">
+                        <div class="profile-image">
+                            <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
+                        </div>
+                        <div class="welcome-text">
+                            <h1>Welcome to the Passenger Dashboard!</h1>
+                            <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                    </div>
                 </div>
+            </header>
 
-                <form id="profileForm">
-                    <div class="form-group">
-                        <label for="passenger-name-input">Name</label>
-                        <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Available Rides Section -->
+                <section class="dashboard-card rides-section">
+                    <div class="card-header">
+                        <h2><i class="fas fa-route"></i> Available Rides</h2>
                     </div>
-                    <div class="form-group">
-                        <label for="passenger-email-input">Email</label>
-                        <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                    <div class="card-content" id="rides-list">
+                        <div class="no-rides-message">
+                            <i class="fas fa-car-side"></i>
+                            <p>No rides available at the moment</p>
+                        </div>
                     </div>
-                    <button type="submit" class="save-btn">Apply</button>
-                </form>
-            </div>
+                </section>
 
-            <!-- Right Column -->
-            <div class="password-info">
-                <h3>Change Password</h3>
-                <form id="changePasswordForm">
-                    <div class="form-group password-field">
-                        <label for="current-password">Current Password</label>
-                        <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
-                        <i class="fas fa-eye toggle-password" data-for="current-password"></i>
+                <!-- Payment History Section -->
+                <section class="dashboard-card history-section">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history"></i> Payment History</h2>
                     </div>
-                    <div class="form-group password-field">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
-                        <i class="fas fa-eye toggle-password" data-for="new-password"></i>
+                    <div class="card-content">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>RIDE ID</th>
+                                    <th>AMOUNT</th>
+                                    <th>METHOD</th>
+                                    <th>STATUS</th>
+                                    <th>DATE</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" class="no-data">No payment history found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="form-group password-field">
-                        <label for="confirm-password">Confirm New Password</label>
-                        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
-                        <i class="fas fa-eye toggle-password" data-for="confirm-password"></i>
+                </section>
+
+                <!-- Help Section -->
+                <section class="dashboard-card help-section">
+                    <div class="card-header">
+                        <h2><i class="fas fa-life-ring"></i> Help and Support</h2>
                     </div>
-                    <button type="submit" class="save-btn">Apply</button>
-                </form>
+                    <div class="card-content">
+                        <div class="help-content">
+                            <i class="fas fa-headset support-icon"></i>
+                            <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+                            <button class="contact-support-btn">Contact Support</button>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
+        </main>
     </div>
-</div>
 
-            <!-- Ride Details Modal -->
-            <div id="detailsModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-btn" id="closeDetailsModal">&times;</span>
-                    <h2>Payment & Ride Details</h2>
-                    <div class="modal-details">
-                        <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
-                        <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
-                        <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
-                        <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
-                        <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
-                        <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
-                        <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
-                        <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
+        <!-- Profile Modal -->
+        <div id="profileModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModalBtn">&times;</span>
+                <h2 class="modal-title">Profile Settings</h2>
+                
+                <div class="profile-grid">
+                    <!-- Left Column -->
+                    <div class="profile-info">
+                        <div class="profile-picture-container">
+                            <img id="modal-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
+                            <label for="profile-picture-input" class="camera-icon">
+                                <i class="fas fa-camera"></i>
+                                <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" hidden>
+                            </label>
+                        </div>
+
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="passenger-name-input">Name</label>
+                                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="passenger-email-input">Email</label>
+                                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                            </div>
+                            <button type="submit" class="save-btn">Apply</button>
+                        </form>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="password-info">
+                        <h3>Change Password</h3>
+                        <form id="changePasswordForm">
+                            <div class="form-group password-field">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+                                <i class="fas fa-eye toggle-password" data-for="current-password"></i>
+                            </div>
+                            <div class="form-group password-field">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+                                <i class="fas fa-eye toggle-password" data-for="new-password"></i>
+                            </div>
+                            <div class="form-group password-field">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+                                <i class="fas fa-eye toggle-password" data-for="confirm-password"></i>
+                            </div>
+                            <button type="submit" class="save-btn">Apply</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Help Section -->
-            <div class="section help-section">
-                <h2>Help and Support</h2>
-                <p>Need assistance? Contact our support at <strong>support@aglugan.com</strong> or call (02) 1234-5678.</p>
+        <!-- Ride Details Modal -->
+        <div id="detailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeDetailsModal">&times;</span>
+                <h2>Payment & Ride Details</h2>
+                <div class="modal-details">
+                    <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
+                    <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
+                    <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
+                    <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
+                    <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
+                    <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
+                    <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
+                    <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
+                </div>
             </div>
         </div>
 
-<!-- Route Modal -->
-<div id="routeModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeRouteModalBtn">&times;</span>
-    <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
-    <p><strong>From:</strong> <span id="startLocationDisplay"></span></p>
-    <p><strong>To:</strong> <span id="endLocationDisplay"></span></p>
-    <div id="mapContainer" style="height: 400px; margin-top: 10px;"></div>
-  </div>
-</div>
+        <!-- Route Modal -->
+        <div id="routeModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeRouteModalBtn">&times;</span>
+                <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
+                <p><strong>From:</strong> <span id="startLocationDisplay"></span></p>
+                <p><strong>To:</strong> <span id="endLocationDisplay"></span></p>
+                <div id="mapContainer" style="height: 400px; margin-top: 10px;"></div>
+            </div>
+        </div>
     </main>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
