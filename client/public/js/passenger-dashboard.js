@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Handle form submission for changing password
   if (document.getElementById('changePasswordForm')) {
-    handleChangePassword();
+    handlePasswordUpdate();
   }
 
   // Setup modal close button
@@ -185,7 +185,6 @@ function displayAvailableRidesList(data) {
   }
 }
 
-
 // Show ride details modal
 function showDetailsModal(rideId) {
   if (!rideId) {
@@ -230,11 +229,45 @@ function setupDetailsModalClose() {
   }
 }
 
-// Profile modal setup
+// Profile modal setup with all handlers
 function setupProfileModal() {
   const profileModal = document.getElementById('profileModal');
   const profileBtn = document.getElementById('profileBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
+  const profilePictureInput = document.getElementById('profile-picture-input');
+  const currentProfilePicture = document.getElementById('current-profile-picture');
+
+  // Setup password visibility toggles
+  const toggleButtons = document.querySelectorAll('.toggle-password');
+  toggleButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const inputId = this.getAttribute('data-for');
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        this.classList.remove('fa-eye');
+        this.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        this.classList.remove('fa-eye-slash');
+        this.classList.add('fa-eye');
+      }
+    });
+  });
+
+  // Profile picture change handler
+  if (profilePictureInput) {
+    profilePictureInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentProfilePicture.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
 
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
@@ -262,54 +295,49 @@ function setupProfileModal() {
 // Profile update handler
 function handleProfileUpdate() {
   const profileForm = document.getElementById('profileForm');
-  if (!profileForm) {
-    console.warn('Profile form is missing.');
-    return;
-  }
+  const profilePictureInput = document.getElementById('profile-picture-input');
 
   profileForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const name = document.getElementById('passenger-name-input').value.trim();
-    const email = document.getElementById('passenger-email-input').value.trim();
-    const profilePictureFile = document.getElementById('profile-picture-input').files[0];
-
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    if (profilePictureFile) {
-      formData.append('profile_picture', profilePictureFile);
+    formData.append('name', document.getElementById('passenger-name-input').value.trim());
+    formData.append('email', document.getElementById('passenger-email-input').value.trim());
+
+    if (profilePictureInput.files[0]) {
+      formData.append('profile_picture', profilePictureInput.files[0]);
     }
 
     try {
       const response = await fetch('/api/update-profile', {
         method: 'POST',
-        body: formData,
+        body: formData
       });
 
       const data = await response.json();
 
       if (data.status === 'success') {
-        alert('Profile updated successfully.');
-        document.getElementById('current-profile-picture').src = data.profile_picture_url + '?t=' + new Date().getTime();
+        alert('Profile updated successfully');
         document.getElementById('profileModal').style.display = 'none';
+        // Update profile picture in the dashboard if it was changed
+        if (data.profile_picture_url) {
+          document.getElementById('current-profile-picture').src = 
+            data.profile_picture_url + '?t=' + new Date().getTime();
+        }
         location.reload();
       } else {
-        alert(data.message || 'Failed to update profile.');
+        alert(data.message || 'Failed to update profile');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
+      alert('An error occurred while updating the profile');
     }
   });
 }
 
-// Password change handler
-function handleChangePassword() {
+// Password update handler
+function handlePasswordUpdate() {
   const passwordForm = document.getElementById('changePasswordForm');
-  if (!passwordForm) {
-    console.warn('Password form is missing.');
-    return;
-  }
 
   passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -319,32 +347,34 @@ function handleChangePassword() {
     const confirmPassword = document.getElementById('confirm-password').value.trim();
 
     if (newPassword !== confirmPassword) {
-      alert('New password and confirmation do not match.');
+      alert('New password and confirmation do not match');
       return;
     }
 
     try {
       const response = await fetch('/api/change-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           current_password: currentPassword,
-          new_password: newPassword,
-        }),
+          new_password: newPassword
+        })
       });
 
       const data = await response.json();
 
       if (data.status === 'success') {
-        alert('Password changed successfully.');
+        alert('Password changed successfully');
         passwordForm.reset();
         document.getElementById('profileModal').style.display = 'none';
-        location.reload();
       } else {
-        alert(data.message || 'Failed to change password.');
+        alert(data.message || 'Failed to change password');
       }
     } catch (error) {
       console.error('Error changing password:', error);
+      alert('An error occurred while changing the password');
     }
   });
 }

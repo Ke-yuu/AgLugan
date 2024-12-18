@@ -2,12 +2,26 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  --primary: #f80c00;
+  --primary-dark: #a00b03;
+  --background: #1A1A1A;
+  --surface: #262626;
+  --surface-hover: #333333;
+  --text: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --border: #404040;
+  --success: #34C759;
+  --transition: all 0.2s ease-in-out;
 }
 
 html, body {
   height: 100%;
-  background-color: #333333;
+  background-color: var(--background);
+  color: var(--text);
 }
 
 /* Navigation Bar */
@@ -15,131 +29,202 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 25px;
-  background-color: #1b1b1b;
+  padding: 1rem 2rem;
+  background-color: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .logo-container {
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
 .logo {
   width: 50px;
-  margin-right: 10px;
+  transition: var(--transition);
 }
+
 .logo:hover {
-  cursor: pointer;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-.brand-name {
-  font-size: 1.5rem;
-  color: #f8f8f8;
-  font-weight: bold;
-}
-
-ul {
-  list-style-type: none;
+.nav-links {
   display: flex;
-  gap: 10px;
-  margin: 0;
+  gap: 1rem;
 }
 
-ul li a {
+.nav-links a {
   text-decoration: none;
-  color: #f8f8f8;
-  padding: 10px 20px;
-  background-color: #ff0000;
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  background-color: var(--surface-hover);
   border-radius: 8px;
-  transition: background-color 0.3s;
+  transition: var(--transition);
+  font-weight: 500;
 }
 
-ul li a:hover {
-  background-color: #910b0b;
+.nav-links a:hover {
+  background-color: var(--primary);
 }
 
-.nav-links li a.active {
-  background-color: #707070;
-  color: #f7f1f1;
-}
-
-/* Payment Container Styling */
+/* Payment Container */
 .payment-container {
-  width: 60%;
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 30px;
-  background-color: rgb(27, 27, 27);
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .payment-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
   text-align: center;
-  margin-bottom: 20px;
 }
 
-.payment-selection label,
-.payment-section label {
+.payment-selection {
+  margin-bottom: 2rem;
+}
+
+.payment-selection label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
-.payment-selection select,
-.payment-section input {
+select {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #222;
-  color: white;
+  padding: 1rem;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+select:hover {
+  border-color: var(--primary);
 }
 
 .payment-section {
   display: none;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .payment-section.active {
   display: block;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .payment-section h2 {
-  color: #ff0000;
-  margin-bottom: 15px;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.payment-section p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .checkbox-container {
   display: flex;
-  align-items: center;
-  gap: 10px; 
-  margin-top: 10px;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
 }
 
 .checkbox-container input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  margin-top: 0.25rem;
 }
 
+.checkbox-container label {
+  color: var(--text);
+  margin: 0;
+}
+
+.checkbox-container a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.checkbox-container a:hover {
+  text-decoration: underline;
+}
+
+/* Button Styles */
 .submit-btn {
   width: 100%;
-  padding: 10px;
-  background-color: #ff0000;
+  padding: 1rem;
+  background-color: var(--primary);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  transition: var(--transition);
 }
 
 .submit-btn:hover {
-  background-color: #910b0b;
+  background-color: var(--primary-dark);
 }
 
-/* Modal Styling */
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
 .modal {
   display: none;
   position: fixed;
@@ -147,53 +232,82 @@ ul li a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 10% auto;
-  padding: 20px;
-  width: 60%;
-  max-width: 600px;
-  border-radius: 5px;
+  background-color: var(--surface);
+  color: var(--text);
+  margin: 5% auto;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 16px;
   position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+.modal-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .modal-content button {
-  background-color: #4CAF50;
+  background-color: var(--success);
   color: white;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px;
-  transition: background-color 0.3s ease;
+  transition: var(--transition);
 }
 
 .modal-content button:hover {
-  background-color: #ff0000;
-}
-
-/* Success Modal Heading */
-.modal-content h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-/* Success Modal Paragraph */
-.modal-content p {
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: #333;
+  filter: brightness(1.1);
 }
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #ff0000;
+  top: 1rem;
+  right: 1rem;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
   cursor: pointer;
-  font-size: 24px;
+  transition: var(--transition);
+}
+
+.close:hover {
+  color: var(--primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-container {
+    width: 95%;
+    padding: 1.5rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+  }
+  
+  header nav {
+    padding: 1rem;
+  }
+  
+  .nav-links a {
+    padding: 0.5rem 1rem;
+  }
 }
