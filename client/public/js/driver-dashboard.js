@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDateTimePicker();
     loadDriverData();
     disableSameLocation();
-    setInterval(pollRideStatusUpdates, 60000); // Poll every 60 seconds
+    setInterval(pollRideStatusUpdates, 10000); // Poll every 10 seconds
     // Add event listeners with null checks
     logoutBtn?.addEventListener('click', handleLogout);
     
