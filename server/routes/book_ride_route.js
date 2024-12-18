@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const router = express.Router();
 
-// Direct database configuration
+// Database configuration
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -10,7 +10,7 @@ const db = mysql.createConnection({
     database: 'aglugan',
 });
 
-// Connect to the database
+// Connect to database
 db.connect((err) => {
     if (err) {
         console.error('Database connection failed:', err.message);
@@ -19,48 +19,108 @@ db.connect((err) => {
     }
 });
 
-router.get('/session-check', (req, res) => {
-    if (req.session && req.session.user_id) {
-        res.json({ success: true, message: 'Session active', user: req.session.username });
-    } else {
-        res.status(401).json({ success: false, message: 'Session expired' });
-    }
-});
-
-router.post('/book-ride', async (req, res) => {
-    console.log('Session on book-ride:', req.session); // Log session for debugging
-
-    if (!req.session || !req.session.user_id) {
-        console.log('Unauthorized access - session not found.');
-        return res.status(401).json({ status: 'error', message: 'Unauthorized access' });
-    }
-
+// Booking endpoint
+router.post('/direct-booking', (req, res) => {
     const { ride_id } = req.body;
 
     if (!ride_id) {
-        return res.status(400).json({ status: 'error', message: 'Ride ID is required.' });
+        return res.status(400).json({
+            success: false,
+            message: 'Ride ID is required'
+        });
     }
 
-    try {
-        const [result] = await db.promise().query(
-            `UPDATE rides 
-             SET user_id = ?, booking_status = 'Booked' 
-             WHERE ride_id = ? AND booking_status = 'Available'`,
-            [req.session.user_id, ride_id]
-        );
+    // First check ride availability
+    db.query(
+        'SELECT * FROM rides WHERE ride_id = ? AND status = "In queue"',
+        [ride_id],
+        (error, rideResults) => {
+            if (error) {
+                console.error('Database error:', error);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Database error occurred'
+                });
+            }
 
-        if (result.affectedRows === 1) {
-            res.json({ success: true, message: 'Ride booked successfully.' });
-        } else {
-            res.status(400).json({
-                success: false,
-                message: 'Ride is no longer available or already booked.',
+            if (rideResults.length === 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ride not available for booking'
+                });
+            }
+
+            const ride = rideResults[0];
+            const currentSeats = parseInt(ride.seat_status) || 0;
+
+            if (currentSeats >= 23) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No seats available on this ride'
+                });
+            }
+
+            // Start transaction for booking
+            db.beginTransaction((err) => {
+                if (err) {
+                    return res.status(500).json({
+                        success: false,
+                        message: 'Transaction error'
+                    });
+                }
+
+                // Update seat status
+                db.query(
+                    'UPDATE rides SET seat_status = seat_status + 1 WHERE ride_id = ?',
+                    [ride_id],
+                    (updateError) => {
+                        if (updateError) {
+                            return db.rollback(() => {
+                                res.status(500).json({
+                                    success: false,
+                                    message: 'Failed to update ride'
+                                });
+                            });
+                        }
+
+                        // Create booking record
+                        db.query(
+                            'INSERT INTO bookings (ride_id, booking_status, created_at) VALUES (?, "BOOKED", NOW())',
+                            [ride_id],
+                            (bookingError, bookingResult) => {
+                                if (bookingError) {
+                                    return db.rollback(() => {
+                                        res.status(500).json({
+                                            success: false,
+                                            message: 'Failed to create booking'
+                                        });
+                                    });
+                                }
+
+                                // Commit transaction
+                                db.commit((commitError) => {
+                                    if (commitError) {
+                                        return db.rollback(() => {
+                                            res.status(500).json({
+                                                success: false,
+                                                message: 'Failed to commit transaction'
+                                            });
+                                        });
+                                    }
+
+                                    res.json({
+                                        success: true,
+                                        message: 'Booking successful',
+                                        booking_id: bookingResult.insertId
+                                    });
+                                });
+                            }
+                        );
+                    }
+                );
             });
         }
-    } catch (error) {
-        console.error('Error booking ride:', error);
-        res.status(500).json({ status: 'error', message: 'Internal server error.' });
-    }
+    );
 });
 
 module.exports = router;

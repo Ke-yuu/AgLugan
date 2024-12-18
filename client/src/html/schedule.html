@@ -75,7 +75,9 @@
               </select>
   
               <div style="text-align: center; margin-top: 20px;">
-                <button id="apply-filter-button" class="view-button">Apply</button>
+                <div class="button-container">
+                  <button id="apply-filter-button">Apply</button>
+              </div>
               </div>
             </div>
           </div>
@@ -87,12 +89,13 @@
           <div class="table-container">
             <table class="schedule-table">
               <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>Plate Number</th>
-                  <th>Status</th>
-                  <th>Waiting Time</th>
-                  <th>Actions</th>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Plate Number</th>
+                    <th>Status</th>
+                    <th>Waiting Time</th>
+                    <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="rides-list">

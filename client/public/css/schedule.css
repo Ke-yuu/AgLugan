@@ -25,6 +25,7 @@ header nav {
   width: 50px;
   margin-right: 10px;
 }
+
 .logo:hover {
   cursor: pointer;
   transform: scale(1.1);
@@ -111,7 +112,7 @@ select, .view-button {
   transform: scale(1.1);
 }
 
-/* Redesigned Modal */
+/* Modal Base Styles */
 .modal {
   display: none;
   position: fixed;
@@ -123,28 +124,36 @@ select, .view-button {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.new-modal {
+.modal-content {
   background-color: #1e1e1e;
-  border-radius: 12px;
-  color: #ffffff;
+  margin: 10% auto;
   padding: 30px;
-  text-align: center;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
   position: relative;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  animation: fadeInModal 0.5s ease;
-  max-width: 400px;
-  margin: 10% auto;
+  animation: modalSlideIn 0.3s ease-out;
+  color: #ffffff;
 }
 
-@keyframes fadeInModal {
+@keyframes modalSlideIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Modal Header */
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
 .modal-header h2 {
-  color: #ff4d4d;
+  color: #b90202;
+  margin: 0 0 10px 0;
   font-size: 1.8rem;
-  margin: 0;
 }
 
 .sub-text {
@@ -153,45 +162,81 @@ select, .view-button {
   margin-top: 8px;
 }
 
+/* Modal Body */
+.modal-body {
+  padding: 20px 0;
+}
+
 .booking-details-text {
-  font-size: 1rem;
+  text-align: center;
   color: #f2f2f2;
-  margin: 20px 0;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .booking-summary {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #252525;
+  padding: 20px;
+  border-radius: 8px;
   margin: 20px 0;
 }
 
 .icon-box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  color: #f2f2f2;
+  gap: 12px;
+  padding: 10px;
+  background-color: #1b1b1b;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .icon-box i {
-  font-size: 1.5rem;
-  color: #ff4d4d;
+  color: #c70404;
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
 }
 
+.booking-location {
+  color: #f2f2f2;
+  font-size: 0.95rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid #333;
+}
+
+/* Buttons */
 .primary-button {
-  background-color: #ff4d4d;
-  border: none;
+  background-color: #f10000;
   color: white;
-  padding: 12px 20px;
+  border: none;
+  padding: 12px 24px;
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
 }
 
 .primary-button:hover {
-  background-color: #cc0000;
+  background-color: #5a0202;
   transform: scale(1.05);
+}
+
+.primary-button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .close-button {
@@ -200,7 +245,7 @@ select, .view-button {
   right: 15px;
   background: none;
   border: none;
-  color: #ff4d4d;
+  color: #c40000;
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -210,17 +255,58 @@ select, .view-button {
   color: #ffffff;
 }
 
-/* Responsive Modal */
-@media (max-width: 768px) {
-  .new-modal {
-    width: 90%;
-    padding: 20px;
-  }
+/* Booking Button and Status */
+.booking-button {
+  background-color: #f80000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 0.9rem;
+}
 
-  .booking-summary {
-    flex-direction: column;
-    gap: 15px;
-  }
+.booking-button:hover {
+  background-color: #790303;
+  transform: scale(1.05);
+}
+
+.booking-button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.booking-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.booking-status .status-badge {
+  background-color: #252525;
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+/* Payment Button */
+.payment-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.payment-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
 }
 
 /* Ride List Table */
@@ -254,6 +340,7 @@ select, .view-button {
   transform: translateY(-2px);
 }
 
+/* Status Badges */
 .status-badge {
   display: inline-block;
   padding: 5px 10px;
@@ -266,9 +353,203 @@ select, .view-button {
 .status-inqueue { background-color: #28a745; color: #fff; }
 .status-scheduled { background-color: #ffc107; color: #333; }
 .status-done { background-color: #007bff; color: #fff; }
-.status-cancelled { background-color: #ff4d4d; color: #fff; }
+.status-cancelled { background-color: #3f3f3f; color: #fff; }
+
+/* Checkbox Container */
+.checkbox-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-label {
+  color: #f8f8f8;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* Filter Modal Specific Styles */
+#filter-modal .modal-content {
+  background-color: #1e1e1e;
+  border-radius: 16px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  margin: 15vh auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+#filter-modal h2 {
+  color: #ff0000;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+#filter-modal h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #ff0000;
+  border-radius: 2px;
+}
+
+#filter-modal label {
+  display: block;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+#filter-modal select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  background-color: #2a2a2a;
+  border: 2px solid #3a3a3a;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+}
+
+#filter-modal select:focus {
+  border-color: #ff0000;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+}
+
+#filter-modal select:hover {
+  border-color: #ff0000;
+}
+
+#filter-modal select option {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  padding: 10px;
+}
+
+#filter-modal .button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#apply-filter-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#apply-filter-button:hover {
+  background-color: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+#apply-filter-button:active {
+  transform: translateY(0);
+}
+
+#filter-modal .close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #ff0000;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+#filter-modal .close-button:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  transform: rotate(90deg);
+}
+
+/* Animation for modal opening */
+@keyframes filterModalSlideIn {
+  from {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+  }
+}
+
+#filter-modal .modal-content {
+  animation: filterModalSlideIn 0.3s ease-out forwards;
+}
+
 
 /* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 10% auto;
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .booking-details-text {
+    font-size: 0.9rem;
+  }
+
+  .icon-box {
+    padding: 8px;
+  }
+
+  .booking-location {
+    font-size: 0.9rem;
+  }
+
+  .booking-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
 @media (max-width: 600px) {
   label, select, .view-button {
     font-size: 16px;
@@ -279,9 +560,42 @@ select, .view-button {
     flex-direction: column;
   }
 
+  .schedule-table th {
+    padding: 15px 20px;
+  }
+
   .payment-button {
     margin-left: 0;
     margin-top: 10px;
     padding: 5px 10px;
+  }
+
+  .view-button {
+    max-width: 40%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    margin: 5% auto;
+    padding: 15px;
+  }
+
+  .booking-summary {
+    padding: 15px;
+  }
+
+  .primary-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+
+  .schedule-table {
+    font-size: 14px;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    padding: 10px;
   }
 }

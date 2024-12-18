@@ -28,8 +28,7 @@ const driverDashboardRoute = require('./routes/driver_dashboard_route');
 const adminLoginRoute = require('./routes/admin_login_route');
 const getUsersRoute = require('./routes/get_users_route');
 const adminDashboardRoute = require('./routes/admin_dashboard_route');
-const bookRideRouter = require('./routes/book_ride_route');
-const scheduleMiddleware = require('./middleware/scheduleMiddleware');
+const bookingRoutes = require('./routes/book_ride_route');
 
 
 const app = express();
@@ -102,7 +101,8 @@ app.use('/api', adminLoginRoute);
 app.use('/api', getUsersRoute);
 app.use('/api', adminDashboardRoute);
 app.use('/api/admin-dashboard', adminDashboardRoute);
-app.use('/api', bookRideRouter);
+app.use('/', bookingRoutes); 
+
 
 
 // HTML Routes

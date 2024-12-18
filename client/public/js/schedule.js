@@ -5,26 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const applyFilterButton = document.getElementById("apply-filter-button");
     const showDoneCheckbox = document.getElementById("hideDoneCheckbox");
     const ridesList = document.getElementById("rides-list");    
-    
-    fetch('/api/check-session', { credentials: 'include' }) // Ensure cookies are sent
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Session Check:', data);
-
-        if (data.status === 'logged_out') {
-            alert('Session expired. Redirecting to login page.');
-            window.location.href = '/login'; // Redirect to login
-        } else {
-            console.log(`Welcome, ${data.type}!`);
-            // Load schedule page content here
-            filterRides();
-        }
-    })
-    .catch((error) => {
-        console.error('Session check failed:', error);
-        alert('Unable to verify session. Redirecting to login.');
-        window.location.href = '/login';
-    });
 
     // Advanced booking modal setup
     const advanceBookingModal = document.createElement('div');
@@ -85,35 +65,65 @@ document.addEventListener("DOMContentLoaded", function () {
     function createRideRow(ride) {
         const tr = document.createElement('tr');
         const statusClass = ride.status.toLowerCase().replace(' ', '');
+        const isBooked = ride.booking_status === 'BOOKED';
     
-        tr.innerHTML = `
-          <td>${ride.time_range || 'N/A'}</td>
-          <td>${ride.plate_number || 'N/A'}</td>
-          <td>
-            <span class="status-badge status-${statusClass}">${ride.status}</span>
-          </td>
-          <td>${ride.waiting_time || 'N/A'}</td>
-          <td>
-            ${
-              ride.status.toLowerCase() === "in queue"
-                ? `<button class="booking-button" 
-                    data-ride-id="${ride.ride_id}" 
-                    data-start="${ride.start_location}" 
+        // Create table data elements
+        const tdTime = document.createElement('td');
+        tdTime.textContent = ride.time_range || 'N/A';
+    
+        const tdPlate = document.createElement('td');
+        tdPlate.textContent = ride.plate_number || 'N/A';
+    
+        const tdStatus = document.createElement('td');
+        tdStatus.innerHTML = `<span class="status-badge status-${statusClass}">${ride.status}</span>`;
+    
+        const tdWaiting = document.createElement('td');
+        tdWaiting.textContent = ride.waiting_time || 'N/A';
+    
+        const tdActions = document.createElement('td');
+        
+        if (isBooked) {
+            tdActions.innerHTML = `
+                <div class="booking-status">
+                    <span class="status-badge">BOOKED</span>
+                    <button class="payment-button" 
+                        onclick="window.location.href='/payment?ride_id=${ride.ride_id}'">
+                        Proceed to Payment
+                    </button>
+                </div>
+            `;
+        } else if (ride.status.toLowerCase() === "in queue") {
+            tdActions.innerHTML = `
+                <button class="booking-button" 
+                    data-ride-id="${ride.ride_id}"
+                    data-start="${ride.start_location}"
                     data-end="${ride.end_location}">
                     Book Ride
-                  </button>`
-                : `<span class="status-badge status-${statusClass}">${ride.status}</span>`
-            }
-          </td>
-        `;
+                </button>
+            `;
+        } else {
+            tdActions.innerHTML = `
+                <button class="booking-button" disabled>
+                    Book Ride
+                </button>
+            `;
+        }
     
-        const bookingButton = tr.querySelector('.booking-button');
+        // Append table data to the row
+        tr.appendChild(tdTime);
+        tr.appendChild(tdPlate);
+        tr.appendChild(tdStatus);
+        tr.appendChild(tdWaiting);
+        tr.appendChild(tdActions);
+    
+        // Add Event Listener to the "Book Ride" button
+        const bookingButton = tdActions.querySelector('.booking-button:not([disabled])');
         if (bookingButton) {
             bookingButton.addEventListener('click', () => {
                 openBookingModal({
-                    ride_id: bookingButton.dataset.rideId, 
+                    ride_id: bookingButton.dataset.rideId,
                     start_location: bookingButton.dataset.start,
-                    end_location: bookingButton.dataset.end,
+                    end_location: bookingButton.dataset.end
                 });
             });
         }
@@ -122,8 +132,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function openBookingModal(ride) {
-        console.log('Ride Details:', ride); 
-    
         if (!ride || !ride.ride_id || !ride.start_location || !ride.end_location) {
             alert('Error: Booking details not found. Please try again.');
             return;
@@ -138,10 +146,45 @@ document.addEventListener("DOMContentLoaded", function () {
         startLocation.textContent = ride.start_location;
         endLocation.textContent = ride.end_location;
     
-        // Store ride ID for submission
+        // Store ride ID for booking
         bookingModal.dataset.rideId = ride.ride_id;
-    
+        
+        // Show modal
         bookingModal.style.display = "block";
+    }
+
+    function processBooking(rideId) {
+        const bookingModal = document.getElementById('advance-booking-modal');
+        
+        return fetch('/direct-booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ride_id: rideId })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Booking failed');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                bookingModal.style.display = 'none';
+                // Redirect to payment page with booking ID
+                window.location.href = `/payment?ride_id=${rideId}&booking_id=${data.booking_id}`;
+            } else {
+                throw new Error(data.message || 'Booking failed');
+            }
+        })
+        .catch(error => {
+            console.error('Booking error:', error);
+            alert(error.message || 'An error occurred while processing your booking. Please try again.');
+            return false;
+        });
     }
 
     if (continueToBookButton) {
@@ -149,38 +192,35 @@ document.addEventListener("DOMContentLoaded", function () {
             const bookingModal = document.getElementById('advance-booking-modal');
             const rideId = bookingModal.dataset.rideId;
     
-            console.log('Sending Payload:', { ride_id: rideId }); // Debugging
-    
             if (!rideId) {
-                alert('Error: Ride ID not set. Please reopen the booking modal.');
+                alert('Error: Ride ID not found. Please try again.');
                 return;
             }
     
-            // Send POST request with session cookies
-            fetch('/api/book-ride', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include', // Include cookies
-                body: JSON.stringify({ ride_id: rideId }) 
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Server Response:', data); 
-                if (data.success) {
-                    alert('Ride booked successfully!');
-                    location.reload();
-                } else {
-                    alert(`Error: ${data.message}`);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            // Disable the button while processing
+            continueToBookButton.disabled = true;
+            continueToBookButton.textContent = 'Processing...';
+    
+            processBooking(rideId)
+                .finally(() => {
+                    // Re-enable the button
+                    continueToBookButton.disabled = false;
+                    continueToBookButton.textContent = 'Proceed to Payment';
+                });
         });
     }
-    
+
+    // Close modal when clicking outside
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+        if (event.target === advanceBookingModal) {
+            advanceBookingModal.style.display = "none";
+        }
+    };
 
     function filterRides() {
-        console.log("Fetching rides with filters");
-
         const showDone = showDoneCheckbox.checked;
         const route = document.getElementById("route-filter").value.trim();
         const status = document.getElementById("status-filter").value.trim();
@@ -200,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     let currentStatus = ride.status;
 
                     if (!showDone && (currentStatus === "Done" || currentStatus === "Cancelled")) {
-                        return; // Skip "Done" and "Cancelled" rides
+                        return;
                     }
 
                     const rideRow = createRideRow(ride);
@@ -216,14 +256,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayError(message) {
         ridesList.innerHTML = `
             <tr>
-                <td colspan="6" style="text-align: center; padding: 20px;">${message}</td>
+                <td colspan="5" style="text-align: center; padding: 20px;">${message}</td>
             </tr>
         `;
     }
 
-    // Show all rides initially
+    // Initial load and refresh interval
     filterRides();
-
-    // Refresh rides every 10 seconds
     setInterval(filterRides, 10000);
 });
