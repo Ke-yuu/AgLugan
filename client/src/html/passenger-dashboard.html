@@ -49,7 +49,7 @@
                             <img id="current-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
                         </div>
                         <div class="welcome-text">
-                            <h1>Welcome to the Passenger Dashboard!</h1>
+                            <h1>Welcome, <span id="passenger-name">Passenger</span>!</h1>
                             <p>Book a Jeepney ride easily with only a few clicks! No queueing needed.</p>
                         </div>
                     </div>
@@ -64,25 +64,27 @@
             <!-- Dashboard Grid -->
             <div class="dashboard-grid">
                 <!-- Available Rides Section -->
-                <section class="dashboard-card rides-section">
+                <section class="dashboard-card rides-section" id="available-rides-section">
                     <div class="card-header">
                         <h2><i class="fas fa-route"></i> Available Rides</h2>
                     </div>
-                    <div class="card-content" id="rides-list">
-                        <div class="no-rides-message">
-                            <i class="fas fa-car-side"></i>
-                            <p>No rides available at the moment</p>
-                        </div>
+                    <div class="card-content">
+                        <ul id="rides-list">
+                            <li class="no-rides-message">
+                                <i class="fas fa-car-side"></i>
+                                <p>No rides available at the moment</p>
+                            </li>
+                        </ul>
                     </div>
                 </section>
 
                 <!-- Payment History Section -->
-                <section class="dashboard-card history-section">
+                <section class="dashboard-card history-section" id="ride-history-section">
                     <div class="card-header">
                         <h2><i class="fas fa-history"></i> Payment History</h2>
                     </div>
                     <div class="card-content">
-                        <table class="styled-table">
+                        <table id="payment-history-table" class="styled-table">
                             <thead>
                                 <tr>
                                     <th>RIDE ID</th>
@@ -119,91 +121,91 @@
         </main>
     </div>
 
-        <!-- Profile Modal -->
-        <div id="profileModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeModalBtn">&times;</span>
-                <h2 class="modal-title">Profile Settings</h2>
-                
-                <div class="profile-grid">
-                    <!-- Left Column -->
-                    <div class="profile-info">
-                        <div class="profile-picture-container">
-                            <img id="modal-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
-                            <label for="profile-picture-input" class="camera-icon">
-                                <i class="fas fa-camera"></i>
-                                <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" hidden>
-                            </label>
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2 class="modal-title">Profile Settings</h2>
+            
+            <div class="profile-grid">
+                <!-- Left Column -->
+                <div class="profile-info">
+                    <div class="profile-picture-container">
+                        <img id="modal-profile-picture" src="/media/default-profile.png" alt="Profile Picture">
+                        <label for="profile-picture-input" class="camera-icon">
+                            <i class="fas fa-camera"></i>
+                            <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" hidden>
+                        </label>
+                    </div>
+
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="passenger-name-input">Name</label>
+                            <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
                         </div>
+                        <div class="form-group">
+                            <label for="passenger-email-input">Email</label>
+                            <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
+                        </div>
+                        <button type="submit" class="save-btn">Apply</button>
+                    </form>
+                </div>
 
-                        <form id="profileForm">
-                            <div class="form-group">
-                                <label for="passenger-name-input">Name</label>
-                                <input type="text" id="passenger-name-input" name="name" placeholder="Enter your name">
-                            </div>
-                            <div class="form-group">
-                                <label for="passenger-email-input">Email</label>
-                                <input type="email" id="passenger-email-input" name="email" placeholder="Enter your email">
-                            </div>
-                            <button type="submit" class="save-btn">Apply</button>
-                        </form>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="password-info">
-                        <h3>Change Password</h3>
-                        <form id="changePasswordForm">
-                            <div class="form-group password-field">
-                                <label for="current-password">Current Password</label>
-                                <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
-                                <i class="fas fa-eye toggle-password" data-for="current-password"></i>
-                            </div>
-                            <div class="form-group password-field">
-                                <label for="new-password">New Password</label>
-                                <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
-                                <i class="fas fa-eye toggle-password" data-for="new-password"></i>
-                            </div>
-                            <div class="form-group password-field">
-                                <label for="confirm-password">Confirm New Password</label>
-                                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
-                                <i class="fas fa-eye toggle-password" data-for="confirm-password"></i>
-                            </div>
-                            <button type="submit" class="save-btn">Apply</button>
-                        </form>
-                    </div>
+                <!-- Right Column -->
+                <div class="password-info">
+                    <h3>Change Password</h3>
+                    <form id="changePasswordForm">
+                        <div class="form-group password-field">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" name="current_password" placeholder="Enter current password">
+                            <i class="fas fa-eye toggle-password" data-for="current-password"></i>
+                        </div>
+                        <div class="form-group password-field">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" name="new_password" placeholder="Enter new password">
+                            <i class="fas fa-eye toggle-password" data-for="new-password"></i>
+                        </div>
+                        <div class="form-group password-field">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password">
+                            <i class="fas fa-eye toggle-password" data-for="confirm-password"></i>
+                        </div>
+                        <button type="submit" class="save-btn">Apply</button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Ride Details Modal -->
-        <div id="detailsModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeDetailsModal">&times;</span>
-                <h2>Payment & Ride Details</h2>
-                <div class="modal-details">
-                    <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
-                    <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
-                    <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
-                    <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
-                    <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
-                    <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
-                    <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
-                    <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
-                </div>
+    <!-- Ride Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeDetailsModal">&times;</span>
+            <h2>Payment & Ride Details</h2>
+            <div class="modal-details">
+                <p><strong>Ride ID:</strong> <span id="modal-ride-id">N/A</span></p>
+                <p><strong>Route:</strong> <span id="modal-route">N/A</span></p>
+                <p><strong>Schedule:</strong> <span id="modal-schedule">N/A</span></p>
+                <p><strong>Plate Number:</strong> <span id="modal-plate-number">N/A</span></p>
+                <p><strong>Payment Amount:</strong> <span id="modal-payment-amount">N/A</span></p>
+                <p><strong>Payment Method:</strong> <span id="modal-payment-method">N/A</span></p>
+                <p><strong>Payment Status:</strong> <span id="modal-payment-status">N/A</span></p>
+                <p><strong>Payment Date:</strong> <span id="modal-payment-date">N/A</span></p>
             </div>
         </div>
+    </div>
 
-        <!-- Route Modal -->
-        <div id="routeModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeRouteModalBtn">&times;</span>
-                <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
-                <p><strong>From:</strong> <span id="startLocationDisplay"></span></p>
-                <p><strong>To:</strong> <span id="endLocationDisplay"></span></p>
-                <div id="mapContainer" style="height: 400px; margin-top: 10px;"></div>
-            </div>
+    <!-- Route Modal -->
+    <div id="routeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeRouteModalBtn">&times;</span>
+            <h2>Ride Route - Ride ID: <span id="rideIdDisplay"></span></h2>
+            <p><strong>From:</strong> <span id="startLocationDisplay"></span></p>
+            <p><strong>To:</strong> <span id="endLocationDisplay"></span></p>
+            <div id="mapContainer" style="height: 400px; margin-top: 10px;"></div>
         </div>
-    </main>
+    </div>
+
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>

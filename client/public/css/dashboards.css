@@ -138,8 +138,8 @@ body {
 .action-btn {
   background-color: #ff0000;
   border: none;
-  border-radius: 50%;
-  width: 40px;
+  border-radius: 10px;
+  width: 90px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -147,6 +147,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  color: white;
 }
 
 .action-btn:hover {
@@ -190,21 +191,111 @@ body {
   padding: 20px;
 }
 
-/* Rides Section */
-.rides-section {
+/* Available Rides Section */
+#available-rides-section {
   margin-bottom: 25px;
+  padding-bottom: 50px;
 }
 
-.no-rides-message {
-  text-align: center;
-  padding: 40px;
+#rides-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+#rides-list li {
+  margin-bottom: 0;
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+  background-color: #333;
+  border-color: #910b0b;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+
+#rides-list .no-rides-message {
+  grid-column: 1 / -1;
+}
+
+
+.ride-info-header {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#rides-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.ride-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ride-route {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f8f8f8;
+}
+
+.ride-schedule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
   color: #aaaaaa;
 }
 
-.no-rides-message i {
-  font-size: 3rem;
-  margin-bottom: 15px;
+.schedule-label {
+  font-weight: bold;
   color: #ff0000;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-inqueue {
+  background-color: #ffc107;
+  color: #000;
+}
+
+/* No rides message */
+.no-rides-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #aaaaaa;
+  background: #1b1b1b;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.no-rides-message i {
+  font-size: 48px;
+  color: #ff0000;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.no-rides-message p {
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 /* Payment History Table */
@@ -280,8 +371,9 @@ body {
   margin: 5% auto;
   padding: 20px 30px;
   border-radius: 15px;
+  margin-top: 230px;
   width: 90%;
-  max-width: 500px;
+  max-width: 900px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
   position: relative;
   animation: fadeIn 0.3s ease-in-out;

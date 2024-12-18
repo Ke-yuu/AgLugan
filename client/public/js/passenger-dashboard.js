@@ -405,12 +405,23 @@ const locations = {
   "SLU Mary Heights": [16.385431230475408, 120.59332518930958],
   "Holy Family Parish Church": [16.390849719238346, 120.59038991417202],
   "Igorot Garden": [16.413115332778087, 120.5944202827095],
+  "SM Baguio": [16.40909857340778, 120.59979147431693],
+  "Burham Park": [16.412475921804447, 120.59296601748652],
+  "Phase 1": [16.386170610199027, 120.58975987299971],
+  "Phase 2": [16.384299383092074, 120.59003912657275],
+  "Phase 3": [16.381427480873413, 120.59409463187622],
+  "Barangay Hall": [16.396485330039443, 120.58249126050718]
 };
 
 let currentMap = null;
 let currentRoutingControl = null;
 
 function showRouteModal(route) {
+    // Debug logging
+    console.log('Route object received:', route);
+    console.log('Start location:', route.start_location);
+    console.log('End location:', route.end_location);
+    
     const routeModal = document.getElementById('routeModal');
     const rideIdDisplay = document.getElementById('rideIdDisplay');
     const startLocationDisplay = document.getElementById('startLocationDisplay');
@@ -436,16 +447,11 @@ function showRouteModal(route) {
     // Clean up existing map
     cleanupMap();
 
-    // Setup modal controls
+    // Close button handler (removed duplicate)
     closeBtn.onclick = function() {
         routeModal.style.display = 'none';
         cleanupMap();
-    }
-
-    closeBtn.onclick = function() {
-      routeModal.style.display = 'none';
-      cleanupMap();
-  };
+    };
 
     window.onclick = function(event) {
         if (event.target == routeModal) {
@@ -453,68 +459,75 @@ function showRouteModal(route) {
             cleanupMap();
         }
     }
+
+    // Debug logging for coordinates
     const startCoords = locations[route.start_location];
     const endCoords = locations[route.end_location];
+    console.log('Start coordinates:', startCoords);
+    console.log('End coordinates:', endCoords);
 
-    if (startCoords && endCoords) {
-        rideIdDisplay.textContent = route.ride_id || 'N/A';
-        startLocationDisplay.textContent = route.start_location || 'N/A';
-        endLocationDisplay.textContent = route.end_location || 'N/A';
-
-        // Show modal first
-        routeModal.style.display = 'block';
-
-        // Small delay to ensure container is visible
-        setTimeout(() => {
-            try {
-                // Initialize new map
-                currentMap = L.map(mapContainer);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(currentMap);
-
-                currentRoutingControl = L.Routing.control({
-                    waypoints: [
-                        L.latLng(startCoords[0], startCoords[1]),
-                        L.latLng(endCoords[0], endCoords[1])
-                    ],
-                    routeWhileDragging: false,
-                    addWaypoints: false,
-                    draggableWaypoints: false,
-                    fitSelectedRoutes: true,
-                    showAlternatives: false,
-                    lineOptions: {
-                        styles: [
-                            {color: 'red', opacity: 0.8, weight: 4}
-                        ]
-                    },
-                    createMarker: function(i, waypoint, n) {
-                        const marker = L.marker(waypoint.latLng);
-                        marker.bindPopup(i === 0 ? 'Start: ' + route.start_location : 'End: ' + route.end_location);
-                        return marker;
-                    }
-                }).addTo(currentMap);
-
-                currentRoutingControl.on('routesfound', function(e) {
-                    const container = document.querySelector('.leaflet-routing-container');
-                    if (container) {
-                        container.style.display = 'none';
-                    }
-                    currentMap.fitBounds(L.latLngBounds(startCoords, endCoords), {
-                        padding: [50, 50]
-                    });
-                });
-            } catch (error) {
-                console.error('Error initializing map:', error);
-                cleanupMap();
-            }
-        }, 100);
-
-    } else {
-    
-      console.error('Coordinates not found for the given route.');
+    if (!startCoords || !endCoords) {
+        console.error('Invalid coordinates:', {
+            startLocation: route.start_location,
+            endLocation: route.end_location,
+            availableLocations: Object.keys(locations)
+        });
+        return;
     }
+
+    rideIdDisplay.textContent = route.ride_id || 'N/A';
+    startLocationDisplay.textContent = route.start_location || 'N/A';
+    endLocationDisplay.textContent = route.end_location || 'N/A';
+
+    // Show modal first
+    routeModal.style.display = 'block';
+
+    // Small delay to ensure container is visible
+    setTimeout(() => {
+        try {
+            // Initialize new map
+            currentMap = L.map(mapContainer);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(currentMap);
+
+            currentRoutingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(startCoords[0], startCoords[1]),
+                    L.latLng(endCoords[0], endCoords[1])
+                ],
+                routeWhileDragging: false,
+                addWaypoints: false,
+                draggableWaypoints: false,
+                fitSelectedRoutes: true,
+                showAlternatives: false,
+                lineOptions: {
+                    styles: [
+                        {color: 'red', opacity: 0.8, weight: 4}
+                    ]
+                },
+                createMarker: function(i, waypoint, n) {
+                    const marker = L.marker(waypoint.latLng);
+                    marker.bindPopup(i === 0 ? 'Start: ' + route.start_location : 'End: ' + route.end_location);
+                    return marker;
+                }
+            }).addTo(currentMap);
+
+            currentRoutingControl.on('routesfound', function(e) {
+                const container = document.querySelector('.leaflet-routing-container');
+                if (container) {
+                    container.style.display = 'none';
+                }
+                currentMap.fitBounds(L.latLngBounds(startCoords, endCoords), {
+                    padding: [50, 50]
+                });
+            });
+        } catch (error) {
+            console.error('Error initializing map:', error);
+            cleanupMap();
+        }
+    }, 100);
 }
 
 
