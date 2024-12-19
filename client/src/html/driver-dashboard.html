@@ -9,248 +9,272 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-header">
-            <nav>
-                <div class="logo-container">
-                    <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
-                </div>
-                <div class="profile-content">    
-                    <h2>Welcome back, <span id="driver-name">Driver Name</span>!</h2>
-                </div>
-                <ul class="nav-actions">
-                    <li><a href="#addVehicleModal" class="action-btn"><i class="fas fa-car"></i></a></li>
-                    <li><button id="logoutBtn" class="action-btn"><i class="fas fa-sign-out-alt"></i></button></li>
-                </ul>
-            </nav>
-        </header>
-
-        <main class="main-content">
-            <div class="dashboard-grid">
-                <div class="section" id="queue-ride-section">
-                    <div class="section-header">
-                        <h2>My Queue</h2>
-                        <button id="queueRideBtn" class="action-btn primary">
-                            <i class="fas fa-plus"></i> Queue a Ride
-                        </button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <th>Capacity</th>
-                                    <th>Start Location</th>
-                                    <th>End Location</th>
-                                    <th>Status</th>
-                                    <th>Scheduled Time</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="queued-rides-list">
-                                <!-- Queued rides will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="section" id="ongoing-queue">
-                    <div class="section-header">
-                        <h2>Ongoing Queue</h2>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <th>Capacity</th>
-                                    <th>Start Location</th>
-                                    <th>End Location</th>
-                                    <th>Status</th>
-                                    <th>Scheduled Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ongoing-queue-list">
-                                <!-- Ongoing queued rides will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="section" id="scheduled-queue">
-                    <div class="section-header">
-                        <h2>Scheduled Queue</h2>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <th>Capacity</th>
-                                    <th>Start Location</th>
-                                    <th>End Location</th>
-                                    <th>Status</th>
-                                    <th>Scheduled Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="scheduled-queue-list">
-                                <!-- Scheduled rides will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="section" id="Rides-History">
-                    <div class="section-header">
-                        <h2>Rides History</h2>
-                    </div>
-                    
-                    <!-- Done Rides Table -->
-                    <div class="table-container finished">
-                        <h3 class="finished">Finished Rides</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <th>Capacity</th>
-                                    <th>Start Location</th>
-                                    <th>End Location</th>
-                                    <th>Status</th>
-                                    <th>Scheduled Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="Done-Rides-List">
-                                <!-- Done rides will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                
-                    <!-- Cancelled Rides Table -->
-                    <div class="table-container cancelled">
-                        <h3 class="cancelled">Cancelled Rides</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <th>Capacity</th>
-                                    <th>Start Location</th>
-                                    <th>End Location</th>
-                                    <th>Status</th>
-                                    <th>Scheduled Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="Cancelled-Rides-List">
-                                <!-- Cancelled rides will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-
-                <div class="section help-section">
-                    <div class="section-header">
-                        <h2>Need Help?</h2>
-                    </div>
-                    <div class="support-content">
-                        <p>Our support team is available 24/7</p>
-                        <p>Email us at <strong>support@aglugan.com</strong> or call <strong>(02) 1234-5678</strong></p>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Modal for Queuing a Ride -->
-        <div id="queueRideModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Queue a Ride</h2>
-                    <span class="close-btn" id="closeQueueRideModalBtn">&times;</span>
-                </div>
-                <form id="queueRideForm" class="modal-form">
-                    <div class="form-group">
-                        <label for="vehicle-id">Vehicle</label>
-                        <select id="vehicle-id" name="vehicle-id" required>
-                            <option value="" disabled selected>Select a Vehicle</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="start-location">Start Location</label>
-                        <select id="start-location" name="start-location" required>
-                            <option value="" disabled selected>Select Start Location</option>
-                            <option value="Igorot Garden">Igorot Garden</option>
-                            <option value="Barangay Hall">Barangay Hall</option>
-                            <option value="SLU Mary Heights">SLU Mary Heights</option>
-                            <option value="Phase 3">Phase 3</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="end-location">End Location</label>
-                        <select id="end-location" name="end-location" required>
-                            <option value="" disabled selected>Select End Location</option>
-                            <option value="Igorot Garden">Igorot Garden</option>
-                            <option value="Burnham Park">Burnham Park</option>
-                            <option value="SM Baguio">SM Baguio</option>
-                            <option value="Barangay Hall">Barangay Hall</option>
-                            <option value="Holy Family Parish Church">Holy Family Parish Church</option>
-                            <option value="SLU Mary Heights">SLU Mary Heights</option>
-                            <option value="Phase 1">Phase 1</option>
-                            <option value="Phase 2">Phase 2</option>
-                            <option value="Phase 3">Phase 3</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ride-type">Ride Type</label>
-                        <select id="ride-type" name="ride-type" required>
-                            <option value="" disabled selected>Select Ride Type</option>
-                            <option value="now">Now</option>
-                            <option value="scheduled">Schedule</option>
-                        </select>
-                    </div>
-
-                    <div id="schedule-time-container" class="form-group" style="display: none;">
-                        <label for="schedule-time">Schedule Time</label>
-                        <input type="datetime-local" id="schedule-time" name="schedule-time" step="900">
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" id="queueRideSubmit" class="btn primary">Add to Queue</button>
-                    </div>
-                </form>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
             </div>
         </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#" class="sidebar-link active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#addVehicleModal" class="sidebar-link">
+                        <i class="fas fa-car"></i>
+                        <span>Add Vehicle</span>
+                    </a>
+                </li>
+                <li>
+                    <button id="logoutBtn" class="sidebar-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
-        <!-- Modal for Adding/Editing a Vehicle -->
-        <div id="addVehicleModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Add Vehicle</h2>
-                    <span class="close-btn" id="closeAddVehicleModalBtn">&times;</span>
-                </div>
-                <form id="addVehicleForm" class="modal-form">
-                    <div class="form-group">
-                        <label for="capacity">Capacity</label>
-                        <input type="number" id="capacity" name="capacity" required min="1" placeholder="Enter vehicle capacity">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="plate-number">Plate Number</label>
-                        <input type="text" id="plate-number" name="plate-number" 
-                               required placeholder="Enter plate number" 
-                               pattern="^[A-Z]{3} [0-9]{3,4}$" 
-                               title="Plate number must be in the format ABC 123 or ABC 1234">
-                    </div>
-                    
-
-                    <div class="form-actions">
-                        <button type="submit" id="addVehicleSubmit" class="btn primary">Save Vehicle</button>
-                    </div>
-                </form>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <h1>Welcome back, <span id="driver-name">Driver Name</span>!</h1>
             </div>
+            <button id="queueRideBtn" class="action-btn">
+                <i class="fas fa-plus"></i> Queue a Ride
+            </button>
         </div>
+
+        <!-- Queue Section -->
+        <section class="section" id="queue-ride-section">
+            <div class="section-header">
+                <h2>My Queue</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Capacity</th>
+                            <th>Start Location</th>
+                            <th>End Location</th>
+                            <th>Status</th>
+                            <th>Scheduled Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="queued-rides-list">
+                        <!-- Queued rides will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+<!-- Ongoing Queue Section -->
+<section class="section" id="ongoing-queue">
+    <div class="section-header">
+        <h2>Ongoing Queue</h2>
     </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Capacity</th>
+                    <th>Start Location</th>
+                    <th>End Location</th>
+                    <th>Status</th>
+                    <th>Scheduled Time</th>
+                </tr>
+            </thead>
+            <tbody id="ongoing-queue-list">
+                <!-- Ongoing queued rides will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Scheduled Queue Section -->
+<section class="section" id="scheduled-queue">
+    <div class="section-header">
+        <h2>Scheduled Queue</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Capacity</th>
+                    <th>Start Location</th>
+                    <th>End Location</th>
+                    <th>Status</th>
+                    <th>Scheduled Time</th>
+                </tr>
+            </thead>
+            <tbody id="scheduled-queue-list">
+                <!-- Scheduled rides will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Rides History Section -->
+<section class="section" id="Rides-History">
+    <div class="section-header">
+        <h2>Rides History</h2>
+    </div>
+    
+    <!-- Done Rides -->
+    <div class="table-container finished">
+        <h3>Finished Rides</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Capacity</th>
+                    <th>Start Location</th>
+                    <th>End Location</th>
+                    <th>Status</th>
+                    <th>Scheduled Time</th>
+                </tr>
+            </thead>
+            <tbody id="Done-Rides-List">
+                <!-- Done rides will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Cancelled Rides -->
+    <div class="table-container cancelled">
+        <h3>Cancelled Rides</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Capacity</th>
+                    <th>Start Location</th>
+                    <th>End Location</th>
+                    <th>Status</th>
+                    <th>Scheduled Time</th>
+                </tr>
+            </thead>
+            <tbody id="Cancelled-Rides-List">
+                <!-- Cancelled rides will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Help Section -->
+<section class="section help-section">
+    <div class="section-header">
+        <h2>Need Help?</h2>
+    </div>
+    <div class="support-content">
+        <p>Our support team is available 24/7</p>
+        <p>Email us at <strong>support@aglugan.com</strong> or call <strong>(02) 1234-5678</strong></p>
+    </div>
+</section>
+
+<!-- Queue Ride Modal -->
+<div id="queueRideModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Queue a Ride</h2>
+            <span class="close-btn" id="closeQueueRideModalBtn">&times;</span>
+        </div>
+        <form id="queueRideForm" class="modal-form">
+            <div class="form-group">
+                <label for="vehicle-id">Vehicle</label>
+                <select id="vehicle-id" name="vehicle-id" required>
+                    <option value="" disabled selected>Select a Vehicle</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="start-location">Start Location</label>
+                <select id="start-location" name="start-location" required>
+                    <option value="" disabled selected>Select Start Location</option>
+                    <option value="Igorot Garden">Igorot Garden</option>
+                    <option value="Barangay Hall">Barangay Hall</option>
+                    <option value="SLU Mary Heights">SLU Mary Heights</option>
+                    <option value="Phase 3">Phase 3</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="end-location">End Location</label>
+                <select id="end-location" name="end-location" required>
+                    <option value="" disabled selected>Select End Location</option>
+                    <option value="Igorot Garden">Igorot Garden</option>
+                    <option value="Burnham Park">Burnham Park</option>
+                    <option value="SM Baguio">SM Baguio</option>
+                    <option value="Barangay Hall">Barangay Hall</option>
+                    <option value="Holy Family Parish Church">Holy Family Parish Church</option>
+                    <option value="SLU Mary Heights">SLU Mary Heights</option>
+                    <option value="Phase 1">Phase 1</option>
+                    <option value="Phase 2">Phase 2</option>
+                    <option value="Phase 3">Phase 3</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ride-type">Ride Type</label>
+                <select id="ride-type" name="ride-type" required>
+                    <option value="" disabled selected>Select Ride Type</option>
+                    <option value="now">Now</option>
+                    <option value="scheduled">Schedule</option>
+                </select>
+            </div>
+
+            <div id="schedule-time-container" class="form-group" style="display: none;">
+                <label for="schedule-time">Schedule Time</label>
+                <input type="datetime-local" id="schedule-time" name="schedule-time" step="900">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="queueRideSubmit" class="action-btn">Add to Queue</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Vehicle Modal -->
+<div id="addVehicleModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add Vehicle</h2>
+            <span class="close-btn" id="closeAddVehicleModalBtn">&times;</span>
+        </div>
+        <form id="addVehicleForm" class="modal-form">
+            <div class="form-group">
+                <label for="capacity">Capacity</label>
+                <input type="number" id="capacity" name="capacity" required min="1" placeholder="Enter vehicle capacity">
+            </div>
+
+            <div class="form-group">
+                <label for="plate-number">Plate Number</label>
+                <input type="text" id="plate-number" name="plate-number" 
+                       required placeholder="Enter plate number" 
+                       pattern="^[A-Z]{3} [0-9]{3,4}$" 
+                       title="Plate number must be in the format ABC 123 or ABC 1234">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="addVehicleSubmit" class="action-btn">Save Vehicle</button>
+            </div>
+        </form>
+    </div>
+</div>
+</main>
 
     <script src="../js/driver-dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
