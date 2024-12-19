@@ -453,6 +453,7 @@ async function pollRideStatusUpdates() {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    checkSessionStatus();// Check session status on page load
     setupDateTimePicker();
     loadDriverData();
     disableSameLocation();
@@ -496,3 +497,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Check session status
+function checkSessionStatus() {
+    fetch('/api/check-session')
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'logged_out') {
+          window.location.href = '/login';
+        }
+      })
+      .catch(error => {
+        console.error('Error checking session:', error);
+      });
+  }
