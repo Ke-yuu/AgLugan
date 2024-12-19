@@ -62,6 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
         showDoneCheckbox.addEventListener('change', filterRides);
     }
 
+    // New function to update the "last updated" timestamp
+    function updateLastUpdatedTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('update-time').textContent = `Last updated: ${timeString}`;
+    }
+
     function createRideRow(ride) {
         const tr = document.createElement('tr');
         const statusClass = ride.status.toLowerCase().replace(' ', '');
@@ -109,14 +116,14 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
     
-        // Append table data to the row
+        // Append all cells
         tr.appendChild(tdTime);
         tr.appendChild(tdPlate);
         tr.appendChild(tdStatus);
         tr.appendChild(tdWaiting);
         tr.appendChild(tdActions);
     
-        // Add Event Listener to the "Book Ride" button
+        // Add booking button event listener
         const bookingButton = tdActions.querySelector('.booking-button:not([disabled])');
         if (bookingButton) {
             bookingButton.addEventListener('click', () => {
@@ -130,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
         return tr;
     }
-
     function openBookingModal(ride) {
         if (!ride || !ride.ride_id || !ride.start_location || !ride.end_location) {
             alert('Error: Booking details not found. Please try again.');
@@ -221,46 +227,70 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function filterRides() {
-        const showDone = showDoneCheckbox.checked;
+        const showDone = document.getElementById('hideDoneCheckbox').checked;
         const route = document.getElementById("route-filter").value.trim();
         const status = document.getElementById("status-filter").value.trim();
         const time = document.getElementById("time-filter").value.trim();
-
+        const ridesList = document.getElementById("rides-list");
+        const emptyState = document.getElementById("empty-state");
+        const tableElement = document.querySelector('.schedule-table');
+    
         fetch(`/api/rides?route=${encodeURIComponent(route)}&status=${encodeURIComponent(status)}&time=${encodeURIComponent(time)}`)
             .then(response => response.json())
             .then(data => {
                 ridesList.innerHTML = "";
-
+    
                 if (!Array.isArray(data) || data.length === 0) {
-                    displayError("No rides found for the selected filters.");
+                    // Hide the table and show empty state
+                    tableElement.style.display = 'none';
+                    emptyState.style.display = 'flex';
+                    emptyState.style.flexDirection = 'column';
+                    emptyState.style.alignItems = 'center';
+                    emptyState.style.padding = '40px 20px';
                     return;
                 }
-
+    
+                // Show table and hide empty state when we have data
+                tableElement.style.display = 'table';
+                emptyState.style.display = 'none';
+    
+                let visibleRows = 0;
                 data.forEach(ride => {
-                    let currentStatus = ride.status;
-
-                    if (!showDone && (currentStatus === "Done" || currentStatus === "Cancelled")) {
+                    if (!showDone && (ride.status === "Done" || ride.status === "Cancelled")) {
                         return;
                     }
-
+                    visibleRows++;
                     const rideRow = createRideRow(ride);
                     ridesList.appendChild(rideRow);
                 });
+    
+                // If all rows were filtered out, show empty state
+                if (visibleRows === 0) {
+                    tableElement.style.display = 'none';
+                    emptyState.style.display = 'flex';
+                    emptyState.style.flexDirection = 'column';
+                    emptyState.style.alignItems = 'center';
+                    emptyState.style.padding = '40px 20px';
+                }
+    
+                updateLastUpdatedTime();
             })
             .catch(error => {
                 console.error('Error fetching rides:', error);
-                displayError("Error fetching rides. Please try again later.");
+                tableElement.style.display = 'none';
+                emptyState.style.display = 'flex';
+                emptyState.style.flexDirection = 'column';
+                emptyState.style.alignItems = 'center';
+                emptyState.style.padding = '40px 20px';
+                
+                // Update empty state message for error
+                const emptyStateTitle = emptyState.querySelector('h3');
+                const emptyStateText = emptyState.querySelector('p');
+                if (emptyStateTitle) emptyStateTitle.textContent = 'Error loading rides';
+                if (emptyStateText) emptyStateText.textContent = 'Please try again later';
             });
     }
-
-    function displayError(message) {
-        ridesList.innerHTML = `
-            <tr>
-                <td colspan="5" style="text-align: center; padding: 20px;">${message}</td>
-            </tr>
-        `;
-    }
-
+    updateLastUpdatedTime();
     // Initial load and refresh interval
     filterRides();
     setInterval(filterRides, 10000);

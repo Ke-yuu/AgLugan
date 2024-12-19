@@ -203,19 +203,8 @@ body {
   gap: 20px;
   padding: 0;
   margin: 0;
+  list-style: none;
 }
-
-#rides-list li {
-  margin-bottom: 0;
-  height: 100%; 
-  display: flex;
-  flex-direction: column;
-  background-color: #333;
-  border-color: #910b0b;
-  border-radius: 10px;
-  padding: 10px;
-}
-
 
 #rides-list .no-rides-message {
   grid-column: 1 / -1;
@@ -298,30 +287,183 @@ body {
   margin: 0;
 }
 
-/* Payment History Table */
+/* Payment History Table Styling */
 .styled-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px;
   margin-top: 10px;
 }
 
-.styled-table th {
+/* Header Styling */
+.styled-table thead tr {
   background-color: #ff0000;
+}
+
+.styled-table th {
   color: #f8f8f8;
-  padding: 12px;
+  padding: 14px 20px;
+  font-weight: 600;
   text-align: left;
-  font-weight: bold;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* Row Styling */
+.styled-table tbody tr {
+  background-color: #414040;
+  margin-bottom: 8px;
+  border-left: 4px solid #ff0000;
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background-color: #4b4b4b;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #757575;
+  transform: translateX(4px);
+  transition: all 0.3s ease;
 }
 
 .styled-table td {
-  padding: 12px;
-  border-bottom: 1px solid #444;
+  padding: 16px 20px;
+  color: #f8f8f8;
+  font-size: 0.95rem;
 }
 
-.no-data {
+/* Ride ID Styling */
+.styled-table td:first-child {
+  font-weight: 600;
+  color: #ff0000;
+}
+
+/* Amount Styling */
+.styled-table td:nth-child(2) {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4CAF50;
+}
+
+/* Method Styling */
+.styled-table td:nth-child(3) {
+  text-transform: capitalize;
+  color: #f8f8f8;
+}
+
+/* Status Badge */
+.payment-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+.payment-status.pending {
+  background-color: #ffc107;
+  color: #000000;
+}
+
+.payment-status.completed {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.payment-status.failed {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+/* Action Button */
+.action-btn {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100px;
   text-align: center;
+}
+
+.action-btn:hover {
+  background-color: #910b0b;
+  transform: scale(1.05);
+}
+
+/* No Data Styling */
+.styled-table .no-data {
+  text-align: center;
+  padding: 30px;
   color: #aaaaaa;
-  padding: 20px;
+  background-color: #1b1b1b;
+}
+
+/* Payment Status Badges */
+.payment-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.payment-status.pending {
+  background-color: #ffc107;
+  color: #000000;
+}
+
+.payment-status.completed {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.payment-status.failed {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+/* Action Button */
+.action-btn {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #910b0b;
+  transform: scale(1.05);
+}
+
+/* Amount Styling */
+.styled-table td.amount {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* No Data Styling */
+.styled-table .no-data {
+  text-align: center;
+  padding: 30px;
+  color: #aaaaaa;
+  font-style: italic;
+  background-color: #1b1b1b;
+  border-radius: 8px;
 }
 
 /* Help Section */
@@ -544,6 +686,148 @@ input:focus {
 
 .status-scheduled {
   background-color: #007bff;
+}
+
+/* Details Modal Specific Styling */
+#detailsModal .modal-content {
+  background-color: #1b1b1b;
+  max-width: 600px;
+  padding: 30px;
+}
+
+#detailsModal h2 {
+  color: #f8f8f8;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #ff0000;
+}
+
+.modal-details {
+  display: grid;
+  gap: 15px;
+}
+
+.modal-details p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  margin: 0;
+  background-color: #252525;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-details p:hover {
+  background-color: #2a2a2a;
+}
+
+.modal-details strong {
+  color: #ff0000;
+  font-size: 1rem;
+  min-width: 140px;
+}
+
+.modal-details span {
+  color: #f8f8f8;
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Status-specific styling */
+#modal-payment-status {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#modal-payment-status[data-status="pending"] {
+  background-color: #ffc107;
+  color: #000;
+}
+
+#modal-payment-status[data-status="completed"] {
+  background-color: #28a745;
+  color: #fff;
+}
+
+#modal-payment-status[data-status="failed"] {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* Close button styling */
+#detailsModal .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  color: #ff0000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#detailsModal .close-btn:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+
+.ride-info {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background-color: #696969;
+  border-radius: 8px;
+  border-left: 2px solid #ff0000;
+}
+
+.route-icon i {
+  color: #ff0000;
+  font-size: 1.2rem;
+}
+
+.ride-content {
+  flex: 1;
+}
+
+.route-text {
+  font-size: 1.1rem;
+  color: #f8f8f8;
+  margin-bottom: 10px;
+}
+
+.ride-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.label {
+  color: #f8f8f8;
+  font-weight: 600;
+}
+
+.value {
+  color: #aaaaaa;
+}
+
+.status {
+  color: #ffc107;
+}
+
+.status.in-queue {
+  color: #ffc107;
 }
 
 /* Responsive Design */

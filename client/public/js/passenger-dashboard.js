@@ -79,42 +79,41 @@ function fetchPassengerDashboardData() {
 // Display payment history
 function displayPaymentHistory(payments) {
   const paymentHistoryTableBody = document.querySelector('#payment-history-table tbody');
-
-  paymentHistoryTableBody.innerHTML = ''; // Clear existing rows
+  
+  paymentHistoryTableBody.innerHTML = '';
 
   if (payments.length > 0) {
-    payments.forEach(payment => {
-      const row = document.createElement('tr');
+      payments.forEach(payment => {
+          const row = document.createElement('tr');
+          
+          // Format payment amount
+          const amount = parseFloat(payment.amount);
+          const formattedAmount = isNaN(amount) ? 'N/A' : `₱${amount.toFixed(2)}`;
 
-      // Format payment amount and date
-      const amount = parseFloat(payment.amount);
-      const formattedAmount = isNaN(amount) ? 'N/A' : `₱${amount.toFixed(2)}`;
-      const paymentDate = payment.payment_date
-        ? new Date(payment.payment_date).toLocaleDateString()
-        : 'Invalid Date';
-
-      // Create status badge
-      const statusBadge = `<span class="payment-status ${payment.status.toLowerCase()}">${payment.status}</span>`;
-
-      // Add View Details button
-      const actionButton = `<button class="action-btn" onclick="showDetailsModal(${payment.ride_id})">View Details</button>`;
-
-      // Populate table row with payment data
-      row.innerHTML = `
-        <td>${payment.ride_id}</td>
-        <td>${formattedAmount}</td>
-        <td>${payment.payment_method}</td>
-        <td>${statusBadge}</td>
-        <td>${paymentDate}</td>
-        <td>${actionButton}</td>
-      `;
-
-      paymentHistoryTableBody.appendChild(row);
-    });
+          row.innerHTML = `
+              <td>#${payment.ride_id}</td>
+              <td>${formattedAmount}</td>
+              <td>${payment.payment_method}</td>
+              <td><span class="payment-status ${payment.status.toLowerCase()}">${payment.status}</span></td>
+              <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
+              <td>
+                  <button class="action-btn" onclick="showDetailsModal(${payment.ride_id})">
+                      View Details
+                  </button>
+              </td>
+          `;
+          
+          paymentHistoryTableBody.appendChild(row);
+      });
   } else {
-    const row = document.createElement('tr');
-    row.innerHTML = `<td colspan="6" class="no-payment">No payment history found.</td>`;
-    paymentHistoryTableBody.appendChild(row);
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <td colspan="6" class="no-data">
+              <i class="fas fa-history" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+              No payment history found
+          </td>
+      `;
+      paymentHistoryTableBody.appendChild(row);
   }
 }
 
@@ -158,16 +157,24 @@ function displayAvailableRidesList(data) {
 
         // Populate the list item with ride data and icon
         listItem.innerHTML = `
-          <div class="ride-info">
-            <i class="fas fa-route" style="margin-right: 15px; color: #ff0000;"></i>
-            <div>
-              <div class="ride-info-header">${ride.start_location} - ${ride.end_location}</div>
-              <div class="ride-details">
-                <div><strong>Schedule:</strong> ${ride.time_range}</div>
-                <div><strong>Status:</strong> <span class="ride-status">${ride.status}</span></div>
-              </div>
+<div class="ride-info">
+    <div class="route-icon">
+        <i class="fas fa-route"></i>
+    </div>
+    <div class="ride-content">
+        <div class="route-text">${ride.start_location} - ${ride.end_location}</div>
+        <div class="ride-details">
+            <div class="detail-row">
+                <span class="label">Schedule:</span>
+                <span class="value">${ride.time_range}</span>
             </div>
-          </div>
+            <div class="detail-row">
+                <span class="label">Status:</span>
+                <span class="status ${ride.status.toLowerCase().replace(' ', '-')}">${ride.status}</span>
+            </div>
+        </div>
+    </div>
+</div>
         `;
         ridesList.appendChild(listItem);
       });
@@ -228,6 +235,15 @@ function setupDetailsModalClose() {
     });
   }
 }
+
+function updatePaymentStatusStyle() {
+  const statusElement = document.getElementById('modal-payment-status');
+  if (statusElement) {
+      const status = statusElement.textContent.toLowerCase();
+      statusElement.setAttribute('data-status', status);
+  }
+}
+updatePaymentStatusStyle();
 
 // Profile modal setup with all handlers
 function setupProfileModal() {

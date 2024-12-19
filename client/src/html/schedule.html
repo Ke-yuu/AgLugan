@@ -1,145 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeepney Ride Schedule - AgLugan</title>
-  <link rel="icon" href="/media/logo.png" type="image/png">
-  <link rel="stylesheet" href="/css/schedule.css">
-  <link rel="stylesheet" href="/css/transition.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeepney Ride Schedule - AgLugan</title>
+    <link rel="icon" href="/media/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/schedule.css">
+    <link rel="stylesheet" href="/css/transition.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <div class="logo-container">
-        <a href="/passengerDashboard"><img src="/media/logo.png" alt="Aglugan Logo" class="logo"></a>
-      </div>
-      <ul class="nav-links">
-        <li><a href="" class="active"><i class="fas fa-calendar-alt"></i></a></li>
-      </ul>
-    </nav>
-  </header>
+    <!-- Navigation Header -->
+    <header>
+        <nav>
+            <div class="logo-container">
+                <a href="/passengerDashboard"><img src="/media/logo.png" alt="Aglugan Logo" class="logo"></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="" class="active"><i class="fas fa-calendar-alt"></i></a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main class="main-content">
-    <div class="container">
-      <h1>Jeepney Rides from/to Bakakeng</h1>
-  
-      <!-- Button to Open the Filter Modal -->
-      <div style="text-align: center; margin-bottom: 20px;">
-        <button id="filter-button" class="view-button">Filter Rides</button>
-  
-        <!-- Checkbox to Show Finished Rides -->
-        <div class="checkbox-container">
-          <input type="checkbox" id="hideDoneCheckbox">
-          <label for="hideDoneCheckbox" class="checkbox-label">Show Finished Rides</label>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="schedule-container">
+            <!-- Header Section -->
+            <div class="schedule-header">
+                <h1>Jeepney Rides from/to Bakakeng</h1>
+                <p class="subtitle">View and book available jeepney rides</p>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-panel">
+                <div class="controls-group">
+                    <button id="filter-button" class="control-button">
+                        <i class="fas fa-filter"></i>
+                        Filter Rides
+                    </button>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="hideDoneCheckbox">
+                        <label for="hideDoneCheckbox">Show Other Rides</label>
+                    </div>
+                </div>
+                <div class="last-updated">
+                    <i class="fas fa-clock"></i>
+                    <span id="update-time">Last updated: Just now</span>
+                </div>
+            </div>
+
+            <!-- Rides Section -->
+            <div class="rides-panel">
+                <div class="rides-header">
+                    <h2>
+                        <i class="fas fa-calendar-days"></i>
+                        Ride Schedules
+                    </h2>
+                </div>
+                
+                <div class="table-container">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Plate Number</th>
+                                <th>Status</th>
+                                <th>Waiting Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rides-list">
+                            <!-- JavaScript will populate this -->
+                        </tbody>
+                    </table>
+                    <!-- Empty state message -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="fas fa-eye"></i>
+                        <h3>No rides found</h3>
+                        <p>Try adjusting your filters to see more results</p>
+                    </div>
+                </div>
+            </div>
         </div>
-  
-        <!-- Filter Modal -->
-        <div id="filter-modal" class="modal">
-          <div class="modal-content">
+    </main>
+
+    <!-- Modals -->
+    <!-- Filter Modal -->
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Filter Rides</h2>
             <div class="ride-form">
-              <label for="route-filter">Select Route:</label>
-              <select id="route-filter">
-                <option value="">All Routes</option>
-                <option value="SLU Mary Heights-Holy Family Parish Church">SLU Mary Heights to Holy Family Parish Church</option>
-                <option value="SLU Mary Heights-Igorot Garden">SLU Mary Heights to Igorot Garden</option>
-                <option value="Igorot Garden-SLU Mary Heights">Igorot Garden to SLU Mary Heights</option>
-                <option value="Igorot Garden-Holy Family Parish Church">Igorot Garden to Holy Family Parish Church</option>
-              </select>
-  
-              <label for="status-filter">Select Status:</label>
-              <select id="status-filter">
-                <option value="">All Statuses</option>
-                <option value="scheduled">Scheduled</option>
-                <option value="in queue">In Queue</option>
-              </select>
-  
-              <label for="time-filter">Select Time (Hourly):</label>
-              <select id="time-filter" style="margin-bottom: 20px;">
-                <option value="">All Times</option>
-                <option value="6:00-6:30">06:00 - 06:30</option>
-                <option value="6:30-7:00">06:30 - 07:00</option>
-                <option value="7:00-7:30">07:00 - 07:30</option>
-                <option value="7:30-8:00">07:30 - 08:00</option>
-                <option value="8:00-8:30">08:00 - 08:30</option>
-                <option value="8:30-9:00">08:30 - 09:00</option>
-                <option value="9:00-9:30">09:00 - 09:30</option>
-                <option value="9:30-10:00">09:30 - 10:00</option>
-                <option value="10:00-10:30">10:00 - 10:30</option>
-                <option value="10:30-11:00">10:30 - 11:00</option>
-                <option value="11:00-11:30">11:00 - 11:30</option>
-                <option value="11:30-12:00">11:30 - 12:00</option>
-              </select>
-  
-              <div style="text-align: center; margin-top: 20px;">
-                <div class="button-container">
-                  <button id="apply-filter-button">Apply</button>
-              </div>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <div class="ride-info">
-          <h2>Ride Schedules</h2>
-          <!-- Table Container -->
-          <div class="table-container">
-            <table class="schedule-table">
-              <thead>
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Plate Number</th>
-                    <th>Status</th>
-                    <th>Waiting Time</th>
-                    <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="rides-list">
-                <!-- JavaScript will populate this -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+                <label for="route-filter">Select Route:</label>
+                <select id="route-filter">
+                    <option value="">All Routes</option>
+                    <option value="SLU Mary Heights-Holy Family Parish Church">SLU Mary Heights to Holy Family Parish Church</option>
+                    <option value="SLU Mary Heights-Igorot Garden">SLU Mary Heights to Igorot Garden</option>
+                    <option value="Igorot Garden-SLU Mary Heights">Igorot Garden to SLU Mary Heights</option>
+                    <option value="Igorot Garden-Holy Family Parish Church">Igorot Garden to Holy Family Parish Church</option>
+                </select>
 
-  <!-- Redesigned Booking Modal -->
-  <div id="advance-booking-modal" class="modal" style="display: none;">
-    <div class="modal-content new-modal">
-        <button class="close-button" id="close-advance-booking">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="modal-header">
-            <h2>Confirm Your Booking</h2>
-            <p class="sub-text">Secure your seat now with a small additional fee.</p>
-        </div>
-        <div class="modal-body">
-            <p id="booking-details" class="booking-details-text"></p>
-            <div class="booking-summary">
-                <div class="icon-box">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span id="start-location" class="booking-location">Start Location</span>
-                </div>
-                <div class="icon-box">
-                    <i class="fas fa-flag-checkered"></i>
-                    <span id="end-location" class="booking-location">End Location</span>
+                <label for="status-filter">Select Status:</label>
+                <select id="status-filter">
+                    <option value="">All Statuses</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="in queue">In Queue</option>
+                </select>
+
+                <label for="time-filter">Select Time (Hourly):</label>
+                <select id="time-filter" style="margin-bottom: 20px;">
+                    <option value="">All Times</option>
+                    <option value="6:00-6:30">06:00 - 06:30</option>
+                    <option value="6:30-7:00">06:30 - 07:00</option>
+                    <option value="7:00-7:30">07:00 - 07:30</option>
+                    <option value="7:30-8:00">07:30 - 08:00</option>
+                    <option value="8:00-8:30">08:00 - 08:30</option>
+                    <option value="8:30-9:00">08:30 - 09:00</option>
+                    <option value="9:00-9:30">09:00 - 09:30</option>
+                    <option value="9:30-10:00">09:30 - 10:00</option>
+                    <option value="10:00-10:30">10:00 - 10:30</option>
+                    <option value="10:30-11:00">10:30 - 11:00</option>
+                    <option value="11:00-11:30">11:00 - 11:30</option>
+                    <option value="11:30-12:00">11:30 - 12:00</option>
+                </select>
+
+                <div class="button-container">
+                    <button id="apply-filter-button">Apply</button>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button id="continue-to-book" class="primary-button">
-                Proceed to Payment
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="advance-booking-modal" class="modal">
+        <div class="modal-content new-modal">
+            <button class="close-button" id="close-advance-booking">
+                <i class="fas fa-times"></i>
             </button>
+            <div class="modal-header">
+                <h2>Confirm Your Booking</h2>
+                <p class="sub-text">Secure your seat now with a small additional fee.</p>
+            </div>
+            <div class="modal-body">
+                <p id="booking-details" class="booking-details-text"></p>
+                <div class="booking-summary">
+                    <div class="icon-box">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="start-location" class="booking-location">Start Location</span>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span id="end-location" class="booking-location">End Location</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="continue-to-book" class="primary-button">
+                    Proceed to Payment
+                </button>
+            </div>
         </div>
     </div>
-  </div>
-  
-  <script src="../js/schedule.js"></script>
-  <script src="../js/page-transition.js"></script>
+
+    <!-- Scripts -->
+    <script src="../js/schedule.js"></script>
+    <script src="../js/page-transition.js"></script>
 </body>
 </html>

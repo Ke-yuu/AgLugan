@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 17, 2024 at 07:35 AM
--- Server version: 8.2.0
--- PHP Version: 8.3.0
+-- Generation Time: Dec 19, 2024 at 04:06 AM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -44,6 +44,7 @@ INSERT INTO `admin_users` (`id`, `username`, `password`) VALUES
 (3, 'admin2', '$2a$04$M3NnIAEnldkiWwL5g.UdHOplYUQpdYgCQuhajCXMUi97Dqdkh7Vua'),
 (4, 'admin3', 'admin123');
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `bookings`
@@ -57,9 +58,7 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`booking_id`),
   KEY `ride_id` (`ride_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `bookings`
@@ -69,13 +68,8 @@ INSERT INTO `bookings` (`booking_id`, `ride_id`, `booking_status`, `created_at`)
 (1, 10077, 'BOOKED', '2024-12-18 17:54:33'),
 (2, 10078, 'BOOKED', '2024-12-18 18:01:14'),
 (3, 10079, 'BOOKED', '2024-12-18 18:43:05'),
-(4, 10079, 'BOOKED', '2024-12-18 18:47:48');
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
+(4, 10079, 'BOOKED', '2024-12-18 18:47:48'),
+(5, 10078, 'BOOKED', '2024-12-19 00:36:28');
 
 -- --------------------------------------------------------
 
@@ -165,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   PRIMARY KEY (`payment_id`),
   KEY `ride_id` (`ride_id`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `payments`
@@ -178,7 +172,8 @@ INSERT INTO `payments` (`payment_id`, `ride_id`, `amount`, `payment_method`, `st
 (29, 1048, 18.00, 'cash', 'pending', 0, 27, '2024-12-11 10:01:51'),
 (30, 1018, 18.00, 'cash', 'pending', 0, 31, '2024-12-12 14:40:38'),
 (31, 1058, 18.00, 'cash', 'pending', 0, 32, '2024-12-12 14:42:54'),
-(32, 1059, 18.00, 'cash', 'pending', 0, 37, '2024-12-13 00:02:16');
+(32, 1059, 18.00, 'cash', 'pending', 0, 37, '2024-12-13 00:02:16'),
+(33, 10078, 18.00, 'cash', 'pending', 0, 36, '2024-12-19 00:36:30');
 
 -- --------------------------------------------------------
 
@@ -197,40 +192,22 @@ CREATE TABLE IF NOT EXISTS `rides` (
   `fare` decimal(10,2) NOT NULL,
   `waiting_time` time(6) NOT NULL,
   `time_range` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seat_status` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seat_status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ride_id`),
   KEY `passenger_id` (`plate_number`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10076 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10081 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rides`
 --
 
 INSERT INTO `rides` (`ride_id`, `plate_number`, `driver_id`, `start_location`, `end_location`, `status`, `fare`, `waiting_time`, `time_range`, `seat_status`) VALUES
-(1, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Done', 12.00, '00:15:00.000000', '2024-12-17 10:00-10:15', '0/23'),
-(2, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 10:15-10:30', '0/23'),
-(3, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Done', 13.00, '00:15:00.000000', '2024-12-17 14:00-14:15', '0/23'),
-(4, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 11:00-11:15', '0/23'),
-(5, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-19 15:00-15:15', '0/23'),
-(6, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Done', 12.00, '00:15:00.000000', '2024-12-17 12:00-12:15', '0/23'),
-(7, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-18 13:00-13:15', '0/23'),
-(8, 'ABC123', 30, 'Igorot Garden', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 10:00-10:15', '0/23'),
-(9, 'ABC123', 30, 'Barangay Hall', 'SM Baguio', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 10:15-10:30', '0/23'),
-(10, 'ABC123', 30, 'SLU Mary Heights', 'Burnham Park', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-21 14:00-14:15', '0/23'),
-(11, 'ABC123', 30, 'Igorot Garden', 'Barangay Hall', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 11:00-11:15', '0/23'),
-(12, 'MNO345', 32, 'SM Baguio', 'Holy Family Parish Church', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-20 15:00-15:15', '0/23'),
-(13, 'PQR678', 33, 'Igorot Garden', 'Holy Family Parish Church ', 'Scheduled', 12.00, '00:15:00.000000', '2024-12-21 12:00-12:15', '0/23'),
-(14, 'STU901', 35, 'Igorot Garden', 'SLU Mary Heights', 'Scheduled', 13.00, '00:15:00.000000', '2024-12-19 13:00-13:15', '0/23'),
-(10065, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Done', 14.00, '00:15:00.000000', '2024-12-17 14:30-14:45', '0/23'),
-(10066, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Done', 14.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
-(10067, 'web 123', 30, 'Phase 3', 'Igorot Garden', 'Cancelled', 14.00, '00:15:00.000000', '2024-12-17 14:45-15:00', '0/23'),
-(10068, 'YAA 4321', 30, 'Barangay Hall', 'Burnham Park', 'Cancelled', 12.00, '00:15:00.000000', '2024-12-17 15:15-15:30', '0/23'),
-(10073, 'web 123', 30, 'Igorot Garden', 'Phase 3', 'Scheduled', 14.00, '00:15:00.000000', '2024-12-17 15:45-16:00', '0/23'),
-(10072, 'web 123', 30, 'Phase 3', 'Barangay Hall', 'Scheduled', 10.00, '00:15:00.000000', '2024-12-17 20:30-20:45', '0/23'),
-(10071, 'web 123', 30, 'Phase 3', 'Barangay Hall', 'Done', 10.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
-(10074, 'web 123', 30, 'Igorot Garden', 'Phase 3', 'Done', 14.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23'),
-(10075, 'web 123', 30, 'Igorot Garden', 'Phase 1', 'In Queue', 13.00, '00:15:00.000000', '2024-12-17 15:30-15:45', '0/23');
+(10080, 'YAA 3508', 39, 'Igorot Garden', 'Phase 1', 'In Queue', 13.00, '00:15:00.000000', '2024-12-19 01:00-01:15', '0/23'),
+(10079, 'YAA 3508', 39, 'Igorot Garden', 'Barangay Hall', 'Done', 12.00, '00:15:00.000000', '2024-12-19 00:45-01:00', '0/23'),
+(10078, 'YAA 3508', 39, 'Barangay Hall', 'SM Baguio', 'Done', 12.00, '00:15:00.000000', '2024-12-19 00:30-00:45', '1'),
+(10077, 'YAA 3508', 39, 'Igorot Garden', 'SLU Mary Heights', 'Done', 13.00, '00:15:00.000000', '2024-12-19 00:15-00:30', '0/23'),
+(10076, 'YAA 3508', 39, 'Igorot Garden', 'SLU Mary Heights', 'Done', 13.00, '00:15:00.000000', '2024-12-18 23:15-23:30', '0/23');
 
 -- --------------------------------------------------------
 
@@ -254,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `driver_id` (`driver_id`),
   KEY `name` (`name`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -263,8 +240,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `name`, `username`, `email`, `password_hash`, `phone_number`, `user_type`, `profile_picture`, `id_number`, `driver_id`) VALUES
 (28, 'Aisea Marie Factor', 'Aisea', 'asieamarie@gmail.com', '$2b$10$8wSIRmu0rB8mecY6TsA/7uNTBaViMYvuVfaEteiRS5lakMOTyXJxu', '9183724988', 'Student', '/uploads/profile_pictures/1733847649371-4043260_avatar_male_man_portrait_icon.ico', NULL, NULL),
 (30, 'Martin Kapitan', 'Martin', 'kapitanmartin@gmail.com', '$2b$10$6p4PWt5901vHTalFLmlEdOTCiomaEYLk/zRvMtD8zB7RZiByL5u1y', '9234693982', 'Driver', NULL, NULL, NULL),
-(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Driver', NULL, '2222723', NULL),
-(38, 'Karding Kenkoy', 'Karding', '', '$2b$10$NvtxuNTJQ3nmPC1TBQzgtu5OZvM0Rdos9ZmbP7NjLeHuJ1nWsexHq', NULL, 'Driver', NULL, NULL, 103);
+(36, 'Claude API', 'Claude', 'claudeai@gmail.com', '$2b$10$6MtXay.RGLeDo/AWvdrmHuSIVOIIU7tngsKxYePLhdFiCB7eGivM2', '9845345678', 'Student', '/uploads/profile_pictures/1734534060201-Profile-YGN_1.png', '2222723', NULL),
+(38, 'Karding Kenkoy', 'Karding', '', '$2b$10$NvtxuNTJQ3nmPC1TBQzgtu5OZvM0Rdos9ZmbP7NjLeHuJ1nWsexHq', NULL, 'Driver', NULL, NULL, 103),
+(39, 'Rolando Morzoe', 'Rolando', 'rolandospy@gmail.com', '$2b$10$AcPYFZ87FlEow0ggDupZyeTTa3llokZTQc19yoShBbyJ5fnvZO3B6', '9483276877', 'Driver', NULL, '', 104);
 
 -- --------------------------------------------------------
 
@@ -280,20 +258,14 @@ CREATE TABLE IF NOT EXISTS `vehicles` (
   `plate_number` varchar(1234) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`vehicle_id`),
   KEY `driver_id` (`driver_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vehicles`
 --
 
 INSERT INTO `vehicles` (`vehicle_id`, `driver_id`, `capacity`, `plate_number`) VALUES
-(1, 101, 23, 'WEB 445'),
-(2, 102, 23, 'SAF 214'),
-(3, 103, 23, 'AHL 725'),
-(4, 30, 23, 'web 123'),
-(5, 30, 23, 'yaa 5656'),
-(6, 36, 23, 'yaa 9876'),
-(7, 30, 23, 'YAA 4321');
+(8, 39, 23, 'YAA 3508');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
