@@ -51,3 +51,44 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// Modal functionality
+const modal = document.getElementById('driverModal');
+const applyBtn = document.getElementById('applyBtn');
+const closeBtn = document.querySelector('.close-btn');
+const driverForm = document.getElementById('driverForm');
+
+applyBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+});
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+});
+
+driverForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('driverEmail').value;
+    
+    // Here you would typically send this data to your server
+    console.log('Driver application submitted:', email);
+    
+    // Show success message (you can customize this)
+    alert('Thank you for your interest! We will contact you shortly.');
+    
+    // Clear form and close modal
+    driverForm.reset();
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
+
+const allSections = document.querySelectorAll('main > div');

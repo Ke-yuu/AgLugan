@@ -155,6 +155,79 @@
                 </div>
             </div>
         </div>
+
+<!-- User Details Modal -->
+<div id="user-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">User Details</h3>
+            <button class="close-btn" onclick="closeUserModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="user-detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="detail-content">
+                    <p class="detail-label">Username</p>
+                    <p class="detail-value" id="modal-username">Loading...</p>
+                </div>
+            </div>
+
+            <div class="user-detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="detail-content">
+                    <p class="detail-label">Full Name</p>
+                    <p class="detail-value" id="modal-name">Loading...</p>
+                </div>
+            </div>
+
+            <div class="user-detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="detail-content">
+                    <p class="detail-label">Email Address</p>
+                    <p class="detail-value" id="modal-email">Loading...</p>
+                </div>
+            </div>
+
+            <div class="user-detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="detail-content">
+                    <p class="detail-label">Phone Number</p>
+                    <p class="detail-value" id="modal-number">Loading...</p>
+                </div>
+            </div>
+
+            <div class="user-detail-item">
+                <div class="detail-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <div class="detail-content">
+                    <p class="detail-label">ID Number</p>
+                    <p class="detail-value" id="modal-id-number">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-danger" id="banUserButton">
+                <i class="fas fa-ban icon"></i>
+                Ban User
+            </button>
+            <button class="btn btn-secondary" onclick="closeUserModal()">Close</button>
+        </div>
+    </div>
+</div>
+
     </main>
 
     <script src="../js/admin-dashboard.js"></script>
