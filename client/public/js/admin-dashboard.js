@@ -337,8 +337,8 @@ function showUserModal(user) {
     const banButton = document.getElementById('banUserButton');
     if (banButton) {
         // Ensure the event listener is added only once
-        banButton.removeEventListener('click', handleBanUserClick); // Avoid multiple event listeners
-        banButton.addEventListener('click', handleBanUserClick.bind(null, user.user_id)); // Use bind to pass the userId
+        banButton.removeEventListener('click', handleBanUserClick);
+        banButton.addEventListener('click', handleBanUserClick.bind(null, user.user_id)); 
     }
 
     // Show user modal
@@ -438,13 +438,11 @@ function removeRide(rideId) {
     };
 }
 
-// Styles for the modal (injecting styles dynamically)
 const style2 = document.createElement('style');
 style2.innerHTML = `
      .modal {
         display: none;
         position: fixed;
-        z-index: 1;
         left: 0;
         top: 0;
         width: 100%;
@@ -457,8 +455,8 @@ style2.innerHTML = `
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #ccc;
-        width: 80%;
-        max-width: 400px;
+        width: 100%;
+        max-width: 500px;
     }
 
     .modal-actions {
@@ -472,7 +470,6 @@ style2.innerHTML = `
         padding: 10px;
         border: none;
         cursor: pointer;
-        width: 45%; /* Adjust width to make buttons more balanced */
     }
 
     button.confirm {
@@ -522,7 +519,7 @@ document.head.appendChild(style2);
        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
        text-align: center;
        width: 50%;
-       max-width: 400px;
+       max-width: 500px;
    }
    .modal-content button {
        margin-top: 15px;

@@ -8,227 +8,212 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo-container">
-                <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
-            </div>
-            <div class="profile-content">
-                <h2>Welcome, Admin User!</h2>
-            </div>
-            <button id="logoutBtn" class="icon-button"><i class="fas fa-sign-out-alt"></i></button>
-        </nav>
-    </header>
-
-    <main class="main-content">
-        <h1>Welcome to the Admin Dashboard</h1>
-        <p>Here you can edit most of the features relating to the Aglugan operations</p>
-        <div class="dashboard-sections">
-            <!-- Top Row Cards -->
-            <div class="top-row">
-                <!-- View Users Section -->
-                <div class="section small-section">
-                    <h2>View Users</h2>
-                    <div class="search-container">
-                        <input type="text" id="user-search" class="search-input" placeholder="Search users by name, username, email...">
-                    </div>
-                    <ul id="users-list">
-                    </ul>
-                </div>
-    
-                <!-- Add Driver Section -->
-                <div class="section small-section">
-                    <h2>Add Driver</h2>
-                    <form id="add-driver-form">
-                        <div class="form-group">
-                            <label for="driver-username">Username:</label>
-                            <input type="text" id="driver-username" required>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="driver-name">Driver Name:</label>
-                            <input type="text" id="driver-name" required>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="driver-password">Password:</label>
-                            <input type="password" id="driver-password" required>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="driver-id">Driver ID:</label>
-                            <input type="number" id="driver-id" required>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="plate-number">Plate Number:</label>
-                            <input type="text" id="plate-number" required
-                            pattern="^[A-Z]{3} [0-9]{3,4}$" 
-                            title="Plate number must be in the format ABC 123 or ABC 1234">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="vehicle-capacity">Vehicle Capacity:</label>
-                            <input type="number" id="vehicle-capacity" required>
-                        </div>
-    
-                        <button type="submit" class="save-btn">Add Driver</button>
-                    </form>
-                </div>
-    
-                <!-- Add ID Numbers Section -->
-                <div class="section small-section">
-                    <h2>Add ID Numbers</h2>
-                    <form id="add-id-form">
-                        <div class="form-group">
-                            <label for="id-number">ID Number:</label>
-                            <input type="text" id="id-number" required>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="id-type">User Type:</label>
-                            <select id="id-type" required>
-                                <option value="Student">Student</option>
-                                <option value="Faculty/Staff">Faculty/Staff</option>
-                            </select>
-                        </div>
-    
-                        <button type="submit" class="save-btn">Add ID</button>
-                    </form>
-                </div>
-            </div>
-    
-            <!-- Bottom Full Width Section -->
-            <div class="section full-width-section">
-                <h2>View Rides</h2>
-                <div class="search-container">
-                    <input type="text" id="ride-search" class="search-input" placeholder="Search rides by ID, location, status...">
-                </div>
-                <div class="table-container">
-                    <table id="rides-table">
-                        <thead>
-                            <tr>
-                                <th>RIDE ID</th>
-                                <th>FROM</th>
-                                <th>TO</th>
-                                <th>STATUS</th>
-                                <th>VEHICLE</th>
-                                <th>FARE</th>
-                                <th>TIME RANGE</th>
-                                <th>SEATS AVAILABLE</th>
-                                <th>ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rides-list">
-                            <!-- Example Row -->
-                            <tr>
-                                <td>001</td>
-                                <td>SLU Mary Heights</td>
-                                <td>Igorot Garden</td>
-                                <td>
-                                    <!-- Badge Design for Status -->
-                                    <span class="status-badge status-in-queue">In Queue</span>
-                                </td>
-                                <td>YAA 1234</td>
-                                <td>₱20.00</td>
-                                <td>08:00 - 08:30</td>
-                                <td>
-                                    <button class="remove-ride-btn">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>Igorot Garden</td>
-                                <td>SLU Mary Heights</td>
-                                <td>
-                                    <span class="status-badge status-done">Done</span>
-                                </td>
-                                <td>YAA 5678</td>
-                                <td>₱25.00</td>
-                                <td>08:30 - 09:00</td>
-                                <td>
-                                    <button class="remove-ride-btn">Remove</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-<!-- User Details Modal -->
-<div id="user-modal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">User Details</h3>
-            <button class="close-btn" onclick="closeUserModal()">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../media/logo.png" alt="AgLugan Logo" class="logo">
+            <h3>Aglugan Admin</h3>
         </div>
         
-        <div class="modal-body">
-            <div class="user-detail-item">
-                <div class="detail-icon">
-                    <i class="fas fa-user"></i>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <button id="logoutBtn" class="nav-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-content">
+                <h2>Welcome, Admin User!</h2>
+                <div class="header-actions">
+                    <button id="refreshRidesBtn" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh Data
+                    </button>
                 </div>
-                <div class="detail-content">
-                    <p class="detail-label">Username</p>
-                    <p class="detail-value" id="modal-username">Loading...</p>
+            </div>
+        </header>
+
+        <div class="content-container">
+            <!-- Dashboard Cards -->
+            <div class="dashboard-grid">
+                <!-- View Users Card -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>View Users</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="user-search" placeholder="Search users...">
+                        </div>
+                        <div class="users-list-container">
+                            <ul id="users-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Driver Card -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>Add Driver</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="add-driver-form" class="form">
+                            <div class="form-group">
+                                <label for="driver-username">Username</label>
+                                <input type="text" id="driver-username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="driver-name">Driver Name</label>
+                                <input type="text" id="driver-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="driver-password">Password</label>
+                                <input type="password" id="driver-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="driver-id">Driver ID</label>
+                                <input type="number" id="driver-id" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="plate-number">Plate Number</label>
+                                <input type="text" id="plate-number" required 
+                                       pattern="^[A-Z]{3} [0-9]{3,4}$" 
+                                       title="Format: ABC 123 or ABC 1234">
+                            </div>
+                            <div class="form-group">
+                                <label for="vehicle-capacity">Vehicle Capacity</label>
+                                <input type="number" id="vehicle-capacity" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Driver</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Add ID Numbers Card -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>Add ID Numbers</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="add-id-form" class="form">
+                            <div class="form-group">
+                                <label for="id-number">ID Number</label>
+                                <input type="text" id="id-number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id-type">User Type</label>
+                                <select id="id-type" required>
+                                    <option value="Student">Student</option>
+                                    <option value="Faculty/Staff">Faculty/Staff</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add ID</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <div class="user-detail-item">
-                <div class="detail-icon">
-                    <i class="fas fa-id-card"></i>
+            <!-- Rides Table Section -->
+            <div class="dashboard-card table-card">
+                <div class="card-header">
+                    <h2>View Rides</h2>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="ride-search" placeholder="Search rides...">
+                        </div>
+                    </div>
                 </div>
-                <div class="detail-content">
-                    <p class="detail-label">Full Name</p>
-                    <p class="detail-value" id="modal-name">Loading...</p>
-                </div>
-            </div>
-
-            <div class="user-detail-item">
-                <div class="detail-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="detail-content">
-                    <p class="detail-label">Email Address</p>
-                    <p class="detail-value" id="modal-email">Loading...</p>
-                </div>
-            </div>
-
-            <div class="user-detail-item">
-                <div class="detail-icon">
-                    <i class="fas fa-phone"></i>
-                </div>
-                <div class="detail-content">
-                    <p class="detail-label">Phone Number</p>
-                    <p class="detail-value" id="modal-number">Loading...</p>
-                </div>
-            </div>
-
-            <div class="user-detail-item">
-                <div class="detail-icon">
-                    <i class="fas fa-fingerprint"></i>
-                </div>
-                <div class="detail-content">
-                    <p class="detail-label">ID Number</p>
-                    <p class="detail-value" id="modal-id-number">Loading...</p>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="rides-table">
+                            <thead>
+                                <tr>
+                                    <th>RIDE ID</th>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                    <th>STATUS</th>
+                                    <th>VEHICLE</th>
+                                    <th>FARE</th>
+                                    <th>TIME RANGE</th>
+                                    <th>SEATS</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rides-list"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <div class="modal-footer">
-            <button class="btn btn-danger" id="banUserButton">
-                <i class="fas fa-ban icon"></i>
-                Ban User
-            </button>
-            <button class="btn btn-secondary" onclick="closeUserModal()">Close</button>
+    <!-- User Details Modal -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Details</h3>
+                <button class="close-btn" onclick="closeUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="user-info">
+                    <div class="info-item">
+                        <i class="fas fa-user"></i>
+                        <div class="info-content">
+                            <label>Username</label>
+                            <p id="modal-username">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-id-card"></i>
+                        <div class="info-content">
+                            <label>Full Name</label>
+                            <p id="modal-name">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div class="info-content">
+                            <label>Email Address</label>
+                            <p id="modal-email">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div class="info-content">
+                            <label>Phone Number</label>
+                            <p id="modal-number">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-fingerprint"></i>
+                        <div class="info-content">
+                            <label>ID Number</label>
+                            <p id="modal-id-number">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="banUserButton" class="btn btn-danger">
+                    <i class="fas fa-ban"></i>
+                    Ban User
+                </button>
+                <button class="btn btn-secondary" onclick="closeUserModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
-
-    </main>
 
     <script src="../js/admin-dashboard.js"></script>
 </body>
