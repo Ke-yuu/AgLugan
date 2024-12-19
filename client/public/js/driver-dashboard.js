@@ -13,7 +13,72 @@ const logoutBtn = document.getElementById('logoutBtn');
 const addVehicleLink = document.querySelector('li a[href="#addVehicleModal"]');
 const addVehicleModal = document.getElementById('addVehicleModal');
 const closeAddVehicleModalBtn = document.getElementById('closeAddVehicleModalBtn');
-
+ // Create and append modal container for popups
+ const modalContainer = document.createElement('div');
+ modalContainer.id = 'popup-modal';
+ modalContainer.innerHTML = `
+     <div class="modal-content">
+         <p id="modal-message"></p>
+         <button id="close-modal">Close</button>
+     </div>
+ `;
+ document.body.appendChild(modalContainer);
+ console.log('Modal container appended:', modalContainer);
+ 
+ // Modal styles
+ const modalStyles = document.createElement('style');
+ modalStyles.textContent = `
+ #popup-modal {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.6);
+     justify-content: center;
+     align-items: center;
+     z-index: 1000;
+ }
+ .modal-content {
+     background: #1b1b1b;
+     color: #f8f8f8;
+     padding: 20px;
+     border-radius: 10px;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+     text-align: center;
+     width: 50%;
+     max-width: 400px;
+ }
+ .modal-content button {
+     margin-top: 15px;
+     background: #ff0000;
+     border: none;
+     padding: 10px 20px;
+     color: #fff;
+     border-radius: 5px;
+     cursor: pointer;
+     transition: background 0.3s;
+ }
+ .modal-content button:hover {
+     background: #cc0000;
+ }
+ `;
+ document.head.appendChild(modalStyles);
+ 
+ const showModal = (message, callback = null) => {
+     const modal = document.getElementById('popup-modal');
+     const messageContainer = document.getElementById('modal-message');
+     const closeButton = document.getElementById('close-modal');
+ 
+     messageContainer.textContent = message;
+     modal.style.display = 'flex';
+     console.log('Modal is now visible:', modal.style.display);  // Debugging
+     closeButton.onclick = () => {
+         modal.style.display = 'none';
+         if (callback) callback(); // Execute callback if provided
+     };
+ };
 // Utility Functions
 function formatCurrency(value) {
     return `₱${(isNaN(value) || value === null ? 0 : parseFloat(value)).toFixed(2)}`;
@@ -165,7 +230,7 @@ async function submitQueueRideForm(event) {
     event.preventDefault();
     const currentUser = await getCurrentUser();
     if (!currentUser?.user_id) {
-        alert("Unable to fetch user data. Please try again.");
+        showModal("Unable to fetch user data. Please try again.");
         return;
     }
 
@@ -175,7 +240,7 @@ async function submitQueueRideForm(event) {
     const fare = calculateFare(startLocation, endLocation);
 
     if (fare === 0) {
-        alert("Invalid start or end location. Please try again.");
+        showModal("Invalid start or end location. Please try again.");
         return;
     }
 
@@ -194,17 +259,17 @@ async function submitQueueRideForm(event) {
         const now = new Date();
 
         if (!scheduleTime) {
-            alert("Please provide a valid schedule time for the ride.");
+            showModal("Please provide a valid schedule time for the ride.");
             return;
         }
 
         if (selectedTime < now) {
-            alert('Selected time is in the past. Please pick a valid time.');
+            showModal('Selected time is in the past. Please pick a valid time.');
             return;
         }
 
         if (selectedTime.getMinutes() % 15 !== 0) {
-            alert('Please select a time that aligns with 15-minute intervals.');
+            showModal('Please select a time that aligns with 15-minute intervals.');
             return;
         }
 
@@ -219,11 +284,11 @@ async function submitQueueRideForm(event) {
         });
 
         if (response.ok) {
-            alert("Ride queued successfully!");
+            showModal("Ride queued successfully!");
             loadDriverData();
             closeQueueRideModal();
         } else {
-            alert(`Failed to queue ride: ${await response.text()}`);
+            showModal(`Failed to queue ride: ${await response.text()}`);
         }
     } catch (error) {
         console.error("Error submitting queue ride form:", error);
@@ -234,7 +299,7 @@ async function submitAddVehicleForm(event) {
     event.preventDefault();
     const currentUser = await getCurrentUser();
     if (!currentUser?.user_id) {
-        alert('Unable to fetch user data. Please try again.');
+        showModal('Unable to fetch user data. Please try again.');
         return;
     }
     // Fetch input values
@@ -244,7 +309,7 @@ async function submitAddVehicleForm(event) {
     // Plate number validation
     const plateNumberPattern = /^[A-Z]{3} \d{3,4}$/; // Regular expression for ABC 123 or ABC 1234
     if (!plateNumberPattern.test(plateNumber)) {
-        alert("Invalid plate number format. Please use 'ABC 123' or 'ABC 1234'.");
+        showModal("Invalid plate number format. Please use 'ABC 123' or 'ABC 1234'.");
         return;
     }
 
@@ -262,11 +327,11 @@ async function submitAddVehicleForm(event) {
         });
 
         if (response.ok) {
-            alert('Vehicle added successfully!');
+            showModal('Vehicle added successfully!');
             addVehicleModal.style.display = 'none';
             populateVehicleDropdown();
         } else {
-            alert(`Failed to add vehicle: ${await response.text()}`);
+            showModal(`Failed to add vehicle: ${await response.text()}`);
         }
     } catch (error) {
         console.error('Error adding vehicle:', error);
@@ -351,10 +416,10 @@ async function handleRideDone(event) {
         });
 
         if (response.ok) {
-            alert('Ride marked as done!');
+            showModal('Ride marked as done!');
             loadDriverData(); // Refresh the queue data
         } else {
-            alert(`Failed to mark ride as done: ${await response.text()}`);
+            showModal(`Failed to mark ride as done: ${await response.text()}`);
         }
     } catch (error) {
         console.error('Error marking ride as done:', error);
@@ -371,10 +436,10 @@ async function handleRideCancel(event) {
         });
 
         if (response.ok) {
-            alert('Ride canceled successfully!');
+            showModal('Ride canceled successfully!');
             loadDriverData(); // Refresh the queue data
         } else {
-            alert(`Failed to cancel ride: ${await response.text()}`);
+            showModal(`Failed to cancel ride: ${await response.text()}`);
         }
     } catch (error) {
         console.error('Error canceling ride:', error);
@@ -402,15 +467,19 @@ async function handleLogout() {
     try {
         const response = await fetch('/api/logout', { method: 'POST' });
         if (response.ok) {
-            window.location.href = '/login';
+            showModal('You have been logged out successfully.');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
         } else {
             throw new Error('Logout failed');
         }
     } catch (error) {
         console.error('Error during logout:', error);
-        alert('An error occurred while logging out. Please try again.');
+        showModal('An error occurred while logging out. Please try again.');
     }
 }
+
 
 // Location Selection Handler
 function disableSameLocation() {
