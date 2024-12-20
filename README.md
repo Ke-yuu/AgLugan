@@ -8,7 +8,8 @@ TO ACCESS THE WEBSITE
 1. Check your IP address in your desktop
 2. Copy your IP Address and put your IP address in Line 48 in server.js
     eg.     origin: ['http://localhost:3000', 'http://192.168.0.119:3000', 'http://192.168.1.2:3000', 'http://192.168.100.41:3000', 'http://192.168.2.7:3000', 'YOUR IP ADDRESS' ],
-3. Add the database to the phpmyadmin, make sure the database name is "aglugan"
+3. Turn on your WAMP Server and install SQLTools MySQL/MariaDB/TiDB for faster update
+4. Add the database to the phpmyadmin, make sure the database name is "aglugan"
 4. Go to your terminal in VS code 
 5. Type in the terminal "cd server"
 6. and type "node server.js"
@@ -31,7 +32,7 @@ FOR ADMIN
 2. To access the admin
     username: admin
     password: admin123
-3. When a Student/Faculty wants to register the admin must put a ID Number first before the Student/Faculty.
+3. To register, users must be enrolled as students or employed as faculty/staff at SLU. The admin adds the user's ID number, which is checked against the id_numbers table for verification. Only users with valid ID numbers in the table can proceed with registration.
 
 FOR PASSENGER MODULE
 1. Make sure if you want to register Go to admin and add a ID Number FIRST.
