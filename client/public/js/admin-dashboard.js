@@ -550,31 +550,81 @@ document.head.appendChild(style2);
            if (callback) callback(); // Execute callback if provided
        };
    };
-async function banUser(userId) {
-    try {
-        const response = await fetch(`/api/delete-user/${userId}`, { method: 'DELETE' });
+   async function banUser(userId) {
+    if (!userId) {
+        showModal('Invalid user ID');
+        return;
+    }
 
-        if (!response.ok) {
-            throw new Error('Failed to delete user');
-        }
+    try {
+        const response = await fetch(`/api/delete-user/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
         const data = await response.json();
 
-        if (data.status === 'success') {
-            console.log('User banned successfully');
-            // Show modal with success message
+        // Close the user modal first
+        closeUserModal();
+
+        // Then show the result message
+        if (response.ok && data.status === 'success') {
             showModal('User successfully banned.', () => {
-                fetchUsers(); // Fetch updated user list after banning user
-                closeUserModal(); // Close the user modal
+                fetchUsers(); // Refresh user list after modal is closed
             });
         } else {
-            // Show modal with error message if banning fails
             showModal(data.message || 'Failed to ban user.');
         }
     } catch (error) {
         console.error('Error banning user:', error);
+        closeUserModal();
         showModal('An error occurred while banning the user.');
     }
+}
+
+// Update the handleBanUserClick function
+function handleBanUserClick(userId) {
+    if (!userId) {
+        console.error('No user ID provided for ban action');
+        return;
+    }
+
+    // Show confirmation modal before banning
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.style.display = 'flex';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <p>Are you sure you want to ban this user?</p>
+            <div class="modal-actions">
+                <button class="confirm">Yes, Ban User</button>
+                <button class="cancel">Cancel</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Handle confirmation
+    modal.querySelector('.confirm').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        banUser(userId);
+    });
+
+    // Handle cancellation
+    modal.querySelector('.cancel').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+
+    // Close on outside click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
 }
 
 

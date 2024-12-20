@@ -19,9 +19,14 @@ const DOM = {
         register: document.getElementById('registerButton'),
         togglePassword: document.getElementById('togglePassword'),
         toggleConfirmPassword: document.getElementById('toggleConfirmPassword'),
-        closeModal: document.getElementById('closeIdModal')
+        closeModal: document.getElementById('closeIdModal'),
+        closeMessageModal: document.getElementById('closeMessageModal')
     },
-    modal: document.getElementById('idModal')
+    modal: {
+        idVerification: document.getElementById('idModal'),
+        message: document.getElementById('messageModal')
+    },
+    messageModalContent: document.getElementById('messageModalContent')
 };
 
 // Configuration
@@ -31,7 +36,11 @@ const CONFIG = {
     passwordRegex: /^(?=.*[0-9]).{8,}$/,
     endpoints: {
         verifyId: '/api/verify-id',
-        register: '/api/register'
+        register: '/api/register',
+        checkUsername: '/api/check-username',
+        checkEmail: '/api/check-email',
+        checkPhone: '/api/check-phone',
+        checkIdNumber: '/api/check-id'
     }
 };
 
@@ -48,8 +57,14 @@ const utils = {
         icon.classList.toggle('fa-eye-slash');
     },
 
-    showAlert: (message, isError = false) => {
-        alert(message); // Could be replaced with a custom alert system
+    showModal: (message, isError = false) => {
+        DOM.messageModalContent.textContent = message;
+        DOM.messageModalContent.className = isError ? 'message-modal-content error' : 'message-modal-content success';
+        DOM.modal.message.style.display = 'block';
+    },
+
+    hideModal: () => {
+        DOM.modal.message.style.display = 'none';
     },
 
     validateEmail: (email) => {
@@ -62,6 +77,64 @@ const utils = {
 
     validatePassword: (password) => {
         return CONFIG.passwordRegex.test(password);
+    },
+
+    async checkFieldUniqueness(field, value, endpoint) {
+        try {
+            const data = await this.makeRequest(endpoint, { [field]: value });
+            return data.status === 'success' && !data.exists;
+        } catch (error) {
+            console.error(`Error checking ${field} uniqueness:`, error);
+            return false;
+        }
+    },
+
+    async validateUniqueness(formData) {
+        // Check username uniqueness
+        const usernameUnique = await this.checkFieldUniqueness(
+            'username', 
+            formData.username, 
+            CONFIG.endpoints.checkUsername
+        );
+        if (!usernameUnique) {
+            this.showModal('Username already exists. Please choose a different username.', true);
+            return false;
+        }
+
+        // Check email uniqueness
+        const emailUnique = await this.checkFieldUniqueness(
+            'email', 
+            formData.email, 
+            CONFIG.endpoints.checkEmail
+        );
+        if (!emailUnique) {
+            this.showModal('Email is already registered. Please use a different email address.', true);
+            return false;
+        }
+
+        // Check phone uniqueness
+        const phoneUnique = await this.checkFieldUniqueness(
+            'phone_number', 
+            formData.phone_number, 
+            CONFIG.endpoints.checkPhone
+        );
+        if (!phoneUnique) {
+            this.showModal('Phone number is already registered. Please use a different number.', true);
+            return false;
+        }
+
+        // Check ID number uniqueness
+        const idUnique = await this.checkFieldUniqueness(
+            'id_number', 
+            formData.id_number, 
+            CONFIG.endpoints.checkIdNumber
+        );
+        if (!idUnique) {
+            this.showModal('ID Number is already registered. Please contact support if this is an error.', true);
+            return false;
+        }
+
+        return true;
     },
 
     async makeRequest(url, data) {
@@ -86,7 +159,7 @@ const handlers = {
         const idNumber = DOM.inputs.idNumber.value.trim();
 
         if (!idNumber) {
-            return utils.showAlert('ID Number is required.', true);
+            return utils.showModal('ID Number is required.', true);
         }
 
         try {
@@ -96,15 +169,15 @@ const handlers = {
             });
 
             if (data.status === 'success') {
-                utils.showAlert('ID number verified successfully!');
+                utils.showModal('ID number verified successfully!');
                 DOM.inputs.hiddenIdNumber.value = idNumber;
-                DOM.modal.style.display = 'none';
+                DOM.modal.idVerification.style.display = 'none';
                 DOM.buttons.register.disabled = false;
             } else {
-                utils.showAlert(data.message || 'Verification failed.', true);
+                utils.showModal(data.message || 'Verification failed.', true);
             }
         } catch (error) {
-            utils.showAlert('An error occurred during verification. Please try again.', true);
+            utils.showModal('An error occurred during verification. Please try again.', true);
         }
     },
 
@@ -123,34 +196,42 @@ const handlers = {
             id_number: DOM.inputs.hiddenIdNumber.value.trim()
         };
 
-        // Validation
+        // Basic validation
         if (!utils.validateEmail(formData.email)) {
-            return utils.showAlert('Please use a valid email domain (gmail.com, yahoo.com, hotmail.com, or slu.edu.ph)', true);
+            return utils.showModal('Please use a valid email domain (gmail.com, yahoo.com, hotmail.com, or slu.edu.ph)', true);
         }
 
         if (!utils.validatePhone(formData.phone_number)) {
-            return utils.showAlert('Please enter a valid phone number (e.g., 9984276714)', true);
+            return utils.showModal('Please enter a valid phone number (e.g., 9984276714)', true);
         }
 
         if (!utils.validatePassword(formData.password)) {
-            return utils.showAlert('Password must be at least 8 characters long and contain at least one number', true);
+            return utils.showModal('Password must be at least 8 characters long and contain at least one number', true);
         }
 
         if (formData.password !== formData.confirm_password) {
-            return utils.showAlert('Passwords do not match', true);
+            return utils.showModal('Passwords do not match', true);
+        }
+
+        // Check uniqueness of all fields
+        const isUnique = await utils.validateUniqueness(formData);
+        if (!isUnique) {
+            return; // Modal message already shown by validateUniqueness
         }
 
         try {
             const data = await utils.makeRequest(CONFIG.endpoints.register, formData);
             
             if (data.status === 'success') {
-                utils.showAlert('Registration successful!');
-                window.location.href = '../html/login.html';
+                utils.showModal('Registration successful!');
+                setTimeout(() => {
+                    window.location.href = '../html/login.html';
+                }, 2000);
             } else {
-                utils.showAlert(`Registration failed: ${data.message}`, true);
+                utils.showModal(`Registration failed: ${data.message}`, true);
             }
         } catch (error) {
-            utils.showAlert('Registration failed. Please try again.', true);
+            utils.showModal('Registration failed. Please try again.', true);
         }
     },
 
@@ -158,17 +239,24 @@ const handlers = {
         const userType = event.target.value;
         const requiresVerification = ['Student', 'Faculty/Staff'].includes(userType);
         
-        DOM.modal.style.display = requiresVerification ? 'block' : 'none';
+        DOM.modal.idVerification.style.display = requiresVerification ? 'block' : 'none';
         DOM.buttons.register.disabled = requiresVerification;
     },
 
     handleModalClose() {
-        DOM.modal.style.display = 'none';
+        DOM.modal.idVerification.style.display = 'none';
+    },
+
+    handleMessageModalClose() {
+        DOM.modal.message.style.display = 'none';
     },
 
     handleOutsideModalClick(event) {
-        if (event.target === DOM.modal) {
-            DOM.modal.style.display = 'none';
+        if (event.target === DOM.modal.idVerification) {
+            DOM.modal.idVerification.style.display = 'none';
+        }
+        if (event.target === DOM.modal.message) {
+            DOM.modal.message.style.display = 'none';
         }
     }
 };
@@ -188,5 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Modal handling
     DOM.inputs.userType.addEventListener('change', handlers.handleUserTypeChange);
     DOM.buttons.closeModal.addEventListener('click', handlers.handleModalClose);
+    DOM.buttons.closeMessageModal.addEventListener('click', handlers.handleMessageModalClose);
     window.addEventListener('click', handlers.handleOutsideModalClick);
 });

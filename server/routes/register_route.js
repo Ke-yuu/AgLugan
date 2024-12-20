@@ -11,7 +11,119 @@ const dbConfig = {
 
 const router = express.Router();
 
-// Verify ID number
+// Check username uniqueness
+router.post('/check-username', async (req, res) => {
+    const { username } = req.body;
+    
+    if (!username) {
+        return res.status(400).json({ status: 'error', message: 'Username is required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        
+        // Changed 'id' to 'user_id' to match your table structure
+        const [rows] = await connection.execute(
+            'SELECT user_id FROM users WHERE LOWER(username) = LOWER(?)',
+            [username]
+        );
+        
+        // Log for debugging
+        console.log('Checking username:', username);
+        console.log('Found matches:', rows.length);
+        
+        await connection.end();
+
+        res.json({
+            status: 'success',
+            exists: rows.length > 0,
+            message: rows.length > 0 ? 'Username already exists' : 'Username available'
+        });
+    } catch (error) {
+        console.error('Error checking username:', error);
+        res.status(500).json({ status: 'error', message: 'Server error checking username.' });
+    }
+});
+
+// Check email uniqueness
+router.post('/check-email', async (req, res) => {
+    const { email } = req.body;
+    
+    if (!email) {
+        return res.status(400).json({ status: 'error', message: 'Email is required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute(
+            'SELECT user_id FROM users WHERE LOWER(email) = LOWER(?)',
+            [email]
+        );
+        await connection.end();
+
+        res.json({
+            status: 'success',
+            exists: rows.length > 0
+        });
+    } catch (error) {
+        console.error('Error checking email:', error);
+        res.status(500).json({ status: 'error', message: 'Server error checking email.' });
+    }
+});
+
+// Check phone number uniqueness
+router.post('/check-phone', async (req, res) => {
+    const { phone_number } = req.body;
+    
+    if (!phone_number) {
+        return res.status(400).json({ status: 'error', message: 'Phone number is required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute(
+            'SELECT user_id FROM users WHERE phone_number = ?',
+            [phone_number]
+        );
+        await connection.end();
+
+        res.json({
+            status: 'success',
+            exists: rows.length > 0
+        });
+    } catch (error) {
+        console.error('Error checking phone number:', error);
+        res.status(500).json({ status: 'error', message: 'Server error checking phone number.' });
+    }
+});
+
+// Check ID number uniqueness
+router.post('/check-id', async (req, res) => {
+    const { id_number } = req.body;
+    
+    if (!id_number) {
+        return res.status(400).json({ status: 'error', message: 'ID number is required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute(
+            'SELECT user_id FROM users WHERE id_number = ?',
+            [id_number]
+        );
+        await connection.end();
+
+        res.json({
+            status: 'success',
+            exists: rows.length > 0
+        });
+    } catch (error) {
+        console.error('Error checking ID number:', error);
+        res.status(500).json({ status: 'error', message: 'Server error checking ID number.' });
+    }
+});
+
+// Verify ID number (your existing route)
 router.post('/verify-id', async (req, res) => {
     const { idNumber, userType } = req.body;
 
@@ -53,7 +165,7 @@ router.post('/verify-id', async (req, res) => {
     }
 });
 
-// Register user
+// Register user (your existing route)
 router.post('/register', async (req, res) => {
     const { name, username, email, password, phone_number, user_type, id_number } = req.body;
 
