@@ -11,50 +11,126 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
         <header>
             <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
             <div class="header-buttons">
-                <!-- Direct navigation with anchor tags -->
-                <a href="/login" class="btn login-btn"><strong>Login</strong></a>
-                <a href="/aboutUs" class="btn about-btn"><strong>About Us</strong></a>
+                <a href="/login" class="btn login-btn">Login</a>
+                <a href="/aboutUs" class="btn about-btn">About Us</a>
             </div>
         </header>
-        
-        <!-- Main Content -->
-        <main class="content">
+
+        <main>
             <div class="hero-section">
                 <img src="/media/main-bg.jpg" alt="Jeepney" class="bg-image">
-                <div class="content1">
+                <div class="content1 typewriter">
                     <h1><strong>AG</strong>LUGAN</h1>
                     <h2>Ang iyong <strong>Jeepney</strong>, naghihintay na!</h2>
-                    <!-- Direct navigation with anchor tag -->
-                    <a href="/register" class="btn get-started-btn"><strong>Get Started</strong></a>
+                    <a href="/register" class="btn get-started-btn">Get Started</a>
+                </div>
+                <div class="scroll-indicator">
+                    <i class="fas fa-angle-down"></i>
                 </div>
             </div>
-            
-            <!-- Features Section -->
+
             <div class="features">
                 <div class="feature">
-                    <i class="fas fa-calendar-check fa-3x"></i> <!-- Booking Icon -->
-                    <p>Booking: "Madali at mabilis ang pag-book ng iyong jeepney ride gamit ang AgLugan! Sa ilang simpleng click lang, 
-                        makakahanap ka na ng available na biyahe. Piliin ang iyong ruta, oras ng alis, at siguraduhin ang iyong upuan—lahat ng ito ay 
-                        kaya sa loob ng ilang segundo."</p>
+                    <i class="fas fa-calendar-check"></i>
+                    <p>"Madali at mabilis ang pag-book ng iyong jeepney ride gamit ang AgLugan! Sa ilang simpleng click lang, makakahanap ka na ng available na biyahe. Piliin ang iyong ruta, oras ng alis, at siguraduhin ang iyong upuan—lahat ng ito ay kaya sa loob ng ilang segundo."</p>
                 </div>
                 <div class="feature">
-                    <i class="fas fa-credit-card fa-3x"></i> <!-- Online Payment Icon -->
-                    <p>Online Payment: "Sa AgLugan, maaari kang magbayad online nang mabilis, ligtas, at walang hassle! Piliin ang iyong preferred 
-                        payment method—gamit ang debit o credit card, e-wallet, o iba pang online payment options. Sigurado, secure, at hassle-free ang bawat transaksyon!"</p>
+                    <i class="fas fa-credit-card"></i>
+                    <p>"Sa AgLugan, maaari kang magbayad online nang mabilis, ligtas, at walang hassle! Piliin ang iyong preferred payment method—gamit ang debit o credit card, e-wallet, o iba pang online payment options. Sigurado, secure, at hassle-free ang bawat transaksyon!"</p>
                 </div>
                 <div class="feature">
-                    <i class="fas fa-thumbs-up fa-3x"></i> <!-- Convenience Icon -->
-                    <p>Convenience: "Ang AgLugan ay naghahatid ng maginhawang solusyon para sa iyong mga biyahe—kahit saan
-                         ka man pupunta at kahit kailan mo kailangan! I-book ang iyong jeepney ride anumang oras, kahit sa mga oras ng abala, at sigurad
-                         o kang makararating nang mabilis at maayos."</p>
+                    <i class="fas fa-thumbs-up"></i>
+                    <p>"Ang AgLugan ay naghahatid ng maginhawang solusyon para sa iyong mga biyahe—kahit saan ka man pupunta at kahit kailan mo kailangan! I-book ang iyong jeepney ride anumang oras, kahit sa mga oras ng abala, at sigurado kang makararating nang mabilis at maayos."</p>
+                </div>
+            </div>
+
+            <div class="why-choose">
+                <h2>Why Choose AgLugan?</h2>
+                <div class="reasons">
+                    <div class="reason">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Fast and Reliable</h3>
+                        <p>With AgLugan, every ride is just a few clicks away. Our streamlined booking system ensures you get where you need to go—quickly and efficiently.</p>
+                    </div>
+                    <div class="reason">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Secure Transactions</h3>
+                        <p>We prioritize your security with encrypted payment options and reliable systems. Your data and transactions are safe with us.</p>
+                    </div>
+                    <div class="reason">
+                        <i class="fas fa-users"></i>
+                        <h3>Community Driven</h3>
+                        <p>Our platform empowers local jeepney drivers and provides passengers with affordable and sustainable travel options.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-recruitment">
+                <div class="driver-grid">
+                    <div class="driver-image-container">
+                        <img src="/media/Driver.png" alt="Professional Jeepney Driver" class="driver-photo">
+                    </div>
+                    <div class="red-separator"></div>
+                    <div class="driver-content">
+                        <div class="content-wrapper">
+                            <div class="icon-header">
+                                <div class="circle-icon">
+                                    <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
+                                </div>
+                                <h2>Join us as our driver!</h2>
+                            </div>
+                            
+                            <div class="benefits-list">
+                                <div class="benefit-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Earn more with flexible hours</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Connect with more passengers</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>Easy-to-use mobile app</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Secure payment system</span>
+                                </div>
+                            </div>
+            
+                            <button class="btn apply-btn" id="applyBtn">
+                                Register Now
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
-    <script src="../js/page-transition.js"></script>
+
+    <div class="modal" id="driverModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Driver Application</h2>
+            <form id="driverForm">
+                <div class="form-group">
+                    <label for="driverEmail">Email Address</label>
+                    <input type="email" id="driverEmail" required placeholder="Enter your email">
+                </div>
+                <button type="submit" class="btn submit-btn">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <button class="scroll-top-btn" id="scrollTopBtn">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="/js/landingPage.js"></script>
+    <script src="/js/page-transition.js"></script>
 </body>
 </html>

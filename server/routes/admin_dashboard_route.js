@@ -127,7 +127,17 @@ router.post('/add-driver', async (req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
 
-        // Check if username exists in the 'users' table
+        // Check if the driver name already exists
+        const [existingDriverName] = await connection.execute(
+            'SELECT * FROM users WHERE name = ?',
+            [name]
+        );
+        if (existingDriverName.length > 0) {
+            await connection.end();
+            return res.status(409).json({ message: 'Driver name already exists.' });
+        }
+
+        // Check if the username already exists in the 'users' table
         const [existingUser] = await connection.execute(
             'SELECT * FROM users WHERE username = ?',
             [username]
@@ -138,7 +148,7 @@ router.post('/add-driver', async (req, res) => {
             return res.status(409).json({ message: 'Username already exists.' });
         }
 
-        // Check if driver_id exists in the 'vehicles' table
+        // Check if the driver_id exists in the 'vehicles' table
         const [existingDriverId] = await connection.execute(
             'SELECT * FROM vehicles WHERE driver_id = ?',
             [driverId]
@@ -147,6 +157,17 @@ router.post('/add-driver', async (req, res) => {
         if (existingDriverId.length > 0) {
             await connection.end();
             return res.status(409).json({ message: 'Driver ID already exists in vehicles table.' });
+        }
+
+        // Check if the plate number is already assigned to another driver
+        const [existingPlateNumber] = await connection.execute(
+            'SELECT * FROM vehicles WHERE plate_number = ?',
+            [plateNumber]
+        );
+        
+        if (existingPlateNumber.length > 0) {
+            await connection.end();
+            return res.status(409).json({ message: 'Plate number already assigned to another driver.' });
         }
 
         // Hash the password
@@ -177,8 +198,6 @@ router.post('/add-driver', async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 });
-
-
 
 router.post('/add-id', async (req, res) => {
     const { idNumber, idType } = req.body;

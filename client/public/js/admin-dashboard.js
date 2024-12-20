@@ -1,24 +1,35 @@
 document.addEventListener('DOMContentLoaded', function () {
+
     // Check session status on page load
     fetch('/api/check-session', { method: 'GET', credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             if (data.status !== 'logged_in' || data.type !== 'admin') {
-                // If not logged in, redirect to the login page
-                alert('Your session has expired. Please log in again.');
-                window.location.href = '/adminlogin';
+                showModal('Your session has expired. Please log in again.', () => {
+                    window.location.href = '/adminlogin';
+                });
             }
         })
         .catch(() => {
-            alert('Error verifying session. Redirecting to login.');
-            window.location.href = '/adminlogin';
+            showModal('Error verifying session. Redirecting to login.', () => {
+                window.location.href = '/adminlogin';
+            });
         });
 
     window.onload = function () {
         if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
             window.location.reload();
         }
-    };    
+    };
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            showModal('You have been logged out.', () => {
+                window.location.href = '/adminLogin';
+            });
+        });
+    }
 
     // Add close button handler
     const closeBtn = document.querySelector('.close-btn');
@@ -120,15 +131,15 @@ addDriverForm?.addEventListener('submit', async function (e) {
         const data = await response.json();
 
         if (response.ok) {
-            alert(data.message || 'Driver and vehicle added successfully.');
+            showModal(data.message || 'Driver and vehicle added successfully.');
             fetchUsers();
             addDriverForm.reset();
         } else {
-            alert(data.message || 'Failed to add driver.');
+            showModal(data.message || 'Failed to add driver.');
         }
     } catch (error) {
         console.error('Error adding driver:', error);
-        alert('An unexpected error occurred while adding the driver.');
+        showModal('An unexpected error occurred while adding the driver.');
     }
 });
 
@@ -147,11 +158,11 @@ addDriverForm?.addEventListener('submit', async function (e) {
             });
 
             const data = await response.json();
-            alert(data.message || 'ID number added successfully.');
+            showModal(data.message || 'ID number added successfully.');
             addIdForm.reset();
         } catch (error) {
             console.error('Error adding ID number:', error);
-            alert('Failed to add ID number.');
+            showModal('Failed to add ID number.');
         }
     });
 });
@@ -311,7 +322,7 @@ function showUserModal(user) {
     const modal = document.getElementById('user-modal');
     if (!modal) return;
 
-    console.log('User data in modal:', user); // Debug log
+    console.log('User data in modal:', user);
 
     // Update modal content with null checks and proper property access
     document.getElementById('modal-username').textContent = user.username || 'N/A';
@@ -325,22 +336,23 @@ function showUserModal(user) {
     // Set up ban button
     const banButton = document.getElementById('banUserButton');
     if (banButton) {
-        banButton.onclick = () => banUser(user.user_id);
+        // Ensure the event listener is added only once
+        banButton.removeEventListener('click', handleBanUserClick);
+        banButton.addEventListener('click', handleBanUserClick.bind(null, user.user_id)); 
     }
 
-    // Show modal
+    // Show user modal
     modal.style.display = 'flex';
     document.addEventListener('keydown', handleEscapeKey);
-
-    // Add escape key listener
-    document.addEventListener('keydown', handleEscapeKey);
-
-    // Set up click outside to close
     modal.onclick = function(event) {
         if (event.target === modal) {
             closeUserModal();
         }
     };
+}
+
+function handleBanUserClick(userId) {
+    banUser(userId); // Call the ban function with the userId
 }
 
 // Utility function to format phone numbers
@@ -362,17 +374,182 @@ function closeUserModal() {
 }
 
 function removeRide(rideId) {
-    if (confirm('Are you sure you want to delete this ride?')) {
+    // Create the modal container
+    const modal2 = document.createElement('div');
+    modal2.classList.add('modal');
+
+    // Create the modal content
+    const modalContent2 = document.createElement('div');
+    modalContent2.classList.add('modal-content');
+    modal2.appendChild(modalContent2);
+
+    // Add the message to the modal content
+    const confirmationMessage2 = document.createElement('p');
+    confirmationMessage2.textContent = 'Are you sure you want to delete this ride?';
+    modalContent2.appendChild(confirmationMessage2);
+
+    // Create action buttons (Yes and No)
+    const modalActions2 = document.createElement('div');
+    modalActions2.classList.add('modal-actions');
+    modalContent2.appendChild(modalActions2);
+
+    const confirmButton2 = document.createElement('button');
+    confirmButton2.textContent = 'Yes';
+    confirmButton2.classList.add('confirm');
+    modalActions2.appendChild(confirmButton2);
+
+    const cancelButton2 = document.createElement('button');
+    cancelButton2.textContent = 'No';
+    cancelButton2.classList.add('cancel');
+    modalActions2.appendChild(cancelButton2);
+
+    // Append the modal to the body
+    document.body.appendChild(modal2);
+
+    // Show the modal
+    modal2.style.display = 'block';
+
+    // Handle "Yes" (Confirm Delete)
+    confirmButton2.onclick = function() {
         fetch(`/api/delete-ride/${rideId}`, { method: 'DELETE' })
             .then(response => response.json())
             .then(data => {
-                alert(data.message || 'Ride deleted successfully.');
-                fetchRides();
+                // Show success message (or any response message)
+                showModal(data.message || 'Ride deleted successfully.');
+                fetchRides();  // Refresh the ride list
             })
             .catch(error => console.error('Error deleting ride:', error));
-    }
+
+        // Remove the modal from the DOM after confirmation
+        document.body.removeChild(modal2);
+    };
+
+    // Handle "No" (Cancel Delete)
+    cancelButton2.onclick = function() {
+        // Remove the modal from the DOM without doing anything
+        document.body.removeChild(modal2);
+    };
+
+    // Close modal when clicking outside of the modal content
+    window.onclick = function(event) {
+        if (event.target === modal2) {
+            document.body.removeChild(modal2);
+        }
+    };
 }
 
+const style2 = document.createElement('style');
+style2.innerHTML = `
+     .modal {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: center; /* Center the buttons */
+        gap: 10px; /* Adds a small gap between buttons */
+        margin-top: 10px;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    button.confirm {
+        background-color: #4CAF50; /* Green for 'Yes' */
+        color: white;
+    }
+
+    button.cancel {
+        background-color: #f44336; /* Red for 'No' */
+        color: white;
+    }
+`;
+document.head.appendChild(style2);
+
+   // Create and append modal container for popups
+   const modalContainer = document.createElement('div');
+   modalContainer.id = 'popup-modal';
+   modalContainer.innerHTML = `
+       <div class="modal-content">
+           <p id="modal-message"></p>
+           <button id="close-modal">Close</button>
+       </div>
+   `;
+   document.body.appendChild(modalContainer);
+   console.log('Modal container appended:', modalContainer);
+   
+   // Modal styles
+   const modalStyles = document.createElement('style');
+   modalStyles.textContent = `
+   #popup-modal {
+       display: none;
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.6);
+       justify-content: center;
+       align-items: center;
+       z-index: 1000;
+   }
+   .modal-content {
+       background: #1b1b1b;
+       color: #f8f8f8;
+       padding: 20px;
+       border-radius: 10px;
+       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+       text-align: center;
+       width: 50%;
+       max-width: 500px;
+   }
+   .modal-content button {
+       margin-top: 15px;
+       background: #ff0000;
+       border: none;
+       padding: 10px 20px;
+       color: #fff;
+       border-radius: 5px;
+       cursor: pointer;
+       transition: background 0.3s;
+   }
+   .modal-content button:hover {
+       background: #cc0000;
+   }
+   `;
+   document.head.appendChild(modalStyles);
+   
+   const showModal = (message, callback = null) => {
+       const modal = document.getElementById('popup-modal');
+       const messageContainer = document.getElementById('modal-message');
+       const closeButton = document.getElementById('close-modal');
+   
+       messageContainer.textContent = message;
+       modal.style.display = 'flex';
+       console.log('Modal is now visible:', modal.style.display);  // Debugging
+       closeButton.onclick = () => {
+           modal.style.display = 'none';
+           if (callback) callback(); // Execute callback if provided
+       };
+   };
 async function banUser(userId) {
     try {
         const response = await fetch(`/api/delete-user/${userId}`, { method: 'DELETE' });
@@ -382,18 +559,25 @@ async function banUser(userId) {
         }
 
         const data = await response.json();
+
         if (data.status === 'success') {
-            alert('User successfully banned.');
-            fetchUsers();
-            closeUserModal();
+            console.log('User banned successfully');
+            // Show modal with success message
+            showModal('User successfully banned.', () => {
+                fetchUsers(); // Fetch updated user list after banning user
+                closeUserModal(); // Close the user modal
+            });
         } else {
-            alert(data.message || 'Failed to ban user.');
+            // Show modal with error message if banning fails
+            showModal(data.message || 'Failed to ban user.');
         }
     } catch (error) {
         console.error('Error banning user:', error);
-        alert('An error occurred while banning the user.');
+        showModal('An error occurred while banning the user.');
     }
 }
+
+
 
 function setupLogout() {
     const logoutBtn = document.getElementById('logoutBtn');
@@ -402,7 +586,7 @@ function setupLogout() {
             fetch('/api/logout', { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
-                        alert('You have been logged out.');
+                        showModal('You have been logged out.');
                         window.location.href = '/adminLogin';
                     } else {
                         throw new Error('Failed to log out properly.');
@@ -410,7 +594,7 @@ function setupLogout() {
                 })
                 .catch(error => {
                     console.error('Error during logout:', error);
-                    alert('An error occurred while trying to log out. Please try again.');
+                    showModal('An error occurred while trying to log out. Please try again.');
                 });
         });
     }

@@ -31,6 +31,72 @@ document.addEventListener('DOMContentLoaded', function () {
   // Setup modal close button
   setupDetailsModalClose();
 });
+// Create and append 2 container for popups (named as 2)
+const container2 = document.createElement('div');
+container2.id = 'popup-2';
+container2.innerHTML = `
+   <div class="content-2">
+       <p id="message-2"></p>
+       <button id="close-2">Close</button>
+   </div>
+`;
+document.body.appendChild(container2);
+console.log('2 container appended:', container2);
+
+// 2 styles for version 2
+const styles2 = document.createElement('style');
+styles2.textContent = `
+#popup-2 {
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.6);
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+}
+.content-2 {
+   background: #1b1b1b;
+   color: #f8f8f8;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+   text-align: center;
+   width: 50%;
+   max-width: 400px;
+}
+.content-2 button {
+   margin-top: 15px;
+   background: #ff0000;
+   border: none;
+   padding: 10px 20px;
+   color: #fff;
+   border-radius: 5px;
+   cursor: pointer;
+   transition: background 0.3s;
+}
+.content-2 button:hover {
+   background: #cc0000;
+}
+`;
+document.head.appendChild(styles2);
+
+const show2 = (message, callback = null) => {
+   const container = document.getElementById('popup-2');
+   const messageContainer = document.getElementById('message-2');
+   const closeButton = document.getElementById('close-2');
+
+   messageContainer.textContent = message;
+   container.style.display = 'flex';
+
+   closeButton.onclick = () => {
+       container.style.display = 'none';
+       if (callback) callback(); 
+   };
+};
 
 // Check session status
 function checkSessionStatus() {
@@ -195,7 +261,7 @@ function displayAvailableRidesList(data) {
 // Show ride details modal
 function showDetailsModal(rideId) {
   if (!rideId) {
-    alert('Invalid Ride ID');
+    show2('Invalid Ride ID');
     return;
   }
 
@@ -217,12 +283,12 @@ function showDetailsModal(rideId) {
         // Display the modal
         document.getElementById('detailsModal').style.display = 'block';
       } else {
-        alert('Failed to fetch ride details.');
+        show2('Failed to fetch ride details.');
       }
     })
     .catch(error => {
       console.error('Error fetching ride details:', error);
-      alert('An error occurred while fetching details.');
+      show2('An error occurred while fetching details.');
     });
 }
 
@@ -333,7 +399,7 @@ function handleProfileUpdate() {
       const data = await response.json();
 
       if (data.status === 'success') {
-        alert('Profile updated successfully');
+        show2('Profile updated successfully');
         document.getElementById('profileModal').style.display = 'none';
         // Update profile picture in the dashboard if it was changed
         if (data.profile_picture_url) {
@@ -342,11 +408,11 @@ function handleProfileUpdate() {
         }
         location.reload();
       } else {
-        alert(data.message || 'Failed to update profile');
+        show2(data.message || 'Failed to update profile');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('An error occurred while updating the profile');
+      show2('An error occurred while updating the profile');
     }
   });
 }
@@ -361,9 +427,12 @@ function handlePasswordUpdate() {
     const currentPassword = document.getElementById('current-password').value.trim();
     const newPassword = document.getElementById('new-password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
-
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      show2('All fields are required');
+      return;
+    }
     if (newPassword !== confirmPassword) {
-      alert('New password and confirmation do not match');
+      show2('New password and confirmation do not match');
       return;
     }
 
@@ -382,15 +451,15 @@ function handlePasswordUpdate() {
       const data = await response.json();
 
       if (data.status === 'success') {
-        alert('Password changed successfully');
+        show2('Password changed successfully');
         passwordForm.reset();
         document.getElementById('profileModal').style.display = 'none';
       } else {
-        alert(data.message || 'Failed to change password');
+        show2(data.message || 'Failed to change password');
       }
     } catch (error) {
       console.error('Error changing password:', error);
-      alert('An error occurred while changing the password');
+      show2('An error occurred while changing the password');
     }
   });
 }
@@ -403,7 +472,7 @@ function setupLogout() {
       fetch('/api/logout', { method: 'POST' })
         .then(response => {
           if (response.ok) {
-            alert('You have been logged out.');
+            show2('You have been logged out.');
             window.location.href = '/login';
           } else {
             throw new Error('Failed to log out properly.');
@@ -411,7 +480,7 @@ function setupLogout() {
         })
         .catch(error => {
           console.error('Error during logout:', error);
-          alert('An error occurred while trying to log out. Please try again.');
+          show2('An error occurred while trying to log out. Please try again.');
         });
     });
   }

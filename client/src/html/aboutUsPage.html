@@ -3,100 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
+    <title>About Us - AgLugan</title>
     <link rel="stylesheet" href="/css/aboutUsStyle.css">
     <link rel="stylesheet" href="/css/transition.css">
     <link rel="icon" href="/media/logo.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo-container">
-                <a href="/"><img src="/media/logo.png" alt="AgLugan Logo" class="logo"></a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="" class="active"><strong>About Us</strong></a></li>
-              </ul>
-        </nav>
-    </header>
+    <div class="page-wrapper">
+        <!-- Navigation -->
+        <header>
+            <nav>
+                <div class="logo-container">
+                    <a href="/" class="logo-link">
+                        <img src="/media/logo.png" alt="AgLugan Logo" class="logo">
+                        <span class="brand-name">AgLugan</span>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="" class="active"><i class="fas fa-info-circle"></i> About Us</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <section class="about-section">
-        <div class="main-content">
-            <div class="text-section">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
                 <h1>About Us</h1>
-                <hr>
-                <p>Welcome to AgLugan! We are committed to providing the best transportation services to our community. Our mission is to ensure safety, reliability, and comfort for all our passengers. With a dedicated team and modern fleet, we strive to exceed your expectations.</p>
+                <p>Welcome to AgLugan! We are committed to providing the best transportation services to our community. Our mission is to ensure safety, reliability, and comfort for all our passengers.</p>
+                <div class="key-features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Safety First</h3>
+                        <p>Your safety is our top priority</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-clock"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Always here when you need us</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-star"></i>
+                        <h3>Quality Service</h3>
+                        <p>Excellence in every ride</p>
+                    </div>
+                </div>
             </div>
-            <div class="image-section">
-                <img src="/media/team.png" alt="About Us Image">
+            <div class="hero-image">
+                <img src="/media/team.png" alt="Team Image" class="floating-image">
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="members-section">
-        <div class="contact-container">
-            <h1>Our Team</h1>
-            <div class="team-section">
-                <article class="team-member">
-                    <img src="../media/JohnArvin.png" alt="Azurin, John Arvin" class="team-photo">
-                    <div class="member-info">
-                        <h3>Azurin, <br>John Arvin</h3>
-                        <p>Email: <a href="mailto:2221021@slu.edu.ph">2221021@slu.edu.ph</a></p>
+        <!-- Team Section -->
+        <section class="team-section">
+            <h2 class="section-title">Meet Our Team</h2>
+            <div class="team-grid">
+                <!-- John Arvin -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/JohnArvin.png" alt="Azurin, John Arvin" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2221021@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
                     </div>
-                </article>
-    
-                <article class="team-member">
-                    <img src="../media/JM.png" alt="Jan Michael Villanueva" class="team-photo">
                     <div class="member-info">
-                        <h3>Villanueva, <br>Jan Michael</h3>
-                        <p>Email: <a href="mailto:2222723@slu.edu.ph">2222723@slu.edu.ph</a></p>
+                        <h3>Azurin, John Arvin</h3>
+                        <p class="member-role">Team Lead</p>
                     </div>
-                </article>
-    
-                <article class="team-member">
-                    <img src="../media/Rabino.png" alt="Josh Rabino" class="team-photo">
-                    <div class="member-info">
-                        <h3>Rabino, <br>Josh Marco</h3>
-                        <p>Email: <a href="mailto:2225217@slu.edu.ph">2225217@slu.edu.ph</a></p>
-                    </div>
-                </article>
-    
-                <article class="team-member">
-                    <img src="../media/Kennely.png" alt="Kennely Bucang" class="team-photo">
-                    <div class="member-info">
-                        <h3>Bucang, <br>Kennely Ray</h3>
-                        <p>Email: <a href="mailto:2222725@slu.edu.ph">2222725@slu.edu.ph</a></p>
-                    </div>
-                </article>
-    
-                <article class="team-member">
-                    <img src="../media/Kumar.jpg" alt="Kumar Wanget" class="team-photo">
-                    <div class="member-info">
-                        <h3>Wanget, <br>Kumar</h3>
-                        <p>Email: <a href="mailto:2226699@slu.edu.ph">2226699@slu.edu.ph</a></p>
-                    </div>
-                </article>
+                </div>
 
-                <article class="team-member">
-                    <img src="../media/Marron.jpg" alt="Marc Marron" class="team-photo">
-                    <div class="member-info">
-                        <h3>Marron, <br>Marc</h3>
-                        <p>Email: <a href="mailto:2224563@slu.edu.ph">2226699@slu.edu.ph</a></p>
+                <!-- Jan Michael -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/JM.png" alt="Jan Michael Villanueva" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2222723@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
                     </div>
-                </article>
-    
-                <article class="team-member">
-                    <img src="../media/dani.png" alt="Daniel Andre Galapon" class="team-photo">
                     <div class="member-info">
-                        <h3>Galapon, <br>Daniel Andre</h3>
-                        <p>Email: <a href="mailto:2223489@slu.edu.ph">2226699@slu.edu.ph</a></p>
+                        <h3>Villanueva, Jan Michael</h3>
+                        <p class="member-role">Developer</p>
                     </div>
-                </article>
-    
-    
+                </div>
+
+                <!-- Josh Rabino -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/Rabino.png" alt="Josh Rabino" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2225217@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Rabino, Josh Marco</h3>
+                        <p class="member-role">Developer</p>
+                    </div>
+                </div>
+
+                <!-- Kennely -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/Kennely.png" alt="Kennely Bucang" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2222725@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Bucang, Kennely Ray</h3>
+                        <p class="member-role">Lead Developer</p>
+                    </div>
+                </div>
+
+                <!-- Kumar -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/Kumar.jpg" alt="Kumar Wanget" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2226699@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Wanget, Kumar</h3>
+                        <p class="member-role">Developer</p>
+                    </div>
+                </div>
+
+                <!-- Marc -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/Marron.jpg" alt="Marc Marron" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2224563@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Marron, Marc</h3>
+                        <p class="member-role">Developer</p>
+                    </div>
+                </div>
+
+                <!-- Daniel -->
+                <div class="team-member">
+                    <div class="member-image-container">
+                        <img src="../media/dani.png" alt="Daniel Andre Galapon" class="team-photo">
+                        <div class="member-overlay">
+                            <a href="mailto:2223489@slu.edu.ph" class="contact-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h3>Galapon, Daniel Andre</h3>
+                        <p class="member-role">Developer</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
     <script src="../js/page-transition.js"></script>
+    <script src="../js/aboutUs.js"></script>
 </body>
 </html>
