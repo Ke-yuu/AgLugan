@@ -51,7 +51,6 @@ router.get('/rides', async (req, res) => {
                 r.status,
                 r.fare,
                 r.time_range,
-                r.seat_status,
                 v.plate_number
             FROM rides r
             LEFT JOIN vehicles v ON r.driver_id = v.driver_id
@@ -68,7 +67,6 @@ router.get('/rides', async (req, res) => {
                 r.start_location LIKE ? OR
                 r.end_location LIKE ? OR
                 r.status LIKE ? OR
-                r.seat_status LIKE ? OR
                 v.plate_number LIKE ?
             )`;
         }
@@ -231,7 +229,6 @@ router.put('/update-ride-status', async function (req, res) {
                 r.status,
                 r.fare,
                 r.time_range,
-                r.seat_status,
                 v.plate_number
             FROM rides r
             LEFT JOIN vehicles v ON r.driver_id = v.driver_id
